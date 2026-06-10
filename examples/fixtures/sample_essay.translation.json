@@ -1,0 +1,12 @@
+{
+  "s1": "forall x. (Philosopher(x) -> QuestionsOwnBeliefs(x))",
+  "s2": "forall x. (QuestionsOwnBeliefs(x) -> SeekerOfTruth(x))",
+  "s3": "Philosopher(socrates)",
+  "s4": "forall x. (Philosopher(x) -> Human(x))",
+  "s5": "forall x. (Human(x) -> Mortal(x))",
+  "s6": "SeekerOfTruth(socrates)",
+  "s7": "Mortal(socrates)",
+  "s8": "not Mortal(socrates)",
+  "s9": null,
+  "s10": "exists x. (SeekerOfTruth(x) and NeverSatisfied(x))"
+}

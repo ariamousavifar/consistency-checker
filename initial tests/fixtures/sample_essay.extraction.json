@@ -1,0 +1,74 @@
+[
+  {
+    "id": "s1",
+    "type": "axiom",
+    "original_text": "All philosophers question their own beliefs.",
+    "decontextualized": "Every philosopher questions their own beliefs.",
+    "speaker": "author"
+  },
+  {
+    "id": "s2",
+    "type": "axiom",
+    "original_text": "Everyone who questions their own beliefs is a seeker of truth.",
+    "decontextualized": "Every person who questions their own beliefs is a seeker of truth.",
+    "speaker": "author"
+  },
+  {
+    "id": "s3",
+    "type": "axiom",
+    "original_text": "Socrates was a philosopher",
+    "decontextualized": "Socrates is a philosopher.",
+    "speaker": "author"
+  },
+  {
+    "id": "s4",
+    "type": "axiom",
+    "original_text": "all philosophers are human",
+    "decontextualized": "All philosophers are human.",
+    "speaker": "author"
+  },
+  {
+    "id": "s5",
+    "type": "axiom",
+    "original_text": "Every human is mortal.",
+    "decontextualized": "Every human is mortal.",
+    "speaker": "author"
+  },
+  {
+    "id": "s6",
+    "type": "derived_claim",
+    "original_text": "It follows that Socrates was a seeker of truth.",
+    "decontextualized": "Socrates is a seeker of truth.",
+    "speaker": "author",
+    "depends_on": ["s1", "s2", "s3"]
+  },
+  {
+    "id": "s7",
+    "type": "derived_claim",
+    "original_text": "It also follows that\nSocrates was mortal, like the rest of us.",
+    "decontextualized": "Socrates is mortal.",
+    "speaker": "author",
+    "depends_on": ["s3", "s4", "s5"]
+  },
+  {
+    "id": "s8",
+    "type": "derived_claim",
+    "original_text": "And yet I maintain that Socrates is immortal.",
+    "decontextualized": "Socrates is not mortal.",
+    "speaker": "author"
+  },
+  {
+    "id": "s9",
+    "type": "non_propositional",
+    "original_text": "His ideas will outlive\nevery empire that tries to bury them.",
+    "decontextualized": "The ideas of Socrates will outlive every empire that tries to bury them.",
+    "speaker": "author"
+  },
+  {
+    "id": "s10",
+    "type": "derived_claim",
+    "original_text": "Some seekers of truth are never satisfied with easy answers.",
+    "decontextualized": "Some seekers of truth are never satisfied.",
+    "speaker": "author"
+  }
+]

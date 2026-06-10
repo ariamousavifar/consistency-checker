@@ -1,0 +1,5 @@
+z3-solver>=4.12
+pydantic>=2.5
+openai>=1.30
+python-dotenv>=1.0
+pytest>=8.0
