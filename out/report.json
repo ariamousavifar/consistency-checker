@@ -1,0 +1,155 @@
+{
+  "source_file": "examples/taxation_essay.txt",
+  "mode": "offline (fixtures)",
+  "propositions": [
+    {
+      "id": "t1",
+      "type": "axiom",
+      "speaker": "author",
+      "original_text": "All taxation is theft.",
+      "decontextualized": "Every tax is a theft.",
+      "span": {
+        "start": 52,
+        "end": 74
+      },
+      "fol": "forall x. (Tax(x) -> Theft(x))",
+      "candidates": [
+        {
+          "source": "rule",
+          "fol": "forall x. (Tax(x) -> Theft(x))"
+        },
+        {
+          "source": "llm",
+          "fol": "forall x. (Tax(x) -> Theft(x))"
+        }
+      ],
+      "depends_on": [],
+      "status": "accepted",
+      "confidence": 0.95,
+      "gate_reason": "rule and LLM translations independently agree (Z3-proved equivalent)",
+      "verdict": null,
+      "support": [],
+      "conflict": []
+    },
+    {
+      "id": "t2",
+      "type": "non_propositional",
+      "speaker": "author",
+      "original_text": "The state takes what it has not earned.",
+      "decontextualized": "The state takes what it has not earned.",
+      "span": {
+        "start": 75,
+        "end": 114
+      },
+      "fol": null,
+      "candidates": [],
+      "depends_on": [],
+      "status": "quarantined",
+      "confidence": 0.0,
+      "gate_reason": "not truth-apt (figurative, expressive, or non-assertoric)",
+      "verdict": null,
+      "support": [],
+      "conflict": []
+    },
+    {
+      "id": "t3",
+      "type": "derived_claim",
+      "speaker": "author",
+      "original_text": "some taxes are morally justified",
+      "decontextualized": "Some taxes are morally justified.",
+      "span": {
+        "start": 127,
+        "end": 159
+      },
+      "fol": "exists x. (Tax(x) and MorallyJustified(x))",
+      "candidates": [
+        {
+          "source": "rule",
+          "fol": "exists x. (Tax(x) and MorallyJustified(x))"
+        },
+        {
+          "source": "llm",
+          "fol": "exists x. (Tax(x) and MorallyJustified(x))"
+        }
+      ],
+      "depends_on": [],
+      "status": "accepted",
+      "confidence": 0.95,
+      "gate_reason": "rule and LLM translations independently agree (Z3-proved equivalent)",
+      "verdict": "contradicts",
+      "support": [],
+      "conflict": [
+        "t1",
+        "b1"
+      ]
+    },
+    {
+      "id": "b1",
+      "type": "bridge",
+      "speaker": "background",
+      "original_text": "All theft is morally unjustified (background premise, not stated in the text)",
+      "decontextualized": "All theft is morally unjustified (background premise, not stated in the text)",
+      "span": null,
+      "fol": "forall x. (Theft(x) -> not MorallyJustified(x))",
+      "candidates": [],
+      "depends_on": [],
+      "status": "accepted",
+      "confidence": 1.0,
+      "gate_reason": "user-supplied bridge premise (not stated in the text)",
+      "verdict": null,
+      "support": [],
+      "conflict": []
+    }
+  ],
+  "clusters": [
+    {
+      "cluster_id": 0,
+      "statement_ids": [
+        "t1",
+        "t3",
+        "b1"
+      ],
+      "axioms_consistent": true,
+      "axiom_conflict": [],
+      "note": ""
+    }
+  ],
+  "vocabulary_predicates": [
+    "MorallyJustified",
+    "Tax",
+    "Theft"
+  ],
+  "vocabulary_constants": [],
+  "effort": 1,
+  "timing": [
+    {
+      "stage": "read_and_clean",
+      "seconds": 0.0002
+    },
+    {
+      "stage": "extraction",
+      "seconds": 0.0003
+    },
+    {
+      "stage": "translation",
+      "seconds": 0.0001
+    },
+    {
+      "stage": "gate",
+      "seconds": 0.0066
+    },
+    {
+      "stage": "bridges",
+      "seconds": 0.0002
+    },
+    {
+      "stage": "screener",
+      "seconds": 0.0
+    },
+    {
+      "stage": "solver",
+      "seconds": 0.0179
+    }
+  ],
+  "screener": []
+}

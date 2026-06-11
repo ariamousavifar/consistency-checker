@@ -1,0 +1,32 @@
+digraph theory {
+  rankdir=TB;
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=10];
+  subgraph cluster_0 {
+    label="cluster 0 (consistent)"; color="#b4b2a9";
+    s1 [label="s1 [axiom]\nEvery philosopher questions their own...", fillcolor="#cfe0f5", color="#185fa5"];
+    s2 [label="s2 [axiom]\nEvery person who questions their own ...", fillcolor="#cfe0f5", color="#185fa5"];
+    s3 [label="s3 [axiom]\nSocrates is a philosopher.", fillcolor="#cfe0f5", color="#185fa5"];
+    s4 [label="s4 [axiom]\nAll philosophers are human.", fillcolor="#cfe0f5", color="#185fa5"];
+    s5 [label="s5 [axiom]\nEvery human is mortal.", fillcolor="#cfe0f5", color="#185fa5"];
+    s6 [label="s6 [entailed]\nSocrates is a seeker of truth.", fillcolor="#d6edcb", color="#3b6d11"];
+    s7 [label="s7 [entailed]\nSocrates is mortal.", fillcolor="#d6edcb", color="#3b6d11"];
+    s8 [label="s8 [contradicts]\nSocrates is not mortal.", fillcolor="#f7c1c1", color="#a32d2d"];
+    s10 [label="s10 [not_entailed]\nSome seekers of truth are never satis...", fillcolor="#faeeda", color="#854f0b"];
+  }
+  s9 [label="s9 [quarantined]\nThe ideas of Socrates will outlive ev...", fillcolor="#f1efe8", color="#888780", style="rounded,filled,dashed"];
+  s1 -> s6 [color="#5f5e5a", arrowsize=0.7];
+  s2 -> s6 [color="#5f5e5a", arrowsize=0.7];
+  s3 -> s6 [color="#5f5e5a", arrowsize=0.7];
+  s1 -> s6 [color="#185fa5", style=dotted, arrowsize=0.6];
+  s2 -> s6 [color="#185fa5", style=dotted, arrowsize=0.6];
+  s3 -> s6 [color="#185fa5", style=dotted, arrowsize=0.6];
+  s3 -> s7 [color="#5f5e5a", arrowsize=0.7];
+  s4 -> s7 [color="#5f5e5a", arrowsize=0.7];
+  s5 -> s7 [color="#5f5e5a", arrowsize=0.7];
+  s3 -> s7 [color="#185fa5", style=dotted, arrowsize=0.6];
+  s4 -> s7 [color="#185fa5", style=dotted, arrowsize=0.6];
+  s5 -> s7 [color="#185fa5", style=dotted, arrowsize=0.6];
+  s8 -> s3 [color="#a32d2d", style=dashed, arrowsize=0.7, label="conflict", fontcolor="#a32d2d", fontsize=9];
+  s8 -> s4 [color="#a32d2d", style=dashed, arrowsize=0.7, label="conflict", fontcolor="#a32d2d", fontsize=9];
+  s8 -> s5 [color="#a32d2d", style=dashed, arrowsize=0.7, label="conflict", fontcolor="#a32d2d", fontsize=9];
+}

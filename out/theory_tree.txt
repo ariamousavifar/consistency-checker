@@ -1,0 +1,14 @@
+theory cluster 0  [axioms consistent: YES]
+|-- axioms (1)
+|   `-- [t1] AX Every tax is a theft.
+|-- bridge premises (1)
+|   `-- [b1] BR All theft is morally unjustified (background premise,...
+`-- claims (1)
+    `-- [t3] XX Some taxes are morally justified.
+        |-- INCOMPATIBLE WITH [t1] AX Every tax is a theft.
+        `-- INCOMPATIBLE WITH [b1] BR All theft is morally unjustified (background premise,...
+
+excluded from theory (1)
+`-- [t2] quarantined: The state takes what it has not earned. :: not truth-apt (figurative, expressive, or non-assertoric)
+
+legend: AX axiom | BR bridge premise | OK entailed | ?? not entailed (unprovable) | XX member of an inconsistent set | ~? unknown | -- excluded

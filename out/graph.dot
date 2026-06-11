@@ -1,0 +1,13 @@
+digraph theory {
+  rankdir=TB;
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=10];
+  subgraph cluster_0 {
+    label="cluster 0 (consistent)"; color="#b4b2a9";
+    t1 [label="t1 [axiom]\nEvery tax is a theft.", fillcolor="#cfe0f5", color="#185fa5"];
+    t3 [label="t3 [contradicts]\nSome taxes are morally justified.", fillcolor="#f7c1c1", color="#a32d2d"];
+    b1 [label="b1 [bridge]\nAll theft is morally unjustified (bac...", fillcolor="#EEEDFE", color="#534AB7"];
+  }
+  t2 [label="t2 [quarantined]\nThe state takes what it has not earned.", fillcolor="#f1efe8", color="#888780", style="rounded,filled,dashed"];
+  t3 -> t1 [color="#a32d2d", style=dashed, arrowsize=0.7, label="conflict", fontcolor="#a32d2d", fontsize=9];
+  t3 -> b1 [color="#a32d2d", style=dashed, arrowsize=0.7, label="conflict", fontcolor="#a32d2d", fontsize=9];
+}

@@ -1,0 +1,26 @@
+theory cluster 0  [axioms consistent: YES]
+|-- axioms (5)
+|   |-- [s1] AX Every philosopher questions their own beliefs.
+|   |-- [s2] AX Every person who questions their own beliefs is a see...
+|   |-- [s3] AX Socrates is a philosopher.
+|   |-- [s4] AX All philosophers are human.
+|   `-- [s5] AX Every human is mortal.
+`-- claims (4)
+    |-- [s6] OK Socrates is a seeker of truth.
+    |   |-- proved from [s1] AX Every philosopher questions their own beliefs.
+    |   |-- proved from [s2] AX Every person who questions their own beliefs is a see...
+    |   `-- proved from [s3] AX Socrates is a philosopher.
+    |-- [s7] OK Socrates is mortal.
+    |   |-- proved from [s3] AX Socrates is a philosopher.
+    |   |-- proved from [s4] AX All philosophers are human.
+    |   `-- proved from [s5] AX Every human is mortal.
+    |-- [s8] XX Socrates is not mortal.
+    |   |-- CONFLICTS WITH [s3] AX Socrates is a philosopher.
+    |   |-- CONFLICTS WITH [s4] AX All philosophers are human.
+    |   `-- CONFLICTS WITH [s5] AX Every human is mortal.
+    `-- [s10] ?? Some seekers of truth are never satisfied.
+
+excluded from theory (1)
+`-- [s9] quarantined: The ideas of Socrates will outlive every empire that ... :: not truth-apt (figurative, expressive, or non-assertoric)
+
+legend: AX axiom | OK entailed | ?? not entailed (unprovable) | XX contradicts | ~? unknown | -- excluded
