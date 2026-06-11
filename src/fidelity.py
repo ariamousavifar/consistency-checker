@@ -17,7 +17,7 @@ import re
 from dataclasses import dataclass, field
 
 from .fol_parser import KEYWORDS, tokenize
-from .vocabulary import words_of
+from .vocabulary import NEG_PREFIXES, words_of
 
 _STOP = {"a", "an", "the", "of", "is", "are", "be", "to", "in"}
 
@@ -69,6 +69,10 @@ def fidelity_check(fol: str, sentence: str, threshold: float = 0.6) -> FidelityR
     from .verbalizer import verbalize
 
     sentence_words = set(re.findall(r"[a-z0-9]+", sentence.lower()))
+    for sw in list(sentence_words):
+        for pfx in NEG_PREFIXES:
+            if sw.startswith(pfx) and len(sw) - len(pfx) >= 3:
+                sentence_words.add(sw[len(pfx):])
     pred_words, consts = _symbols(fol)
     missing: list[str] = []
 

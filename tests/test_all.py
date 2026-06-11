@@ -84,7 +84,7 @@ def test_vocabulary_merges_plural_variants():
     v = Vocabulary()
     a = v.normalize_fol("forall x. (Humans(x) -> Mortals(x))")
     b = v.normalize_fol("Human(socrates)")
-    assert "Humans(" in a and "Humans(socrates)" in b  # first-seen form wins for both
+    assert "Human(" in a and "Human(socrates)" in b  # canonical forms are singular
 
 
 # ---------- Verbalizer & fidelity ----------
@@ -213,7 +213,7 @@ def test_tree_dot_svg_outputs(tmp_path):
     tree = build_tree_text(report)
     assert "theory cluster 0" in tree
     assert "axioms consistent: YES" in tree
-    assert "CONFLICTS WITH" in tree            # s8 shows its conflict set inline
+    assert "INCOMPATIBLE WITH" in tree            # s8 shows its conflict set inline
     assert "excluded from theory" in tree      # s9 appears, never silently dropped
 
     dot = build_dot(report)

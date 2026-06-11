@@ -1,4 +1,32 @@
-# Internal-Inconsistency Checker (prototype v0.2)
+# Internal-Inconsistency Checker (prototype v0.3)
+
+## What's new in v0.3
+
+1. Per-stage timing: console table, `out/timing.json`, and a report section.
+2. Neutral verdict language: the system now reports minimal inconsistent sets
+   ("these statements cannot all be true; at least one must be abandoned")
+   instead of implying that the contradicting claim is the wrong one. No
+   member of a set is ever declared false.
+3. Negation mapping in vocabulary alignment: `Immortal(x)` is rewritten to
+   `not Mortal(x)` once `Mortal` is known (same for un-, non-, ir-, dis-, in-
+   prefixed forms). This fixes the observed live-run failure where the
+   contradiction silently vanished. Direction matters: the base predicate must
+   appear first, which matches the usual premises-before-claims order.
+4. Bridge premises: pass `--bridges file.json` to supply explicit, tagged
+   background axioms (e.g. "all theft is morally unjustified"). Contradictions
+   that need them are labeled "bridged" and the report names the premise, so
+   the tool stays loyal to the text and never imports semantics silently.
+5. Effort dial: `--effort 0` (surface screener only), `1` (clustered symbolic
+   checks, default), `2` (one global axiom set: deeper cross-topic reasoning,
+   higher timeout risk). The solver warns on large axiom sets.
+6. Surface screener: a deterministic lexical placeholder for the future NLI
+   path. It flags shared-wording/opposite-polarity pairs and prefix antonyms,
+   runs at every effort level, and doubles as the embedded baseline; multi-hop
+   inconsistencies are invisible to it by design.
+7. Hardened prompts: explicit axiom-vs-derived_claim rules, mandatory
+   compound-sentence splitting, and a ban on inventing antonym predicates.
+8. Test suite expanded from 17 to 37 offline tests.
+
 
 A neuro-symbolic pipeline that finds internal logical inconsistencies in a text
 using only the author's own statements: no agreement on which axioms are
@@ -12,7 +40,16 @@ language judgment and translation; Z3 does all logical verification.
 python -m src.main --file examples/sample_essay.txt --offline
 ```
 
-The shipped essay asserts five premises, two claims that genuinely follow from
+A second example demonstrates bridged contradictions (taxation):
+
+```
+python -m src.main --file examples/taxation_essay.txt --offline --bridges examples/taxation_essay.bridges.json
+```
+
+Without the bridge file, "some taxes are morally justified" is merely
+unprovable; with the explicit background premise "all theft is morally
+unjustified", it joins a minimal inconsistent set {t1, b1, t3}, labeled as
+bridged. The shipped essay asserts five premises, two claims that genuinely follow from
 them, one multi-hop contradiction ("Socrates is immortal", which conflicts with
 his being a philosopher, philosophers being human, and humans being mortal),
 one figurative sentence, and one claim that is consistent but unprovable. The
@@ -92,11 +129,12 @@ Requirements: Python 3.10+ (tested on 3.12), internet for `pip install`.
    - Mode: `module` (click "script path" dropdown and choose "module name")
    - Module name: `src.main`
    - Parameters: `--file examples/sample_essay.txt --offline`
+     (or the taxation command above for the bridged demo)
    - Working directory: the project root (the folder containing `src/`)
    Press Run. The console prints the verdict table; open `out/report.md`
    to see the full report (PyCharm renders Markdown).
 5. Run the tests: right-click the `tests/` folder -> "Run pytest in tests".
-   All 17 tests run offline in about a second.
+   All 37 tests run offline in about a second.
 
 Command-line equivalents:
 ```
@@ -186,6 +224,9 @@ src/solver.py           clustering, consistency, entailment, minimal conflict se
 src/report.py           Markdown + JSON reports
 src/tree_builder.py     theory tree (ASCII), graph.dot, graph.svg, optional graph.png
 src/main.py             CLI
-tests/test_all.py       17 offline tests, including end-to-end
+tests/test_all.py       core tests, including end-to-end
+tests/test_v03_features.py  negation mapping, bridges, effort, screener, timing
+src/timing.py           per-stage wall-clock instrumentation
+src/screener.py         surface screener (lexical placeholder for NLI)
 examples/               sample essay + fixtures
 ```

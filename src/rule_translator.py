@@ -38,32 +38,42 @@ def rule_translate(sentence: str, vocab: Vocabulary) -> str | None:
 
     m = _UNIVERSAL_NEG.match(s)
     if m:
-        p = vocab.pred_from_phrase(m.group(1))
-        q = vocab.pred_from_phrase(m.group(2))
-        return f"forall x. ({p}(x) -> not {q}(x))"
+        p, pn = vocab.resolve_phrase(m.group(1))
+        q, qn = vocab.resolve_phrase(m.group(2))
+        if pn:
+            return None
+        body = f"{q}(x)" if qn else f"not {q}(x)"
+        return f"forall x. ({p}(x) -> {body})"
 
     m = _UNIVERSAL.match(s)
     if m:
-        p = vocab.pred_from_phrase(m.group(1))
-        q = vocab.pred_from_phrase(m.group(2))
-        return f"forall x. ({p}(x) -> {q}(x))"
+        p, pn = vocab.resolve_phrase(m.group(1))
+        q, qn = vocab.resolve_phrase(m.group(2))
+        if pn:
+            return None
+        body = f"not {q}(x)" if qn else f"{q}(x)"
+        return f"forall x. ({p}(x) -> {body})"
 
     m = _EXISTENTIAL.match(s)
     if m:
-        p = vocab.pred_from_phrase(m.group(1))
-        q = vocab.pred_from_phrase(m.group(2))
-        return f"exists x. ({p}(x) and {q}(x))"
+        p, pn = vocab.resolve_phrase(m.group(1))
+        q, qn = vocab.resolve_phrase(m.group(2))
+        if pn:
+            return None
+        body = f"not {q}(x)" if qn else f"{q}(x)"
+        return f"exists x. ({p}(x) and {body})"
 
     m = _INSTANCE_NEG.match(s)
     if m and m.group(1) not in _QUANT_WORDS:
         c = vocab.canonical_const(m.group(1))
-        p = vocab.pred_from_phrase(m.group(2))
-        return f"not {p}({c})"
+        q, qn = vocab.resolve_phrase(m.group(2))
+        inner = f"not {q}({c})" if qn else f"{q}({c})"
+        return f"not {inner}" if not qn else f"{q}({c})"
 
     m = _INSTANCE.match(s)
     if m and m.group(1) not in _QUANT_WORDS:
         c = vocab.canonical_const(m.group(1))
-        p = vocab.pred_from_phrase(m.group(2))
-        return f"{p}({c})"
+        q, qn = vocab.resolve_phrase(m.group(2))
+        return f"not {q}({c})" if qn else f"{q}({c})"
 
     return None

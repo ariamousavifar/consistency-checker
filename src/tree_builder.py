@@ -26,6 +26,7 @@ from .schema import GateOutcome, Proposition, RunReport, StatementType, Verdict
 
 _FILL = {
     "axiom": ("#cfe0f5", "#185fa5"),
+    "bridge": ("#EEEDFE", "#534AB7"),
     "entailed": ("#d6edcb", "#3b6d11"),
     "not_entailed": ("#faeeda", "#854f0b"),
     "contradicts": ("#f7c1c1", "#a32d2d"),
@@ -36,6 +37,7 @@ _FILL = {
 
 _MARK = {
     "axiom": "AX",
+    "bridge": "BR",
     "entailed": "OK",
     "not_entailed": "??",
     "contradicts": "XX",
@@ -48,6 +50,8 @@ _MARK = {
 def _kind(p: Proposition) -> str:
     if p.status in (GateOutcome.QUARANTINED, GateOutcome.AMBIGUOUS):
         return "excluded"
+    if p.type == StatementType.BRIDGE:
+        return "bridge"
     if p.type == StatementType.AXIOM:
         return "axiom"
     if p.verdict is None:
@@ -87,7 +91,8 @@ def build_tree_text(report: RunReport, width: int = 56) -> str:
         cons = "UNKNOWN" if c.axioms_consistent is None else ("YES" if c.axioms_consistent else "NO")
         members = [by_id[i] for i in c.statement_ids if i in by_id]
         axioms = [p for p in members if p.type == StatementType.AXIOM]
-        claims = [p for p in members if p.type != StatementType.AXIOM]
+        bridges = [p for p in members if p.type == StatementType.BRIDGE]
+        claims = [p for p in members if p.type not in (StatementType.AXIOM, StatementType.BRIDGE)]
 
         claim_nodes = []
         for p in claims:
@@ -99,14 +104,16 @@ def build_tree_text(report: RunReport, width: int = 56) -> str:
             for cid in p.conflict:
                 cp = by_id.get(cid)
                 if cp:
-                    kids.append((f"CONFLICTS WITH {leaf(cp)}", []))
+                    kids.append((f"INCOMPATIBLE WITH {leaf(cp)}", []))
             claim_nodes.append((leaf(p), kids))
 
         root_label = f"theory cluster {c.cluster_id}  [axioms consistent: {cons}]"
         children = [
             (f"axioms ({len(axioms)})", [(leaf(p), []) for p in axioms]),
-            (f"claims ({len(claims)})", claim_nodes),
         ]
+        if bridges:
+            children.append((f"bridge premises ({len(bridges)})", [(leaf(p), []) for p in bridges]))
+        children.append((f"claims ({len(claims)})", claim_nodes))
         if c.axiom_conflict:
             children.insert(0, ("MINIMAL INCONSISTENT AXIOM SET",
                                 [(leaf(by_id[i]), []) for i in c.axiom_conflict if i in by_id]))
@@ -123,7 +130,7 @@ def build_tree_text(report: RunReport, width: int = 56) -> str:
         )
         lines.append("")
 
-    legend = "legend: AX axiom | OK entailed | ?? not entailed (unprovable) | XX contradicts | ~? unknown | -- excluded"
+    legend = "legend: AX axiom | BR bridge premise | OK entailed | ?? not entailed (unprovable) | XX member of an inconsistent set | ~? unknown | -- excluded"
     lines.append(legend)
     return "\n".join(lines)
 
@@ -206,8 +213,8 @@ def build_svg(report: RunReport) -> str:
 
     for c in report.clusters:
         members = [by_id[i] for i in c.statement_ids if i in by_id]
-        axioms = [p for p in members if p.type == StatementType.AXIOM]
-        claims = [p for p in members if p.type != StatementType.AXIOM]
+        axioms = [p for p in members if p.type in (StatementType.AXIOM, StatementType.BRIDGE)]
+        claims = [p for p in members if p.type not in (StatementType.AXIOM, StatementType.BRIDGE)]
         if axioms:
             rows.append(axioms)
         if claims:

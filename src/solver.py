@@ -76,11 +76,12 @@ def _minimize(ids: list[str], formulas: dict[str, z3.ExprRef], extra: list[z3.Ex
     return current
 
 
-def verify(props: list[Proposition], timeout_ms: int = 8000) -> list[ClusterReport]:
+def verify(props: list[Proposition], timeout_ms: int = 8000, effort: int = 1) -> list[ClusterReport]:
     accepted = [p for p in props if p.status == GateOutcome.ACCEPTED and p.fol]
     reports: list[ClusterReport] = []
 
-    for idx, cluster in enumerate(cluster_propositions(accepted)):
+    clusters = cluster_propositions(accepted) if effort <= 1 else ([accepted] if accepted else [])
+    for idx, cluster in enumerate(clusters):
         report = ClusterReport(cluster_id=idx, statement_ids=[p.id for p in cluster])
         env = Env()
         formulas: dict[str, z3.ExprRef] = {}
@@ -91,8 +92,18 @@ def verify(props: list[Proposition], timeout_ms: int = 8000) -> list[ClusterRepo
                 p.verdict = Verdict.ERROR
                 p.gate_reason += f" | FOL parse failed at solver stage: {exc}"
 
-        axioms = {p.id: formulas[p.id] for p in cluster if p.type == StatementType.AXIOM and p.id in formulas}
-        claims = [p for p in cluster if p.type != StatementType.AXIOM and p.id in formulas]
+        axioms = {
+            p.id: formulas[p.id]
+            for p in cluster
+            if p.type in (StatementType.AXIOM, StatementType.BRIDGE) and p.id in formulas
+        }
+        claims = [p for p in cluster if p.type not in (StatementType.AXIOM, StatementType.BRIDGE) and p.id in formulas]
+        if effort >= 2:
+            report.note = "global axiom set (effort 2): deeper cross-topic reasoning, higher timeout risk"
+        if len(axioms) > 40:
+            report.note = (report.note + "; " if report.note else "") + (
+                f"large axiom set ({len(axioms)}): quantifier instantiation may slow or return unknown"
+            )
 
         solver = z3.Solver()
         solver.set("timeout", timeout_ms)

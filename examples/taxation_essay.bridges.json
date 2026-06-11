@@ -1,0 +1,7 @@
+[
+  {
+    "id": "b1",
+    "fol": "forall x. (Theft(x) -> not MorallyJustified(x))",
+    "gloss": "All theft is morally unjustified (background premise, not stated in the text)"
+  }
+]

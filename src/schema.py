@@ -14,6 +14,7 @@ class StatementType(str, Enum):
     HYPOTHETICAL = "hypothetical"
     RHETORICAL = "rhetorical"
     NON_PROPOSITIONAL = "non_propositional"
+    BRIDGE = "bridge"
 
 
 class GateOutcome(str, Enum):
@@ -86,3 +87,6 @@ class RunReport(BaseModel):
     clusters: list[ClusterReport]
     vocabulary_predicates: list[str]
     vocabulary_constants: list[str]
+    effort: int = 1
+    timing: list[dict] = Field(default_factory=list)
+    screener: list[dict] = Field(default_factory=list)

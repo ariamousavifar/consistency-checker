@@ -1,7 +1,13 @@
-"""Report generation: human-readable Markdown plus machine-readable JSON."""
+"""Report generation: Markdown + JSON (architecture stage 8).
+
+Language policy: the system identifies minimal inconsistent sets; it never
+declares which member of a set is the wrong one. A contradiction verdict means
+"this statement belongs to a set that cannot all be true", not "this statement
+is false".
+"""
 from __future__ import annotations
 
-from .schema import GateOutcome, RunReport, Verdict
+from .schema import GateOutcome, RunReport, StatementType, Verdict
 from .tree_builder import build_tree_text
 from .verbalizer import verbalize
 
@@ -21,7 +27,7 @@ def render_markdown(report: RunReport) -> str:
     lines: list[str] = []
     lines.append("# Consistency report")
     lines.append("")
-    lines.append(f"Source: `{report.source_file}` | mode: {report.mode}")
+    lines.append(f"Source: `{report.source_file}` | mode: {report.mode} | effort: {report.effort}")
     lines.append("")
 
     counts: dict[str, int] = {}
@@ -48,23 +54,38 @@ def render_markdown(report: RunReport) -> str:
 
     contradictions = [p for p in props if p.verdict == Verdict.CONTRADICTS]
     if contradictions:
-        lines.append("## Contradictions found")
+        lines.append("## Minimal inconsistent sets")
         lines.append("")
+        lines.append(
+            "Each set below is a minimal collection of statements that cannot all be "
+            "true at once. At least one member of each set must be abandoned. The "
+            "system identifies the conflict; it does not determine which member to reject."
+        )
+        lines.append("")
+        seen: set[frozenset] = set()
         for p in contradictions:
-            span = f" (chars {p.span.start}-{p.span.end})" if p.span else ""
-            lines.append(f"### {p.id}: \u201c{p.original_text}\u201d{span}")
+            members = sorted({p.id, *p.conflict})
+            key = frozenset(members)
+            if key in seen:
+                continue
+            seen.add(key)
+            bridges = [m for m in members if by_id.get(m) and by_id[m].type == StatementType.BRIDGE]
+            kind = "bridged" if bridges else "self-contained"
+            lines.append(f"### Inconsistent set {{{', '.join(members)}}} ({kind})")
             lines.append("")
-            lines.append(f"- Formalized as: `{p.fol}` ({_safe_verbalize(p.fol)})")
-            lines.append("- Minimal conflicting set:")
-            for cid in p.conflict:
-                cp = by_id.get(cid)
-                if cp:
-                    cspan = f" (chars {cp.span.start}-{cp.span.end})" if cp.span else ""
-                    lines.append(f"  - {cid}: \u201c{cp.original_text}\u201d{cspan} -> `{cp.fol}`")
-            lines.append(
-                "- Reading: these statements cannot all be true at once; "
-                "the author has violated their own stated premises."
-            )
+            for mid in members:
+                mp = by_id.get(mid)
+                if not mp:
+                    continue
+                span = f" (chars {mp.span.start}-{mp.span.end})" if mp.span else ""
+                tag = " [background premise, not stated in the text]" if mp.type == StatementType.BRIDGE else ""
+                lines.append(f"- {mid}{tag}: \u201c{mp.original_text}\u201d{span} -> `{mp.fol}`")
+            if bridges:
+                lines.append(
+                    f"- Note: this inconsistency is only detectable if you also accept "
+                    f"{', '.join(bridges)}. Without that background premise, the author's "
+                    f"own statements remain mutually consistent."
+                )
             lines.append("")
 
     entailed = [p for p in props if p.verdict == Verdict.ENTAILED]
@@ -84,6 +105,14 @@ def render_markdown(report: RunReport) -> str:
             lines.append(f"- {p.id}: \u201c{p.decontextualized}\u201d")
         lines.append("")
 
+    unknown = [p for p in props if p.verdict == Verdict.UNKNOWN]
+    if unknown:
+        lines.append("## Unknown (solver could not decide within limits)")
+        lines.append("")
+        for p in unknown:
+            lines.append(f"- {p.id}: \u201c{p.decontextualized}\u201d")
+        lines.append("")
+
     flagged = [p for p in props if p.status in (GateOutcome.AMBIGUOUS, GateOutcome.QUARANTINED)]
     if flagged:
         lines.append("## Excluded from the axiom set (nothing is dropped silently)")
@@ -91,6 +120,21 @@ def render_markdown(report: RunReport) -> str:
         for p in flagged:
             lines.append(f"- {p.id} [{p.status.value}]: \u201c{p.original_text}\u201d :: {p.gate_reason}")
         lines.append("")
+
+    lines.append("## Surface screener (lexical placeholder for the NLI path)")
+    lines.append("")
+    if report.screener:
+        for f in report.screener:
+            lines.append(f"- {f['a']} vs {f['b']}: {f['signal']} (overlap {f['jaccard']})")
+        lines.append("")
+        lines.append(
+            "Screener flags are cheap surface signals, not verdicts; the symbolic "
+            "verdicts above are authoritative. Multi-hop inconsistencies are invisible "
+            "to the screener by design."
+        )
+    else:
+        lines.append("No surface-level conflicts flagged.")
+    lines.append("")
 
     lines.append("## Theory tree")
     lines.append("")
@@ -100,6 +144,7 @@ def render_markdown(report: RunReport) -> str:
     lines.append(build_tree_text(report))
     lines.append("```")
     lines.append("")
+
     lines.append("## Cluster diagnostics")
     lines.append("")
     for c in report.clusters:
@@ -108,6 +153,16 @@ def render_markdown(report: RunReport) -> str:
         lines.append(f"- cluster {c.cluster_id}: {len(c.statement_ids)} statements, axioms consistent: {cons}{note}")
         if c.axiom_conflict:
             lines.append(f"  - minimal inconsistent axiom set: {', '.join(c.axiom_conflict)}")
+    if not report.clusters:
+        lines.append("- solver skipped (effort 0)")
+    lines.append("")
+
+    lines.append("## Timing")
+    lines.append("")
+    lines.append("| stage | seconds |")
+    lines.append("|---|---|")
+    for r in report.timing:
+        lines.append(f"| {r['stage']} | {r['seconds']:.4f} |")
     lines.append("")
 
     lines.append("## Shared vocabulary")

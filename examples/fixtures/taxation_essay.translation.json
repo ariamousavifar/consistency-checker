@@ -1,0 +1,5 @@
+{
+  "t1": "forall x. (Tax(x) -> Theft(x))",
+  "t2": null,
+  "t3": "exists x. (Tax(x) and MorallyJustified(x))"
+}

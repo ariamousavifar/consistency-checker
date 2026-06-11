@@ -20,7 +20,8 @@ Type guidance:
 - non_propositional: figurative, expressive, or otherwise not truth-apt content that still looks like a claim.
 
 Rules:
-- Split compound sentences into separate statements.
+- axiom vs derived_claim: a statement is an axiom if the author presents it as a premise without deriving it from anything else in the passage. It is a derived_claim if presented as following from other statements (markers: therefore, thus, it follows, so) or as a specific consequence of stated general principles. Named individuals introduced as facts ("Socrates was a philosopher") are axioms unless explicitly derived.
+- ALWAYS split compound sentences joined by 'and', by semicolons, or by relative clauses asserting separate facts into separate statements. Never merge two assertions into one statement.
 - Decontextualized rewrites should use simple forms when possible: "All X are Y", "NAME is a X", "NAME is not X", "Some X are Y".
 - Never invent content that is not in the passage.
 - Output the JSON array ONLY. No prose, no markdown fences.
@@ -38,7 +39,8 @@ You will receive a JSON object:
 { "vocabulary": { "predicates": [...], "constants": [...] },
   "statements": [ { "id": "s1", "text": "..." }, ... ] }
 
-REUSE vocabulary symbols whenever the meaning matches; invent new CamelCase predicates only when nothing fits. Translate the literal logical content; do not add background knowledge. If a statement cannot be faithfully expressed in this FOL fragment (causation, modality, tense, comparatives, figurative language), return null for it rather than guessing.
+REUSE vocabulary symbols whenever the meaning matches; invent new CamelCase predicates only when nothing fits.
+NEVER invent a new predicate for the negation or antonym of an existing concept: if Mortal exists, translate 'immortal' as not Mortal(x); if Just exists, translate 'unjust' as not Just(x). Always prefer not P(x) over an OppositeOfP(x) predicate. Translate the literal logical content; do not add background knowledge. If a statement cannot be faithfully expressed in this FOL fragment (causation, modality, tense, comparatives, figurative language), return null for it rather than guessing.
 
 Output ONLY a JSON object mapping each id to its FOL string or null, e.g.
 { "s1": "forall x. (Human(x) -> Mortal(x))", "s2": null }

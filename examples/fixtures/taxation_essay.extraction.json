@@ -1,0 +1,23 @@
+[
+  {
+    "id": "t1",
+    "type": "axiom",
+    "original_text": "All taxation is theft.",
+    "decontextualized": "Every tax is a theft.",
+    "speaker": "author"
+  },
+  {
+    "id": "t2",
+    "type": "non_propositional",
+    "original_text": "The state takes what it has not earned.",
+    "decontextualized": "The state takes what it has not earned.",
+    "speaker": "author"
+  },
+  {
+    "id": "t3",
+    "type": "derived_claim",
+    "original_text": "some taxes are morally justified",
+    "decontextualized": "Some taxes are morally justified.",
+    "speaker": "author"
+  }
+]
