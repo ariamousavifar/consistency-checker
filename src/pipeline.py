@@ -9,7 +9,13 @@ import json
 from pathlib import Path
 
 from .cleaning import clean
-from .extraction import FixtureExtractor, FixtureTranslator, LiveExtractor, LiveTranslator
+from .extraction import (
+    FixtureExtractor,
+    FixtureTranslator,
+    LiveExtractor,
+    LiveTranslator,
+    apply_compound_splitting,
+)
 from .gate import run_gate
 from .llm_client import LLMClient, LLMConfig
 from .report import render_markdown
@@ -79,6 +85,9 @@ def run_pipeline(
 
     with timer.stage("extraction"):
         statements = extractor.extract(doc.raw_text)
+        if not offline:
+            # Fixtures are authored already-split; only live extraction needs this.
+            statements = apply_compound_splitting(statements)
 
     vocab = Vocabulary()
     with timer.stage("translation"):

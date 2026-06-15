@@ -1,4 +1,44 @@
-# Internal-Inconsistency Checker (prototype v0.3)
+# Internal-Inconsistency Checker (prototype v0.4)
+
+## What's new in v0.4
+
+1. Lemmatization in vocabulary alignment: Tax / Taxation / taxes now collapse
+   to one predicate (also mortality/mortal, happiness/happy, etc.). This fixes
+   the live-run failure where a Tax-vs-Taxation mismatch made a real
+   contradiction invisible. Short words are protected from over-stripping.
+2. Symmetric consistency checking: inconsistency is now a property of a SET,
+   independent of statement role. Two derived claims that contradict each other
+   are flagged even if neither is an axiom. The axiom/derived_claim distinction
+   is kept only for entailment direction and display. When a set is
+   inconsistent, the report still computes entailment context from the
+   consistent remainder, so it explains WHY the conflict arises.
+3. Deterministic compound splitting: a post-extraction pass splits statements
+   that still join two independent clauses ("Socrates was a philosopher and
+   Socrates was human") while preserving shared-predicate noun phrases ("roads
+   and hospitals do not pay for themselves"). Applied in live mode; fixtures
+   are authored pre-split.
+4. Incomplete-argument reporting: a not_entailed claim is now explicitly framed
+   as "the premises are insufficient to prove this; the argument may rely on
+   unstated assumptions" -- an incomplete argument, distinct from inconsistency.
+5. Effort dial extended to level 3: cross-cluster pairwise sweep that catches
+   inconsistencies spanning clusters the predicate-clusterer split apart.
+6. Z3 scaling instrumentation: each cluster reports statement count, solver
+   milliseconds, and a timeout/unknown flag; a warning fires for large sets
+   where quantifier instantiation becomes unpredictable.
+7. --all-examples: runs every example in examples/examples.json into one
+   timestamped folder with a named subfolder per example and a summary table
+   (inconsistent sets found, screener flags, total ms per example).
+8. --out now auto-increments (out, out1, out2, ...) so runs never overwrite.
+9. Test suite expanded to 54 offline tests.
+
+### Note on the sample essay result
+
+Because the sample essay asserts both "Socrates was mortal" and "Socrates is
+immortal", v0.4's symmetric checker now correctly reports the MINIMAL
+inconsistent set as {s7, s8} (the direct contradiction) rather than the longer
+multi-hop set, while still showing that s6 is entailed from the consistent
+remainder. This is more correct, not a regression.
+
 
 ## What's new in v0.3
 
@@ -38,6 +78,12 @@ language judgment and translation; Z3 does all logical verification.
 
 ```
 python -m src.main --file examples/sample_essay.txt --offline
+```
+
+Run every shipped example at once into one timestamped folder:
+
+```
+python -m src.main --all-examples --offline
 ```
 
 A second example demonstrates bridged contradictions (taxation):
@@ -134,7 +180,7 @@ Requirements: Python 3.10+ (tested on 3.12), internet for `pip install`.
    Press Run. The console prints the verdict table; open `out/report.md`
    to see the full report (PyCharm renders Markdown).
 5. Run the tests: right-click the `tests/` folder -> "Run pytest in tests".
-   All 37 tests run offline in about a second.
+   All 54 tests run offline in about a second.
 
 Command-line equivalents:
 ```
@@ -226,6 +272,9 @@ src/tree_builder.py     theory tree (ASCII), graph.dot, graph.svg, optional grap
 src/main.py             CLI
 tests/test_all.py       core tests, including end-to-end
 tests/test_v03_features.py  negation mapping, bridges, effort, screener, timing
+tests/test_v04_features.py  lemmatization, splitting, symmetric consistency, effort 3
+src/lemmatizer.py       morphological merging (Tax/Taxation)
+src/splitter.py         deterministic compound-statement splitting
 src/timing.py           per-stage wall-clock instrumentation
 src/screener.py         surface screener (lexical placeholder for NLI)
 examples/               sample essay + fixtures

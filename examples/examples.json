@@ -1,0 +1,22 @@
+{
+  "examples": [
+    {
+      "name": "sample_essay",
+      "file": "examples/sample_essay.txt",
+      "bridges": null,
+      "note": "Socrates: multi-hop chain plus a direct mortal/immortal contradiction"
+    },
+    {
+      "name": "taxation_plain",
+      "file": "examples/taxation_essay.txt",
+      "bridges": null,
+      "note": "Taxation judged as written: incomplete argument, no contradiction without a bridge"
+    },
+    {
+      "name": "taxation_bridged",
+      "file": "examples/taxation_essay.txt",
+      "bridges": "examples/taxation_essay.bridges.json",
+      "note": "Taxation with the background premise 'all theft is morally unjustified': bridged contradiction"
+    }
+  ]
+}

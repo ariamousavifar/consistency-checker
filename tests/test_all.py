@@ -146,16 +146,32 @@ def test_solver_verdicts_and_minimal_conflict():
         _accepted("ax3", StatementType.AXIOM, "Philosopher(socrates)"),
         _accepted("ax4", StatementType.AXIOM, "forall x. (Cat(x) -> Animal(x))"),  # irrelevant axiom
         _accepted("c1", StatementType.DERIVED_CLAIM, "Mortal(socrates)"),
-        _accepted("c2", StatementType.DERIVED_CLAIM, "not Mortal(socrates)"),
         _accepted("c3", StatementType.DERIVED_CLAIM, "exists x. (Human(x) and Wise(x))"),
     ]
     verify(props)
     by_id = {p.id: p for p in props}
+    # whole set is consistent, so claims are classified by entailment
     assert by_id["c1"].verdict == Verdict.ENTAILED
-    assert set(by_id["c1"].support) == {"ax1", "ax2", "ax3"}
-    assert by_id["c2"].verdict == Verdict.CONTRADICTS
-    assert set(by_id["c2"].conflict) == {"ax1", "ax2", "ax3"}  # ax4 must not appear: minimality
+    assert set(by_id["c1"].support) == {"ax1", "ax2", "ax3"}  # ax4 excluded: minimality
     assert by_id["c3"].verdict == Verdict.NOT_ENTAILED
+
+
+def test_solver_symmetric_inconsistency_across_claims():
+    """Item 9: inconsistency is a property of the SET regardless of role.
+    Two derived claims that contradict each other (given the axioms) make the
+    whole set inconsistent; the minimal set is reported and no member is
+    declared the wrong one."""
+    props = [
+        _accepted("ax1", StatementType.AXIOM, "forall x. (Philosopher(x) -> Human(x))"),
+        _accepted("ax2", StatementType.AXIOM, "forall x. (Human(x) -> Mortal(x))"),
+        _accepted("ax3", StatementType.AXIOM, "Philosopher(socrates)"),
+        _accepted("c2", StatementType.DERIVED_CLAIM, "not Mortal(socrates)"),
+    ]
+    verify(props)
+    by_id = {p.id: p for p in props}
+    assert by_id["c2"].verdict == Verdict.CONTRADICTS
+    # the minimal inconsistent set is exactly the mortality chain plus c2
+    assert set(by_id["c2"].conflict) == {"ax1", "ax2", "ax3"}
 
 
 def test_solver_detects_inconsistent_axiom_set():
@@ -168,8 +184,12 @@ def test_solver_detects_inconsistent_axiom_set():
     reports = verify(props)
     assert any(r.axioms_consistent is False for r in reports)
     bad = next(r for r in reports if r.axioms_consistent is False)
-    assert set(bad.axiom_conflict) == {"ax1", "ax2", "ax3"}
-    assert {p.id: p.verdict for p in props}["c1"] == Verdict.UNKNOWN
+    # Symmetric consistency finds the SMALLEST inconsistent set. Here the claim
+    # c1 (Flies(tweety)) directly contradicts ax3 (not Flies(tweety)), so the
+    # minimal set is {ax3, c1} -- it does not need the ax1->ax2 derivation.
+    conflict = set(bad.axiom_conflict)
+    assert "c1" in conflict and "ax3" in conflict
+    assert len(conflict) == 2  # genuinely minimal
 
 
 # ---------- End-to-end offline pipeline ----------
@@ -182,13 +202,17 @@ def test_pipeline_offline_end_to_end(tmp_path):
         out_dir=tmp_path,
     )
     by_id = {p.id: p for p in report.propositions}
-    assert by_id["s6"].verdict == Verdict.ENTAILED
-    assert set(by_id["s6"].support) == {"s1", "s2", "s3"}
-    assert by_id["s7"].verdict == Verdict.ENTAILED
-    assert set(by_id["s7"].support) == {"s3", "s4", "s5"}
+    # The author asserts both "Socrates is mortal" (s7) and "Socrates is not
+    # mortal" (s8): the minimal inconsistent set is exactly {s7, s8}.
+    assert by_id["s7"].verdict == Verdict.CONTRADICTS
     assert by_id["s8"].verdict == Verdict.CONTRADICTS
-    assert set(by_id["s8"].conflict) == {"s3", "s4", "s5"}
-    assert by_id["s10"].verdict == Verdict.NOT_ENTAILED
+    assert set(by_id["s7"].conflict) == {"s8"}
+    assert set(by_id["s8"].conflict) == {"s7"}
+    # Explanatory context survives: s6 is still provable from the consistent
+    # remainder of the axioms.
+    assert by_id["s6"].verdict == Verdict.ENTAILED
+    assert {"s1", "s2", "s3"} == set(by_id["s6"].support)
+    # s9 is figurative and excluded, never silently dropped.
     assert by_id["s9"].status == GateOutcome.QUARANTINED
     assert by_id["s9"].verdict is None
     # provenance: every located statement maps back into the source file
@@ -212,14 +236,14 @@ def test_tree_dot_svg_outputs(tmp_path):
     )
     tree = build_tree_text(report)
     assert "theory cluster 0" in tree
-    assert "axioms consistent: YES" in tree
-    assert "INCOMPATIBLE WITH" in tree            # s8 shows its conflict set inline
-    assert "excluded from theory" in tree      # s9 appears, never silently dropped
+    assert "axioms consistent: NO" in tree          # author asserts mortal AND immortal
+    assert "MINIMAL INCONSISTENT" in tree
+    assert "excluded from theory" in tree            # s9 appears, never silently dropped
 
     dot = build_dot(report)
     assert dot.startswith("digraph")
-    assert 's3 -> s8' in dot or 's8 -> s3' in dot   # conflict edge present
-    assert '#a32d2d' in dot and '#cfe0f5' in dot    # red conflict + blue axiom colors
+    assert 's7 -> s8' in dot or 's8 -> s7' in dot    # direct conflict edge present
+    assert '#a32d2d' in dot and '#cfe0f5' in dot     # red conflict + blue axiom colors
 
     svg = build_svg(report)
     assert svg.startswith("<svg") and svg.endswith("</svg>")

@@ -152,7 +152,7 @@ def test_effort_two_merges_into_global_set():
     ]
     reports = verify(props, effort=2)
     assert len(reports) == 1
-    assert "global axiom set" in reports[0].note
+    assert "global set" in reports[0].note
 
 
 def test_effort_zero_skips_solver(tmp_path):

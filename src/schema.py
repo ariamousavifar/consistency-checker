@@ -78,6 +78,10 @@ class ClusterReport(BaseModel):
     axioms_consistent: Optional[bool] = None
     axiom_conflict: list[str] = Field(default_factory=list)
     note: str = ""
+    n_statements: int = 0
+    solver_calls: int = 0
+    solver_ms: float = 0.0
+    hit_timeout: bool = False
 
 
 class RunReport(BaseModel):

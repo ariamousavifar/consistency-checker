@@ -1,6 +1,6 @@
 """Provider-agnostic LLM client (Groq, NVIDIA NIM, or any OpenAI-compatible endpoint).
 
-Configured entirely from environment variables (see .env). Includes a
+Configured entirely from environment variables (see .env.example). Includes a
 three-layer JSON robustness strategy: code-fence stripping, balanced-bracket
 extraction, and one self-correction retry where the model is shown its own
 broken output and asked to emit valid JSON only.

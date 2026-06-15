@@ -101,6 +101,12 @@ def render_markdown(report: RunReport) -> str:
     if not_entailed:
         lines.append("## Unverifiable claims (consistent with the axioms but not provable from them)")
         lines.append("")
+        lines.append(
+            "These claims do not contradict anything, but the author's stated premises "
+            "are insufficient to prove them. The argument may rely on unstated assumptions. "
+            "This is an incomplete argument, not an inconsistency."
+        )
+        lines.append("")
         for p in not_entailed:
             lines.append(f"- {p.id}: \u201c{p.decontextualized}\u201d")
         lines.append("")
@@ -149,10 +155,17 @@ def render_markdown(report: RunReport) -> str:
     lines.append("")
     for c in report.clusters:
         cons = "n/a" if c.axioms_consistent is None else str(c.axioms_consistent)
+        flags = []
+        if c.hit_timeout:
+            flags.append("TIMEOUT/UNKNOWN")
+        flag_s = f" [{', '.join(flags)}]" if flags else ""
         note = f" :: {c.note}" if c.note else ""
-        lines.append(f"- cluster {c.cluster_id}: {len(c.statement_ids)} statements, axioms consistent: {cons}{note}")
+        lines.append(
+            f"- cluster {c.cluster_id}: {c.n_statements} statements, consistent: {cons}, "
+            f"solver {c.solver_ms:.1f} ms{flag_s}{note}"
+        )
         if c.axiom_conflict:
-            lines.append(f"  - minimal inconsistent axiom set: {', '.join(c.axiom_conflict)}")
+            lines.append(f"  - minimal inconsistent set: {', '.join(c.axiom_conflict)}")
     if not report.clusters:
         lines.append("- solver skipped (effort 0)")
     lines.append("")

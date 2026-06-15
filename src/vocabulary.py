@@ -21,6 +21,7 @@ from __future__ import annotations
 import re
 
 from .fol_parser import KEYWORDS, tokenize
+from .lemmatizer import lemma
 
 _IDENT = re.compile(r"[A-Za-z_]\w*$")
 _STOPWORDS = {"a", "an", "the"}
@@ -44,7 +45,9 @@ def words_of(name: str) -> list[str]:
 
 
 def pred_key(name: str) -> str:
-    return "".join(_plural_strip(w) for w in words_of(name))
+    """Morphology-insensitive key: lemmatize each word so Tax/Taxation/taxes,
+    Mortal/Mortality, etc. collapse to one predicate."""
+    return "".join(lemma(w) for w in words_of(name))
 
 
 class Vocabulary:
@@ -74,7 +77,7 @@ class Vocabulary:
             return self._pred_by_key[key], False
         ws = words_of(name)
         if len(ws) > 1 and ws[0] in ("not", "non"):
-            base_key = "".join(_plural_strip(w) for w in ws[1:])
+            base_key = "".join(lemma(w) for w in ws[1:])
             if base_key in self._pred_by_key:
                 self._neg_of[key] = self._pred_by_key[base_key]
                 return self._neg_of[key], True
@@ -82,6 +85,8 @@ class Vocabulary:
             if key.startswith(p) and len(key) - len(p) >= 3 and key[len(p):] in self._pred_by_key:
                 self._neg_of[key] = self._pred_by_key[key[len(p):]]
                 return self._neg_of[key], True
+        # Display name: readable (plural-stripped surface form), not the
+        # aggressively-lemmatized key. Matching uses the key; humans see this.
         camel = "".join(_plural_strip(w).capitalize() for w in ws)
         self._pred_by_key[key] = camel
         return camel, False

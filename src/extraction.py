@@ -15,6 +15,31 @@ from pathlib import Path
 from .llm_client import LLMClient
 from .prompts import EXTRACTION_SYSTEM, TRANSLATION_SYSTEM
 from .schema import ExtractedStatement
+from .splitter import split_statement
+
+
+def apply_compound_splitting(statements: list[ExtractedStatement]) -> list[ExtractedStatement]:
+    """Deterministically split any decontextualized proposition that still
+    joins two independent clauses (the LLM often ignores the prompt rule).
+    Split children keep the parent's type/speaker and get suffixed ids."""
+    out: list[ExtractedStatement] = []
+    for st in statements:
+        pieces = split_statement(st.decontextualized)
+        if len(pieces) <= 1:
+            out.append(st)
+            continue
+        for i, piece in enumerate(pieces, start=1):
+            out.append(
+                ExtractedStatement(
+                    id=f"{st.id}.{i}",
+                    type=st.type,
+                    original_text=st.original_text,
+                    decontextualized=piece,
+                    speaker=st.speaker,
+                    depends_on=st.depends_on,
+                )
+            )
+    return out
 
 
 class FixtureExtractor:
