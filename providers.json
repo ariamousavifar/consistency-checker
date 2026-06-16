@@ -1,0 +1,33 @@
+{
+  "providers": {
+    "nim": {
+      "label": "NVIDIA NIM",
+      "base_url": "https://integrate.api.nvidia.com/v1",
+      "api_key_env": ["NIM_API_KEY", "NVIDIA_API_KEY", "LLM_API_KEY"],
+      "models": [
+        "openai/gpt-oss-120b",
+        "deepseek-ai/deepseek-v4-flash",
+        "deepseek-ai/deepseek-v4-pro",
+        "qwen/qwen3.5-122b-a10b",
+        "google/gemma-4-31b-it",
+        "meta/llama-3.3-70b-instruct"
+      ],
+      "thinking_models": [
+        "deepseek-ai/deepseek-v4-pro",
+        "deepseek-ai/deepseek-v4-flash",
+        "qwen/qwen3.5-122b-a10b",
+        "google/gemma-4-31b-it"
+      ]
+    },
+    "groq": {
+      "label": "Groq",
+      "base_url": "https://api.groq.com/openai/v1",
+      "api_key_env": ["GROQ_API_KEY", "LLM_API_KEY"],
+      "models": [
+        "openai/gpt-oss-120b",
+        "llama-3.3-70b-versatile"
+      ],
+      "thinking_models": []
+    }
+  }
+}

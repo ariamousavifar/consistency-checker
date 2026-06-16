@@ -44,10 +44,22 @@ def words_of(name: str) -> list[str]:
     return [p.lower() for p in parts]
 
 
+# Semantically-light head nouns that frequently appear as a trailing classifier
+# ("prime number" = "prime", "industrious creature" = "industrious thing").
+# Dropped ONLY when trailing AND not the sole word, so "number"/"creature" alone
+# are preserved. This aligns rule-translator and LLM-translator outputs that
+# differ only by such a classifier, which otherwise collapses to "ambiguous".
+_LIGHT_HEADS = {"number", "creature", "thing", "object", "entity", "being", "individual"}
+
+
 def pred_key(name: str) -> str:
     """Morphology-insensitive key: lemmatize each word so Tax/Taxation/taxes,
-    Mortal/Mortality, etc. collapse to one predicate."""
-    return "".join(lemma(w) for w in words_of(name))
+    Mortal/Mortality, etc. collapse to one predicate. Trailing light head nouns
+    are dropped so PrimeNumber and Prime map together."""
+    ws = words_of(name)
+    if len(ws) > 1 and ws[-1] in _LIGHT_HEADS:
+        ws = ws[:-1]
+    return "".join(lemma(w) for w in ws)
 
 
 class Vocabulary:

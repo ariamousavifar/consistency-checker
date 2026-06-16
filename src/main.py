@@ -40,28 +40,34 @@ def _inconsistent_sets(report) -> list[tuple]:
     return sets
 
 
-def _print_report(report, out_dir: str, show_tree: bool) -> None:
-    print(f"\nSource: {report.source_file}   mode: {report.mode}   effort: {report.effort}\n")
-    print(f"{'id':<6} {'type':<18} {'gate':<12} {'verdict':<14} {'statement'}")
-    print("-" * 100)
+def _format_report(report, out_dir: str, show_tree: bool) -> str:
+    lines = []
+    lines.append(f"\nSource: {report.source_file}   mode: {report.mode}   effort: {report.effort}\n")
+    lines.append(f"{'id':<6} {'type':<18} {'gate':<12} {'verdict':<14} {'statement'}")
+    lines.append("-" * 100)
     for p in report.propositions:
         verdict = p.verdict.value if p.verdict else "-"
-        print(f"{p.id:<6} {p.type.value:<18} {p.status.value:<12} {verdict:<14} {p.decontextualized[:58]}")
-    print()
+        lines.append(f"{p.id:<6} {p.type.value:<18} {p.status.value:<12} {verdict:<14} {p.decontextualized[:58]}")
+    lines.append("")
     for members, bridged in _inconsistent_sets(report):
         tag = " [bridged: relies on a background premise]" if bridged else ""
-        print(f"INCONSISTENT SET {{{', '.join(members)}}}: these cannot all be true; "
-              f"at least one must be abandoned (the system does not pick which){tag}")
+        lines.append(f"INCONSISTENT SET {{{', '.join(members)}}}: these cannot all be true; "
+                     f"at least one must be abandoned (the system does not pick which){tag}")
     if report.screener:
-        print(f"\nSurface screener flagged {len(report.screener)} pair(s): "
-              + ", ".join(f"{f['a']}~{f['b']}" for f in report.screener))
-    print("\nTiming:")
+        lines.append(f"\nSurface screener flagged {len(report.screener)} pair(s): "
+                     + ", ".join(f"{f['a']}~{f['b']}" for f in report.screener))
+    lines.append("\nTiming:")
     for r in report.timing:
-        print(f"  {r['stage']:<16}{r['seconds']:>10.4f}s")
+        lines.append(f"  {r['stage']:<16}{r['seconds']:>10.4f}s")
     if show_tree:
-        print()
-        print(build_tree_text(report))
-    print(f"\nFull report: {out_dir}/report.md")
+        lines.append("")
+        lines.append(build_tree_text(report))
+    lines.append(f"\nFull report: {out_dir}/report.md")
+    return "\n".join(lines)
+
+
+def _print_report(report, out_dir: str, show_tree: bool) -> None:
+    print(_format_report(report, out_dir, show_tree))
 
 
 def _run_all(args) -> int:
@@ -71,43 +77,68 @@ def _run_all(args) -> int:
     parent = Path(f"out_all_{stamp}_{eff}")
     parent.mkdir(parents=True, exist_ok=True)
     summary = []
+    transcript: list[str] = []
+
+    def emit(text: str) -> None:
+        print(text)
+        transcript.append(text)
+
     for ex in manifest["examples"]:
         sub = parent / ex["name"]
-        print("\n" + "=" * 100)
-        print(f"EXAMPLE: {ex['name']}  ::  {ex.get('note', '')}")
-        print("=" * 100)
-        report = run_pipeline(
-            file_path=ex["file"],
-            offline=args.offline,
-            fixtures_dir=args.fixtures,
-            out_dir=str(sub),
-            solver_timeout_ms=args.solver_timeout_ms,
-            effort=args.effort,
-            bridges_path=ex.get("bridges"),
-        )
-        _print_report(report, str(sub), show_tree=not args.no_tree)
+        header = "\n" + "=" * 100 + f"\nEXAMPLE: {ex['name']}  ::  {ex.get('note', '')}\n" + "=" * 100
+        emit(header)
+        # Item 15: per-example isolation. One failure (e.g. a model returning
+        # prose instead of JSON) must not abort the whole batch.
+        try:
+            report = run_pipeline(
+                file_path=ex["file"],
+                offline=args.offline,
+                fixtures_dir=args.fixtures,
+                out_dir=str(sub),
+                solver_timeout_ms=args.solver_timeout_ms,
+                effort=args.effort,
+                bridges_path=ex.get("bridges"),
+                model_overrides=getattr(args, "_overrides", None),
+            )
+        except Exception as exc:
+            msg = f"\n!! ERROR on {ex['name']}: {type(exc).__name__}: {exc}\n   (skipped; batch continues)"
+            emit(msg)
+            summary.append((ex["name"], "ERR", "ERR", 0.0, str(sub)))
+            continue
+        emit(_format_report(report, str(sub), show_tree=not args.no_tree))
         sets = _inconsistent_sets(report)
         total_ms = sum(r["seconds"] for r in report.timing) * 1000
         summary.append((ex["name"], len(sets), len(report.screener), total_ms, str(sub)))
 
-    print("\n" + "=" * 100)
-    print("SUMMARY (all examples)")
-    print("=" * 100)
-    print(f"{'example':<20}{'inconsistent_sets':>18}{'screener_flags':>16}{'total_ms':>12}   folder")
+    summary_lines = ["\n" + "=" * 100, "SUMMARY (all examples)", "=" * 100]
+    summary_lines.append(f"{'example':<24}{'inconsistent_sets':>18}{'screener_flags':>16}{'total_ms':>12}   folder")
     for name, nsets, nflags, ms, folder in summary:
-        print(f"{name:<20}{nsets:>18}{nflags:>16}{ms:>12.1f}   {folder}")
-    print(f"\nAll outputs under: {parent}/")
+        ms_s = f"{ms:>12.1f}" if isinstance(ms, float) else f"{ms:>12}"
+        summary_lines.append(f"{name:<24}{str(nsets):>18}{str(nflags):>16}{ms_s}   {folder}")
+    summary_lines.append(f"\nAll outputs under: {parent}/")
+    summary_text = "\n".join(summary_lines)
+    emit(summary_text)
+
+    # Item 12: one consolidated transcript so results need not be copy-pasted
+    # from each report.md by hand.
+    consolidated = parent / "all_examples_report.txt"
+    consolidated.write_text("\n".join(transcript) + "\n", encoding="utf-8")
+    print(f"\nConsolidated transcript: {consolidated}")
     return 0
 
 
 def main(argv: list[str] | None = None) -> int:
     load_dotenv()
-    parser = argparse.ArgumentParser(description="Internal-inconsistency checker (prototype v0.4)")
+    parser = argparse.ArgumentParser(description="Internal-inconsistency checker (prototype v0.6)")
     parser.add_argument("--file", help="Path to a .txt document")
     parser.add_argument("--all-examples", action="store_true",
                         help="Run every example in examples/examples.json into one timestamped folder")
     parser.add_argument("--offline", action="store_true", help="Use shipped fixtures instead of an LLM API")
     parser.add_argument("--fixtures", default="examples/fixtures", help="Fixtures directory (offline mode)")
+    parser.add_argument("--provider", default=None,
+                        help="LLM provider short name (nim, groq). If omitted, prompts or uses .env.")
+    parser.add_argument("--model", default=None,
+                        help="Model id or short suffix. If omitted, prompts or uses .env.")
 
     def _next_out() -> str:
         import re
@@ -125,6 +156,14 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--no-tree", action="store_true", help="Skip printing the theory tree to the console")
     args = parser.parse_args(argv)
 
+    # Resolve provider/model once (flags > interactive picker > .env fallback).
+    # Skipped entirely in offline mode, which uses no LLM.
+    overrides = None
+    if not args.offline:
+        from .providers import resolve_model_config
+        overrides = resolve_model_config(args.provider, args.model)
+    args._overrides = overrides
+
     if args.all_examples:
         return _run_all(args)
 
@@ -140,6 +179,7 @@ def main(argv: list[str] | None = None) -> int:
         solver_timeout_ms=args.solver_timeout_ms,
         effort=args.effort,
         bridges_path=args.bridges,
+        model_overrides=overrides,
     )
     _print_report(report, out_dir, show_tree=not args.no_tree)
     print(f"             (also report.json, store.json, timing.json, theory_tree.txt,")

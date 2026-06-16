@@ -1,0 +1,9 @@
+On Knowledge
+
+Every instance of knowledge is a justified true belief. Every justified
+true belief is a belief. Every belief is a mental state.
+
+Her conviction is an instance of knowledge. Therefore her conviction is
+a belief, and her conviction is a mental state.
+
+Some mental states are not beliefs.

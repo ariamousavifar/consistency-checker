@@ -1,0 +1,8 @@
+On Prime Numbers
+
+Every prime number is a natural number. Every prime number is divisible
+only by one and itself. Every natural number is an integer.
+
+Two is a prime number. Two is an integer.
+
+No prime number is an integer.

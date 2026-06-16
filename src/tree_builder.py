@@ -115,7 +115,7 @@ def build_tree_text(report: RunReport, width: int = 56) -> str:
             children.append((f"bridge premises ({len(bridges)})", [(leaf(p), []) for p in bridges]))
         children.append((f"claims ({len(claims)})", claim_nodes))
         if c.axiom_conflict:
-            children.insert(0, ("MINIMAL INCONSISTENT AXIOM SET",
+            children.insert(0, ("MINIMAL INCONSISTENT SET",
                                 [(leaf(by_id[i]), []) for i in c.axiom_conflict if i in by_id]))
         _render_tree(root_label, children, lines, is_root=True)
         lines.append("")
@@ -158,11 +158,34 @@ def build_dot(report: RunReport) -> str:
     for p in report.propositions:
         for sid in p.support:
             out.append(f'  {sid} -> {p.id} [color="#5f5e5a", arrowsize=0.7];')
-        for cid in p.conflict:
-            out.append(f'  {p.id} -> {cid} [color="#a32d2d", style=dashed, arrowsize=0.7, label="conflict", fontcolor="#a32d2d", fontsize=9];')
         for did in p.depends_on:
             if did in by_id:
                 out.append(f'  {did} -> {p.id} [color="#185fa5", style=dotted, arrowsize=0.6];')
+
+    # Minimal inconsistent sets: draw ONE hub per set, with every member joined
+    # to the hub. This shows the set is JOINTLY unsatisfiable, not that any pair
+    # individually contradicts (the old pairwise edges drew a misleading triangle
+    # implying every member conflicts with every other).
+    seen_sets: set[frozenset] = set()
+    hub_i = 0
+    for p in report.propositions:
+        if p.verdict == Verdict.CONTRADICTS:
+            members = frozenset({p.id, *p.conflict})
+            if not members or members in seen_sets:
+                continue
+            seen_sets.add(members)
+            hub = f"conflict_hub_{hub_i}"
+            hub_i += 1
+            out.append(
+                f'  {hub} [label="minimal\\ninconsistent set", shape=octagon, '
+                f'fillcolor="#f6dcdc", color="#a32d2d", fontsize=9, style="filled"];'
+            )
+            for mid in members:
+                if mid in by_id:
+                    out.append(
+                        f'  {mid} -> {hub} [color="#a32d2d", style=dashed, '
+                        f'arrowsize=0.6, dir=none];'
+                    )
     out.append("}")
     return "\n".join(out)
 
@@ -246,20 +269,40 @@ def build_svg(report: RunReport) -> str:
                     f'<line x1="{sx + _NODE_W / 2}" y1="{sy + _NODE_H}" x2="{px + _NODE_W / 2}" y2="{py}" '
                     f'stroke="#5f5e5a" stroke-width="1" marker-end="url(#arr)"/>'
                 )
-        for cid in p.conflict:
-            if cid in pos:
-                cx, cy = pos[cid]
-                edges.append(
-                    f'<line x1="{px + _NODE_W / 2}" y1="{py}" x2="{cx + _NODE_W / 2}" y2="{cy + _NODE_H}" '
-                    f'stroke="#a32d2d" stroke-width="1.6" stroke-dasharray="6,4" marker-end="url(#arrred)"/>'
-                )
+
+    # Minimal inconsistent sets as translucent bands, NOT pairwise edges. A band
+    # encloses all members of one jointly-unsatisfiable set, so it reads as "these
+    # together cannot all hold" rather than "every pair contradicts".
+    bands: list[str] = []
+    seen_sets: set[frozenset] = set()
+    for p in report.propositions:
+        if p.verdict != Verdict.CONTRADICTS:
+            continue
+        members = frozenset({p.id, *p.conflict})
+        if not members or members in seen_sets:
+            continue
+        seen_sets.add(members)
+        pts = [pos[m] for m in members if m in pos]
+        if not pts:
+            continue
+        minx = min(x for x, _ in pts) - 8
+        miny = min(y for _, y in pts) - 8
+        maxx = max(x for x, _ in pts) + _NODE_W + 8
+        maxy = max(y for _, y in pts) + _NODE_H + 8
+        bands.append(
+            f'<rect x="{minx}" y="{miny}" width="{maxx - minx}" height="{maxy - miny}" '
+            f'rx="10" fill="#a32d2d" fill-opacity="0.06" stroke="#a32d2d" '
+            f'stroke-width="1.4" stroke-dasharray="6,4"/>'
+            f'<text x="{minx + 6}" y="{miny + 14}" font-family="Helvetica,Arial" font-size="10" '
+            f'fill="#a32d2d">minimal inconsistent set</text>'
+        )
 
     nodes = [_node_svg(p, *pos[p.id]) for p in report.propositions if p.id in pos]
     legend_y = height - 14
     legend = (
         f'<text x="{width / 2}" y="{legend_y}" text-anchor="middle" font-family="Helvetica,Arial" font-size="11" '
         f'fill="#5f5e5a">blue axiom | green entailed | amber not entailed | red contradicts | '
-        f'dashed gray excluded | red dashed edge = minimal conflict | gray edge = proof support</text>'
+        f'dashed gray excluded | red dashed band = minimal inconsistent set | gray edge = proof support</text>'
     )
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">'
@@ -270,6 +313,6 @@ def build_svg(report: RunReport) -> str:
         '<path d="M1 1L9 5L1 9" fill="none" stroke="#a32d2d" stroke-width="1.4"/></marker>'
         '</defs>'
         f'<rect width="{width}" height="{height}" fill="#ffffff"/>'
-        + "".join(edges) + "".join(nodes) + legend
+        + "".join(bands) + "".join(edges) + "".join(nodes) + legend
         + "</svg>"
     )

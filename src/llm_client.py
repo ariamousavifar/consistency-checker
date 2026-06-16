@@ -14,12 +14,16 @@ import time
 
 
 class LLMConfig:
-    def __init__(self) -> None:
-        self.base_url = os.getenv("LLM_BASE_URL", "https://api.groq.com/openai/v1")
-        self.api_key = os.getenv("LLM_API_KEY", "")
-        self.model = os.getenv("LLM_MODEL", "llama-3.3-70b-versatile")
+    def __init__(self, overrides: dict | None = None) -> None:
+        overrides = overrides or {}
+        self.base_url = overrides.get("base_url") or os.getenv("LLM_BASE_URL", "https://api.groq.com/openai/v1")
+        self.api_key = overrides.get("api_key") or os.getenv("LLM_API_KEY", "")
+        self.model = overrides.get("model") or os.getenv("LLM_MODEL", "llama-3.3-70b-versatile")
         self.max_tokens = int(os.getenv("LLM_MAX_TOKENS", "2048"))
         self.temperature = float(os.getenv("LLM_TEMPERATURE", "0"))
+        # Some NIM reasoning models (DeepSeek V4, Qwen 3.5, Gemma 4) need an
+        # explicit thinking toggle and may return content in reasoning_content.
+        self.thinking = bool(overrides.get("thinking", False))
 
     @property
     def configured(self) -> bool:
@@ -71,7 +75,7 @@ class LLMClient:
         self._client = OpenAI(base_url=self.config.base_url, api_key=self.config.api_key)
 
     def _raw(self, system: str, user: str) -> str:
-        resp = self._client.chat.completions.create(
+        kwargs = dict(
             model=self.config.model,
             max_tokens=self.config.max_tokens,
             temperature=self.config.temperature,
@@ -80,7 +84,22 @@ class LLMClient:
                 {"role": "user", "content": user},
             ],
         )
-        return resp.choices[0].message.content or ""
+        # Reasoning models: disable thinking so we get a clean JSON answer rather
+        # than a long chain-of-thought that buries (or replaces) the content.
+        if self.config.thinking:
+            kwargs["extra_body"] = {"chat_template_kwargs": {"thinking": False}}
+        try:
+            resp = self._client.chat.completions.create(**kwargs)
+        except Exception:
+            # some endpoints reject extra_body; retry once without it
+            kwargs.pop("extra_body", None)
+            resp = self._client.chat.completions.create(**kwargs)
+        msg = resp.choices[0].message
+        content = msg.content or ""
+        if not content.strip():
+            # reasoning models sometimes place the answer here
+            content = getattr(msg, "reasoning_content", None) or ""
+        return content
 
     def complete_json(self, system: str, user: str, retries: int = 2):
         last_text = ""

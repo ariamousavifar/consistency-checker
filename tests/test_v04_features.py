@@ -173,7 +173,12 @@ def test_examples_manifest_is_valid_and_runnable(tmp_path):
     manifest = json.loads(open("examples/examples.json").read())
     names = {e["name"] for e in manifest["examples"]}
     assert {"sample_essay", "taxation_plain", "taxation_bridged"} <= names
+    # Only the original three ship with offline fixtures; the tier1/tier2 and
+    # real-text examples are live-only. Run just the fixture-backed ones here.
+    fixture_backed = {"sample_essay", "taxation_plain", "taxation_bridged"}
     for ex in manifest["examples"]:
+        if ex["name"] not in fixture_backed:
+            continue
         report = run_pipeline(
             file_path=ex["file"], offline=True, fixtures_dir="examples/fixtures",
             out_dir=tmp_path / ex["name"], bridges_path=ex.get("bridges"),

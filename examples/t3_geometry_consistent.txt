@@ -1,0 +1,7 @@
+On Shapes
+
+Every square is a rectangle. Every rectangle is a parallelogram.
+Every parallelogram is a quadrilateral. No quadrilateral is a triangle.
+
+This tile is a square. Therefore this tile is a quadrilateral, and this
+tile is not a triangle.

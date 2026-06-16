@@ -24,6 +24,9 @@ def apply_compound_splitting(statements: list[ExtractedStatement]) -> list[Extra
     Split children keep the parent's type/speaker and get suffixed ids."""
     out: list[ExtractedStatement] = []
     for st in statements:
+        if not isinstance(st, ExtractedStatement):
+            # defensive: skip anything that isn't a real statement object
+            continue
         pieces = split_statement(st.decontextualized)
         if len(pieces) <= 1:
             out.append(st)
@@ -67,7 +70,8 @@ class LiveExtractor:
             # extraction with running context is the planned upgrade.
             text = text[: self.max_chars]
         data = self.client.complete_json(EXTRACTION_SYSTEM, text)
-        return [ExtractedStatement(**item) for item in data]
+        from .normalize import parse_statements
+        return parse_statements(data)
 
 
 class FixtureTranslator:

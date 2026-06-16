@@ -1,4 +1,79 @@
-# Internal-Inconsistency Checker (prototype v0.4)
+# Internal-Inconsistency Checker (prototype v0.6)
+
+## What's new in v0.6
+
+Driven by the NVIDIA NIM + Groq live runs across the full Tier-1/Tier-2 battery:
+
+1. Extraction robustness: malformed LLM output no longer crashes an example.
+   A statement returned as a bare string, a list wrapped in a dict, or stray
+   null/garbage items are now coerced or skipped (parse_statements). This kills
+   the recurring "argument after ** must be a mapping, not str" crash that
+   aborted the Neptune/stanford examples.
+2. Instance retyping: a bare ground instance ("The blue is a whale",
+   "This document is a contract") with no derivation marker is retyped from
+   derived_claim to AXIOM, so it enters the axiom base instead of collapsing the
+   whole entailment chain to not_entailed. Conservative: statements carrying
+   therefore/thus/so/hence keep their derived_claim type. Fixes the t1/t2/t2e
+   entailment collapses seen on NIM.
+3. Adaptive fidelity threshold: single-predicate statements ("Old Ferry has no
+   population") no longer get quarantined just because the lone constant or an
+   auxiliary word fails to match. Recovers t2e's contradicting sentence.
+4. Provider/model picker: choose at run time via
+   --provider nim --model qwen3.5-122b-a10b, or run with no flags for an
+   interactive numbered menu in the terminal, or fall back to .env. providers.json
+   lists the endpoints and models; keys stay in .env (NIM_API_KEY / GROQ_API_KEY).
+5. Reasoning-model support: DeepSeek V4, Qwen 3.5, and Gemma 4 are flagged as
+   thinking models and called with thinking disabled (so they return clean JSON,
+   not a buried chain-of-thought), with a reasoning_content fallback and a retry
+   that drops extra_body if the endpoint rejects it. This unblocks the NIM models
+   that previously failed.
+6. Test suite expanded to 78 offline tests.
+
+### Choosing a model
+
+```
+# explicit
+python -m src.main --all-examples --provider nim --model qwen3.5-122b-a10b
+
+# interactive menu (no flags)
+python -m src.main --all-examples
+
+# .env fallback (headless / piped)
+python -m src.main --all-examples
+```
+
+
+## What's new in v0.5
+
+Driven by the first real Tier-1/Tier-2 live runs, which exposed two SILENT
+false-negative bugs (the tool said 'all clear' when a contradiction existed):
+
+1. Fidelity check no longer over-quarantines correct translations. Multi-word
+   constants ("the blue" -> theblue, "her conviction" -> herconviction) are
+   split into component words before matching, and auxiliary/function words
+   ("has", "by", "for") no longer count against coverage. This fixed Llama
+   missing the 3-hop contradiction (t6) and the planted taxonomy break (t2b),
+   both of which had been wrongly quarantined.
+2. Multi-word predicate canonicalization. Trailing light head nouns ("prime
+   NUMBER" vs "prime", "industrious CREATURE" vs "industrious") are dropped for
+   matching, so the rule translator and the LLM translator stop disagreeing and
+   collapsing to 'ambiguous'. This fixed t2f (inconsistent definitions) being
+   missed on both models. "Number"/"creature" alone are preserved.
+3. Graph conflict rendering fixed. A minimal inconsistent set is now drawn as a
+   single hub (DOT) or enclosing band (SVG) joining all members, instead of
+   pairwise red edges between every pair -- the old rendering drew a misleading
+   triangle implying each statement contradicted each other, when in fact only
+   the whole SET is jointly unsatisfiable.
+4. Per-example error isolation in --all-examples. One example failing (e.g. a
+   model returning prose instead of JSON, as GPT did on the Neptune text) is
+   logged and skipped; the batch continues instead of aborting.
+5. Consolidated transcript: --all-examples now writes
+   out_all_<stamp>/all_examples_report.txt containing every example's full
+   console output plus the summary table, so results need not be copy-pasted
+   from each report.md by hand.
+6. Test suite expanded to 62 offline tests, including explicit regression guards
+   for both false-negative bugs.
+
 
 ## What's new in v0.4
 
@@ -180,7 +255,7 @@ Requirements: Python 3.10+ (tested on 3.12), internet for `pip install`.
    Press Run. The console prints the verdict table; open `out/report.md`
    to see the full report (PyCharm renders Markdown).
 5. Run the tests: right-click the `tests/` folder -> "Run pytest in tests".
-   All 54 tests run offline in about a second.
+   All 78 tests run offline in about a second.
 
 Command-line equivalents:
 ```
@@ -273,6 +348,11 @@ src/main.py             CLI
 tests/test_all.py       core tests, including end-to-end
 tests/test_v03_features.py  negation mapping, bridges, effort, screener, timing
 tests/test_v04_features.py  lemmatization, splitting, symmetric consistency, effort 3
+tests/test_v05_fixes.py     false-negative regression guards (fidelity, canonicalization, graph)
+tests/test_v06_features.py  extraction robustness, instance retyping, provider picker
+src/normalize.py        robust extraction parsing + instance retyping
+src/providers.py        provider/model picker (flags, menu, .env fallback)
+providers.json          endpoint + model registry
 src/lemmatizer.py       morphological merging (Tax/Taxation)
 src/splitter.py         deterministic compound-statement splitting
 src/timing.py           per-stage wall-clock instrumentation

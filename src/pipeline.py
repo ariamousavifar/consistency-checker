@@ -16,6 +16,7 @@ from .extraction import (
     LiveTranslator,
     apply_compound_splitting,
 )
+from .normalize import retype_bare_instances
 from .gate import run_gate
 from .llm_client import LLMClient, LLMConfig
 from .report import render_markdown
@@ -56,6 +57,7 @@ def run_pipeline(
     solver_timeout_ms: int = 8000,
     effort: int = 1,
     bridges_path: str | Path | None = None,
+    model_overrides: dict | None = None,
 ) -> RunReport:
     timer = StageTimer()
     file_path = Path(file_path)
@@ -72,11 +74,11 @@ def run_pipeline(
         translator = FixtureTranslator(Path(fixtures_dir), source_name)
         mode = "offline (fixtures)"
     else:
-        config = LLMConfig()
+        config = LLMConfig(overrides=model_overrides)
         if not config.configured:
             raise RuntimeError(
-                "Live mode requires LLM_API_KEY (and friends) in the environment or a .env file. "
-                "Use --offline to run the shipped examples without an API key."
+                "Live mode requires an API key (LLM_API_KEY / NIM_API_KEY / GROQ_API_KEY) "
+                "in the environment or a .env file. Use --offline to run shipped examples."
             )
         client = LLMClient(config)
         extractor = LiveExtractor(client)
@@ -88,6 +90,10 @@ def run_pipeline(
         if not offline:
             # Fixtures are authored already-split; only live extraction needs this.
             statements = apply_compound_splitting(statements)
+        # Retype bare ground instances ("X is a Y", no derivation marker) as
+        # axioms so they enter the axiom base instead of collapsing entailment
+        # chains to not_entailed. Conservative; runs in both modes.
+        statements = retype_bare_instances(statements)
 
     vocab = Vocabulary()
     with timer.stage("translation"):

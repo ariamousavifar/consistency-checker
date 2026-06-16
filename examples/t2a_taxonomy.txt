@@ -1,0 +1,7 @@
+The Domestic Cat
+
+Every domestic cat is a feline. Every feline is a carnivore. Every
+carnivore is an animal. No animal is a plant.
+
+The tabby is a domestic cat. Therefore the tabby is a carnivore, the
+tabby is an animal, and the tabby is not a plant.

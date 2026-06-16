@@ -237,19 +237,20 @@ def test_tree_dot_svg_outputs(tmp_path):
     tree = build_tree_text(report)
     assert "theory cluster 0" in tree
     assert "axioms consistent: NO" in tree          # author asserts mortal AND immortal
-    assert "MINIMAL INCONSISTENT" in tree
+    assert "MINIMAL INCONSISTENT SET" in tree
     assert "excluded from theory" in tree            # s9 appears, never silently dropped
 
     dot = build_dot(report)
     assert dot.startswith("digraph")
-    assert 's7 -> s8' in dot or 's8 -> s7' in dot    # direct conflict edge present
-    assert '#a32d2d' in dot and '#cfe0f5' in dot     # red conflict + blue axiom colors
+    assert 'conflict_hub' in dot                      # set hub, not pairwise edges
+    assert '#a32d2d' in dot and '#cfe0f5' in dot      # red conflict + blue axiom colors
 
     svg = build_svg(report)
     assert svg.startswith("<svg") and svg.endswith("</svg>")
-    for sid in ("s1", "s6", "s8", "s9", "s10"):
+    for sid in ("s1", "s6", "s8", "s9"):
         assert sid in svg
-    assert "stroke-dasharray" in svg                 # dashed conflict edge / excluded node
+    assert "minimal inconsistent set" in svg         # grouping band, not pairwise edges
+    assert "stroke-dasharray" in svg
 
     for fname in ("theory_tree.txt", "graph.dot", "graph.svg"):
         assert (tmp_path / fname).exists()

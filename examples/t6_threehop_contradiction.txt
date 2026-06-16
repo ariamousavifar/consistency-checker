@@ -1,0 +1,6 @@
+On Membership
+
+Every member is a subscriber. Every subscriber is a user. Every user
+has access.
+
+Devon is a member. And yet Devon does not have access.
