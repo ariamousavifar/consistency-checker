@@ -1,4 +1,95 @@
-# Internal-Inconsistency Checker (prototype v0.6)
+# Internal-Inconsistency Checker (prototype v0.7)
+
+## What's new in v0.7
+
+1. Document chunking. Long documents (real Wikipedia/SEP pages, transcripts) are
+   split into bounded chunks, each extracted independently, then all statements
+   are pooled into ONE solver run. A contradiction spanning chunk 1 and chunk 9
+   is still found because the solver sees the whole belief set at once. Short
+   documents take the original single-pass path unchanged. Chunk boundaries are
+   paragraph-based with a small overlap for seam context; the boundary detector
+   is pluggable so a transcript-aware splitter can drop in later.
+2. Resumable processing. Each chunk's extraction result is cached to
+   <out>/chunks/chunk_NNN.json as it completes. If a run dies partway (rate
+   limit, timeout, machine sleep), rerun with --resume <out_folder> to reuse the
+   finished chunks and only process the missing ones. Verified: a resumed run
+   makes zero LLM calls for already-cached chunks and produces identical output.
+3. Tier selection. --tier N runs only examples tagged with that tier in
+   examples.json; --all-examples is unchanged (runs everything). Output folders
+   are tagged out_all_<stamp>_tierN_effort1/.
+4. Cerebras fixes: correct bare model IDs (gpt-oss-120b, llama-3.3-70b, ...) and
+   the max_completion_tokens parameter Cerebras requires.
+5. Empty-response guard: when a model returns a completely blank reply (seen on
+   Cerebras with the long SEP text), the retry resends the original task cleanly
+   instead of a pointless "your output wasn't JSON" correction.
+6. Tier 2.5 chunking stress tests (t25a/b/c) with an answer key: long synthetic
+   texts whose planted contradictions SPAN chunk boundaries, proving chunking
+   preserves both direct and multi-hop detection. t25a is long-but-consistent
+   (false-positive check); t25b is a 1-hop cross-chunk contradiction; t25c is a
+   3-hop cross-chunk contradiction.
+7. Test suite expanded to 104 offline tests.
+
+### New CLI
+
+```
+python -m src.main --all-examples                 # everything (unchanged)
+python -m src.main --tier 1                        # only tier-1 examples
+python -m src.main --tier 25                        # the chunking stress tests
+python -m src.main --resume out_all_20260616_..._effort1   # resume a dead run
+python -m src.main --file examples/long_doc.txt    # single file (auto-chunks if long)
+```
+
+
+
+## What's new in v0.6.2
+
+1. Self-correction context fix (the important one). When a model's first reply
+   to a long document was not valid JSON, the retry prompt used to REPLACE the
+   document with "re-emit the same content" - so the model lost the text and
+   answered "I don't have the content you're referring to," failing the example.
+   The retry now keeps the original document and appends the correction
+   instruction. This is what crashed the real Wikipedia (Neptune) and SEP
+   (stanford) examples on gpt-oss-120b; they now complete.
+2. Gemini corrections: current model IDs (gemini-3.5-flash, gemini-3.1-flash-lite,
+   gemini-3.1-pro, gemini-2.5-flash) replacing the stale 2.0/1.5 guesses, and
+   per Google's Gemini 3.x guidance the client now omits temperature/top_p for
+   Google models (their reasoning is tuned for defaults; sending sampling params
+   is discouraged). Every other provider still gets temperature 0 for determinism.
+3. Test suite expanded to 92 offline tests.
+
+### Practical note on free-tier rate limits
+
+The v0.6.1 retry handling works (it reads and obeys retry-after), but some free
+tiers are too strict for an interactive 18-example batch - especially the
+thinking models (DeepSeek Pro, Qwen, Gemma) and Gemini, which can force 45-60s
+waits per call. For full batches, use a fast non-thinking model on a generous
+tier: gpt-oss-120b on Groq is the reliable choice. Reserve the thinking models
+and Gemini for spot-checking a few examples.
+
+
+
+## What's new in v0.6.1
+
+1. Rate-limit handling. The LLM client now (a) throttles calls to a minimum
+   interval (LLM_MIN_INTERVAL, default 1.5s) so a burst stays under free-tier
+   RPM caps, (b) on a 429 waits and retries up to LLM_MAX_RETRIES times, and
+   (c) honors the server's retry-after header (numeric seconds or Groq-style
+   '1m11s' durations). This is what lets an 18-example batch complete on a
+   40-requests/minute free tier instead of erroring out partway.
+2. Two more providers in the picker: Cerebras (fast, 1M tokens/day) and Google
+   AI Studio / Gemini (1500 requests/day). Together with Groq and NVIDIA NIM
+   that is four model families for a cross-model robustness comparison.
+3. Test suite expanded to 87 offline tests.
+
+### Note on slow reasoning models
+
+DeepSeek V4 Pro, Qwen 3.5, and Gemma 4 (the NIM 'thinking' models) are much
+slower per call (20-30s each) and burn rate-limit budget fast. For full batches
+prefer a fast non-thinking model (gpt-oss-120b on Groq or NIM, or Cerebras
+llama-3.3-70b). The thinking models still work, just pace them with a higher
+LLM_MIN_INTERVAL.
+
+
 
 ## What's new in v0.6
 
@@ -255,7 +346,7 @@ Requirements: Python 3.10+ (tested on 3.12), internet for `pip install`.
    Press Run. The console prints the verdict table; open `out/report.md`
    to see the full report (PyCharm renders Markdown).
 5. Run the tests: right-click the `tests/` folder -> "Run pytest in tests".
-   All 78 tests run offline in about a second.
+   All 104 tests run offline in about a second.
 
 Command-line equivalents:
 ```

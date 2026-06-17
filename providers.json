@@ -3,7 +3,11 @@
     "nim": {
       "label": "NVIDIA NIM",
       "base_url": "https://integrate.api.nvidia.com/v1",
-      "api_key_env": ["NIM_API_KEY", "NVIDIA_API_KEY", "LLM_API_KEY"],
+      "api_key_env": [
+        "NIM_API_KEY",
+        "NVIDIA_API_KEY",
+        "LLM_API_KEY"
+      ],
       "models": [
         "openai/gpt-oss-120b",
         "deepseek-ai/deepseek-v4-flash",
@@ -22,12 +26,48 @@
     "groq": {
       "label": "Groq",
       "base_url": "https://api.groq.com/openai/v1",
-      "api_key_env": ["GROQ_API_KEY", "LLM_API_KEY"],
+      "api_key_env": [
+        "GROQ_API_KEY",
+        "LLM_API_KEY"
+      ],
       "models": [
         "openai/gpt-oss-120b",
         "llama-3.3-70b-versatile"
       ],
       "thinking_models": []
+    },
+    "cerebras": {
+      "label": "Cerebras",
+      "base_url": "https://api.cerebras.ai/v1",
+      "api_key_env": [
+        "CEREBRAS_API_KEY",
+        "LLM_API_KEY"
+      ],
+      "models": [
+        "gpt-oss-120b",
+        "llama-3.3-70b",
+        "qwen-3-235b-a22b-instruct-2507",
+        "zai-glm-4.7"
+      ],
+      "thinking_models": [],
+      "max_tokens_param": "max_completion_tokens"
+    },
+    "google": {
+      "label": "Google AI Studio (Gemini)",
+      "base_url": "https://generativelanguage.googleapis.com/v1beta/openai",
+      "api_key_env": [
+        "GOOGLE_API_KEY",
+        "GEMINI_API_KEY",
+        "LLM_API_KEY"
+      ],
+      "models": [
+        "gemini-3.5-flash",
+        "gemini-3.1-flash-lite",
+        "gemini-3.1-pro",
+        "gemini-2.5-flash"
+      ],
+      "thinking_models": [],
+      "omit_sampling": true
     }
   }
 }

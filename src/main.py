@@ -72,9 +72,28 @@ def _print_report(report, out_dir: str, show_tree: bool) -> None:
 
 def _run_all(args) -> int:
     manifest = json.loads(Path("examples/examples.json").read_text())
+    examples = manifest["examples"]
     stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     eff = f"effort{args.effort}"
-    parent = Path(f"out_all_{stamp}_{eff}")
+
+    # Tier filter: --tier N runs only that tier; --all-examples (no tier) runs all.
+    tier_tag = ""
+    if getattr(args, "tier", None):
+        examples = [e for e in examples if e.get("tier") == args.tier]
+        tier_tag = f"_tier{args.tier}"
+        if not examples:
+            print(f"No examples with tier {args.tier} in examples.json.")
+            return 1
+
+    # Resume into an existing folder if given; else make a fresh timestamped one.
+    if getattr(args, "resume", None):
+        parent = Path(args.resume)
+        if not parent.exists():
+            print(f"Resume folder {parent} does not exist.")
+            return 1
+        print(f"Resuming into {parent}")
+    else:
+        parent = Path(f"out_all_{stamp}{tier_tag}_{eff}")
     parent.mkdir(parents=True, exist_ok=True)
     summary = []
     transcript: list[str] = []
@@ -83,9 +102,20 @@ def _run_all(args) -> int:
         print(text)
         transcript.append(text)
 
-    for ex in manifest["examples"]:
+    for ex in examples:
         sub = parent / ex["name"]
         header = "\n" + "=" * 100 + f"\nEXAMPLE: {ex['name']}  ::  {ex.get('note', '')}\n" + "=" * 100
+
+        # Example-level resume: if a report.json already exists from a previous
+        # run, the example completed successfully -- skip it entirely rather than
+        # re-running from scratch. Chunk-level caching handles partial examples
+        # (where extraction started but the example never finished).
+        if getattr(args, "resume", None) and (sub / "report.json").exists():
+            emit(header)
+            emit(f"  [resume] skipping {ex['name']} — already completed (report.json exists)")
+            summary.append((ex["name"], "done", "done", 0.0, str(sub)))
+            continue
+
         emit(header)
         # Item 15: per-example isolation. One failure (e.g. a model returning
         # prose instead of JSON) must not abort the whole batch.
@@ -99,6 +129,7 @@ def _run_all(args) -> int:
                 effort=args.effort,
                 bridges_path=ex.get("bridges"),
                 model_overrides=getattr(args, "_overrides", None),
+                resume=bool(getattr(args, "resume", None)),
             )
         except Exception as exc:
             msg = f"\n!! ERROR on {ex['name']}: {type(exc).__name__}: {exc}\n   (skipped; batch continues)"
@@ -133,6 +164,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--file", help="Path to a .txt document")
     parser.add_argument("--all-examples", action="store_true",
                         help="Run every example in examples/examples.json into one timestamped folder")
+    parser.add_argument("--tier", type=int, default=None,
+                        help="Run only examples with this tier (1, 2, 3...). Filters examples.json. "
+                             "Without it, --all-examples runs everything.")
+    parser.add_argument("--resume", default=None,
+                        help="Resume an interrupted batch: pass the out_all_... folder to reuse "
+                             "already-extracted chunks and finished examples.")
     parser.add_argument("--offline", action="store_true", help="Use shipped fixtures instead of an LLM API")
     parser.add_argument("--fixtures", default="examples/fixtures", help="Fixtures directory (offline mode)")
     parser.add_argument("--provider", default=None,
@@ -164,11 +201,11 @@ def main(argv: list[str] | None = None) -> int:
         overrides = resolve_model_config(args.provider, args.model)
     args._overrides = overrides
 
-    if args.all_examples:
+    if args.all_examples or args.tier or args.resume:
         return _run_all(args)
 
     if not args.file:
-        parser.error("provide --file PATH or --all-examples")
+        parser.error("provide --file PATH, --all-examples, or --tier N")
 
     out_dir = args.out or _next_out()
     report = run_pipeline(
@@ -180,6 +217,7 @@ def main(argv: list[str] | None = None) -> int:
         effort=args.effort,
         bridges_path=args.bridges,
         model_overrides=overrides,
+        resume=bool(args.resume),
     )
     _print_report(report, out_dir, show_tree=not args.no_tree)
     print(f"             (also report.json, store.json, timing.json, theory_tree.txt,")

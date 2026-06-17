@@ -109,6 +109,8 @@ def resolve_model_config(provider_flag: str | None, model_flag: str | None) -> d
         return None
 
     thinking = model in pcfg.get("thinking_models", [])
+    omit_sampling = bool(pcfg.get("omit_sampling", False))
+    max_tokens_param = pcfg.get("max_tokens_param", "max_tokens")
     print(f"\nRunning with {pcfg['label']} / {model}"
           f"{' [thinking model]' if thinking else ''}\n")
     return {
@@ -116,4 +118,6 @@ def resolve_model_config(provider_flag: str | None, model_flag: str | None) -> d
         "model": model,
         "api_key": api_key,
         "thinking": thinking,
+        "omit_sampling": omit_sampling,
+        "max_tokens_param": max_tokens_param,
     }

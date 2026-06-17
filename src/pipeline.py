@@ -17,6 +17,7 @@ from .extraction import (
     apply_compound_splitting,
 )
 from .normalize import retype_bare_instances
+from .chunked_extraction import extract_chunked
 from .gate import run_gate
 from .llm_client import LLMClient, LLMConfig
 from .report import render_markdown
@@ -58,6 +59,7 @@ def run_pipeline(
     effort: int = 1,
     bridges_path: str | Path | None = None,
     model_overrides: dict | None = None,
+    resume: bool = False,
 ) -> RunReport:
     timer = StageTimer()
     file_path = Path(file_path)
@@ -86,14 +88,10 @@ def run_pipeline(
         mode = f"live ({config.base_url}, {config.model})"
 
     with timer.stage("extraction"):
-        statements = extractor.extract(doc.raw_text)
-        if not offline:
-            # Fixtures are authored already-split; only live extraction needs this.
-            statements = apply_compound_splitting(statements)
-        # Retype bare ground instances ("X is a Y", no derivation marker) as
-        # axioms so they enter the axiom base instead of collapsing entailment
-        # chains to not_entailed. Conservative; runs in both modes.
-        statements = retype_bare_instances(statements)
+        statements = extract_chunked(
+            doc, extractor, out_dir,
+            offline=offline, resume=resume,
+        )
 
     vocab = Vocabulary()
     with timer.stage("translation"):

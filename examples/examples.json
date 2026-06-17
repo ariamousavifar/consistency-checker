@@ -1,22 +1,151 @@
 {
   "examples": [
-    { "name": "sample_essay",           "file": "examples/sample_essay.txt",              "bridges": null,                                    "note": "Socrates: multi-hop chain plus a direct mortal/immortal contradiction" },
-    { "name": "taxation_plain",         "file": "examples/taxation_essay.txt",            "bridges": null,                                    "note": "Taxation judged as written: incomplete argument, no contradiction without a bridge" },
-    { "name": "taxation_bridged",       "file": "examples/taxation_essay.txt",            "bridges": "examples/taxation_essay.bridges.json",  "note": "Taxation with the background premise 'all theft is morally unjustified': bridged contradiction" },
-    { "name": "t1_legal_consistent",    "file": "examples/t1_legal_consistent.txt",       "bridges": null,                                    "note": "consistent 3-chain; expect zero contradictions" },
-    { "name": "t2_biology_consistent",  "file": "examples/t2_biology_consistent.txt",     "bridges": null,                                    "note": "consistent 3-chain; expect zero contradictions" },
-    { "name": "t3_geometry_consistent", "file": "examples/t3_geometry_consistent.txt",    "bridges": null,                                    "note": "consistent 4-chain with negation; expect zero contradictions" },
-    { "name": "t4_direct",              "file": "examples/t4_direct_contradiction.txt",   "bridges": null,                                    "note": "1-hop direct contradiction" },
-    { "name": "t5_twohop",              "file": "examples/t5_twohop_contradiction.txt",   "bridges": null,                                    "note": "2-hop contradiction; NLI should miss it" },
-    { "name": "t6_threehop",            "file": "examples/t6_threehop_contradiction.txt", "bridges": null,                                    "note": "3-hop contradiction; NLI should miss it" },
-    { "name": "t2a_taxonomy",           "file": "examples/t2a_taxonomy.txt",              "bridges": null,                                    "note": "consistent taxonomy; expect zero contradictions" },
-    { "name": "t2b_taxonomy_broken",    "file": "examples/t2b_taxonomy_broken.txt",       "bridges": null,                                    "note": "planted contradiction; near-identical to t2a" },
-    { "name": "t2c_fable",              "file": "examples/t2c_fable.txt",                 "bridges": null,                                    "note": "fable with normative moral; tests not_entailed/quarantine" },
-    { "name": "t2d_philosophy",         "file": "examples/t2d_philosophy.txt",            "bridges": null,                                    "note": "consistent; converse-confusion false-positive check" },
-    { "name": "t2e_geography_broken",   "file": "examples/t2e_geography_broken.txt",      "bridges": null,                                    "note": "2-hop contradiction + decoy sentence" },
-    { "name": "t2f_definitions_broken", "file": "examples/t2f_definitions_broken.txt",    "bridges": null,                                    "note": "inconsistent definitions; symmetric-consistency test" },
-    { "name": "wikipedia1_coldplay",    "file": "examples/wikipedia1.txt",                "bridges": null,                                    "note": "real Wikipedia; expect heavy quarantine, zero contradictions" },
-    { "name": "wikipedia2_neptune",     "file": "examples/wikipedia2.txt",                "bridges": null,                                    "note": "real Wikipedia; comparatives and causation; false-positive stress test" },
-    { "name": "stanford_theology",      "file": "examples/stanford.txt",                  "bridges": null,                                    "note": "real SEP; attribution stress test" }
+    {
+      "name": "sample_essay",
+      "file": "examples/sample_essay.txt",
+      "bridges": null,
+      "note": "Socrates: multi-hop chain plus a direct mortal/immortal contradiction",
+      "tier": 1
+    },
+    {
+      "name": "taxation_plain",
+      "file": "examples/taxation_essay.txt",
+      "bridges": null,
+      "note": "Taxation judged as written: incomplete argument, no contradiction without a bridge",
+      "tier": 1
+    },
+    {
+      "name": "taxation_bridged",
+      "file": "examples/taxation_essay.txt",
+      "bridges": "examples/taxation_essay.bridges.json",
+      "note": "Taxation with the background premise 'all theft is morally unjustified': bridged contradiction",
+      "tier": 1
+    },
+    {
+      "name": "t1_legal_consistent",
+      "file": "examples/t1_legal_consistent.txt",
+      "bridges": null,
+      "note": "consistent 3-chain; expect zero contradictions",
+      "tier": 1
+    },
+    {
+      "name": "t2_biology_consistent",
+      "file": "examples/t2_biology_consistent.txt",
+      "bridges": null,
+      "note": "consistent 3-chain; expect zero contradictions",
+      "tier": 1
+    },
+    {
+      "name": "t3_geometry_consistent",
+      "file": "examples/t3_geometry_consistent.txt",
+      "bridges": null,
+      "note": "consistent 4-chain with negation; expect zero contradictions",
+      "tier": 1
+    },
+    {
+      "name": "t4_direct",
+      "file": "examples/t4_direct_contradiction.txt",
+      "bridges": null,
+      "note": "1-hop direct contradiction",
+      "tier": 1
+    },
+    {
+      "name": "t5_twohop",
+      "file": "examples/t5_twohop_contradiction.txt",
+      "bridges": null,
+      "note": "2-hop contradiction; NLI should miss it",
+      "tier": 1
+    },
+    {
+      "name": "t6_threehop",
+      "file": "examples/t6_threehop_contradiction.txt",
+      "bridges": null,
+      "note": "3-hop contradiction; NLI should miss it",
+      "tier": 1
+    },
+    {
+      "name": "t2a_taxonomy",
+      "file": "examples/t2a_taxonomy.txt",
+      "bridges": null,
+      "note": "consistent taxonomy; expect zero contradictions",
+      "tier": 2
+    },
+    {
+      "name": "t2b_taxonomy_broken",
+      "file": "examples/t2b_taxonomy_broken.txt",
+      "bridges": null,
+      "note": "planted contradiction; near-identical to t2a",
+      "tier": 2
+    },
+    {
+      "name": "t2c_fable",
+      "file": "examples/t2c_fable.txt",
+      "bridges": null,
+      "note": "fable with normative moral; tests not_entailed/quarantine",
+      "tier": 2
+    },
+    {
+      "name": "t2d_philosophy",
+      "file": "examples/t2d_philosophy.txt",
+      "bridges": null,
+      "note": "consistent; converse-confusion false-positive check",
+      "tier": 2
+    },
+    {
+      "name": "t2e_geography_broken",
+      "file": "examples/t2e_geography_broken.txt",
+      "bridges": null,
+      "note": "2-hop contradiction + decoy sentence",
+      "tier": 2
+    },
+    {
+      "name": "t2f_definitions_broken",
+      "file": "examples/t2f_definitions_broken.txt",
+      "bridges": null,
+      "note": "inconsistent definitions; symmetric-consistency test",
+      "tier": 2
+    },
+    {
+      "name": "wikipedia1_coldplay",
+      "file": "examples/wikipedia1.txt",
+      "bridges": null,
+      "note": "real Wikipedia; expect heavy quarantine, zero contradictions",
+      "tier": 2
+    },
+    {
+      "name": "wikipedia2_neptune",
+      "file": "examples/wikipedia2.txt",
+      "bridges": null,
+      "note": "real Wikipedia; comparatives and causation; false-positive stress test",
+      "tier": 2
+    },
+    {
+      "name": "stanford_theology",
+      "file": "examples/stanford.txt",
+      "bridges": null,
+      "note": "real SEP; attribution stress test",
+      "tier": 2
+    },
+    {
+      "name": "t25a_long_consistent",
+      "file": "examples/t25a_long_consistent.txt",
+      "bridges": null,
+      "tier": 25,
+      "note": "long consistent multi-chunk; chunking false-positive test"
+    },
+    {
+      "name": "t25b_crosschunk_contradiction",
+      "file": "examples/t25b_crosschunk_contradiction.txt",
+      "bridges": null,
+      "tier": 25,
+      "note": "contradiction spanning chunk boundary (1-hop)"
+    },
+    {
+      "name": "t25c_crosschunk_multihop",
+      "file": "examples/t25c_crosschunk_multihop.txt",
+      "bridges": null,
+      "tier": 25,
+      "note": "multi-hop contradiction spanning chunk boundary"
+    }
   ]
 }
