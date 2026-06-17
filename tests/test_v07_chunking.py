@@ -64,8 +64,8 @@ def test_chunked_extraction_saves_and_resumes():
     with tempfile.TemporaryDirectory() as td:
         out = Path(td)
         ex1 = _FakeExtractor()
-        r1 = extract_chunked(doc, ex1, out, offline=False, resume=False,
-                             max_chars=200, chunk_threshold=50)
+        r1, n1 = extract_chunked(doc, ex1, out, offline=False, resume=False,
+                                max_chars=200, chunk_threshold=50)
         assert ex1.calls > 1  # actually chunked
         assert (out / "chunks").exists()
         n_files = len(list((out / "chunks").glob("*.json")))
@@ -73,8 +73,8 @@ def test_chunked_extraction_saves_and_resumes():
 
         # resume: no new extractor calls, identical output
         ex2 = _FakeExtractor()
-        r2 = extract_chunked(doc, ex2, out, offline=False, resume=True,
-                             max_chars=200, chunk_threshold=50)
+        r2, n2 = extract_chunked(doc, ex2, out, offline=False, resume=True,
+                                max_chars=200, chunk_threshold=50)
         assert ex2.calls == 0
         assert len(r1) == len(r2)
 
@@ -84,8 +84,8 @@ def test_chunked_extraction_dedups_overlap():
     doc = _doc(12, words_each=10)
     with tempfile.TemporaryDirectory() as td:
         out = Path(td)
-        stmts = extract_chunked(doc, _FakeExtractor(), out, offline=False,
-                                resume=False, max_chars=200, chunk_threshold=50)
+        stmts, _ = extract_chunked(doc, _FakeExtractor(), out, offline=False,
+                                   resume=False, max_chars=200, chunk_threshold=50)
         texts = [s.decontextualized for s in stmts]
         assert len(texts) == len(set(texts))  # no duplicates
         # ids renumbered globally and sequential
@@ -97,7 +97,7 @@ def test_short_doc_takes_single_pass_no_chunk_files():
     with tempfile.TemporaryDirectory() as td:
         out = Path(td)
         extract_chunked(doc, _FakeExtractor(), out, offline=False, resume=False,
-                        chunk_threshold=2000)
+                        chunk_threshold=2000)  # returns tuple, ignored
         # short doc -> no chunks dir created
         assert not (out / "chunks").exists()
 

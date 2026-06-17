@@ -94,3 +94,6 @@ class RunReport(BaseModel):
     effort: int = 1
     timing: list[dict] = Field(default_factory=list)
     screener: list[dict] = Field(default_factory=list)
+    usage: dict = Field(default_factory=dict)
+    chunked: bool = False
+    num_chunks: int = 1

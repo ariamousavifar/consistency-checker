@@ -60,12 +60,14 @@ def run_pipeline(
     bridges_path: str | Path | None = None,
     model_overrides: dict | None = None,
     resume: bool = False,
+    no_chunk: bool = False,
 ) -> RunReport:
     timer = StageTimer()
     file_path = Path(file_path)
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     source_name = file_path.stem
+    client = None
 
     with timer.stage("read_and_clean"):
         raw_text = file_path.read_text(encoding="utf-8")
@@ -88,9 +90,9 @@ def run_pipeline(
         mode = f"live ({config.base_url}, {config.model})"
 
     with timer.stage("extraction"):
-        statements = extract_chunked(
+        statements, num_chunks = extract_chunked(
             doc, extractor, out_dir,
-            offline=offline, resume=resume,
+            offline=offline, resume=resume, no_chunk=no_chunk,
         )
 
     vocab = Vocabulary()
@@ -124,6 +126,9 @@ def run_pipeline(
         effort=effort,
         timing=list(timer.records),
         screener=flags,
+        usage=client.usage() if client is not None else {},
+        chunked=(num_chunks > 1),
+        num_chunks=num_chunks,
     )
 
     with timer.stage("write_outputs"):

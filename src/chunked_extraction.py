@@ -60,26 +60,30 @@ def extract_chunked(
     *,
     offline: bool,
     resume: bool = False,
+    no_chunk: bool = False,
     max_chars: int = 1500,
     overlap_units: int = 1,
     chunk_threshold: int = 2000,
     log=print,
-) -> list[ExtractedStatement]:
+) -> tuple[list[ExtractedStatement], int]:
     """Extract statements from a document, chunking long ones and caching each
     chunk so the work is resumable.
 
+    Returns (statements, num_chunks). num_chunks is 1 for the single-pass path.
+
     Short documents (raw text under chunk_threshold) take the simple single-pass
     path - no chunk files, identical behavior to before - so nothing changes for
-    the existing examples. Only genuinely long documents get chunked.
-    """
+    the existing examples. Only genuinely long documents get chunked. Passing
+    no_chunk=True forces single-pass even on long documents (the control
+    condition for measuring chunking overhead)."""
     chunks_dir = out_dir / "chunks"
 
-    # Single-pass path for short documents: behavior identical to pre-chunking.
-    if len(doc.raw_text) < chunk_threshold:
+    # Single-pass path for short documents OR when chunking is explicitly disabled.
+    if no_chunk or len(doc.raw_text) < chunk_threshold:
         statements = extractor.extract(doc.raw_text)
         if not offline:
             statements = apply_compound_splitting(statements)
-        return retype_bare_instances(statements)
+        return retype_bare_instances(statements), 1
 
     chunks = chunk_document(doc, max_chars=max_chars, overlap_units=overlap_units)
     log(f"  [chunking] {len(doc.raw_text)} chars -> {len(chunks)} chunks")
@@ -115,4 +119,4 @@ def extract_chunked(
             pooled.append(s)
     log(f"  [chunking] pooled {counter} unique statements "
         f"(from {sum(len(c) for c in per_chunk)} pre-dedup)")
-    return pooled
+    return pooled, len(chunks)

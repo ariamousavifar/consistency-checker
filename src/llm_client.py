@@ -126,6 +126,23 @@ class LLMClient:
 
         self._client = OpenAI(base_url=self.config.base_url, api_key=self.config.api_key)
         self._last_call_ts = 0.0
+        # Usage tracking (v0.7.5): accumulate across every API call so the
+        # pipeline can report token cost and compare chunking vs single-pass.
+        self.calls = 0
+        self.prompt_tokens = 0
+        self.completion_tokens = 0
+        self.total_tokens = 0
+
+    def usage(self) -> dict:
+        return {
+            "calls": self.calls,
+            "prompt_tokens": self.prompt_tokens,
+            "completion_tokens": self.completion_tokens,
+            "total_tokens": self.total_tokens,
+        }
+
+    def reset_usage(self) -> None:
+        self.calls = self.prompt_tokens = self.completion_tokens = self.total_tokens = 0
 
     def _throttle(self) -> None:
         """Keep a minimum gap between calls so a burst stays under free-tier RPM."""
@@ -191,6 +208,13 @@ class LLMClient:
         if not content.strip():
             # reasoning models sometimes place the answer here
             content = getattr(msg, "reasoning_content", None) or ""
+        # Accumulate usage (when the provider reports it).
+        self.calls += 1
+        usage = getattr(resp, "usage", None)
+        if usage is not None:
+            self.prompt_tokens += getattr(usage, "prompt_tokens", 0) or 0
+            self.completion_tokens += getattr(usage, "completion_tokens", 0) or 0
+            self.total_tokens += getattr(usage, "total_tokens", 0) or 0
         return content
 
     def complete_json(self, system: str, user: str, retries: int = 2):

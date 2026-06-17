@@ -59,6 +59,20 @@ def _format_report(report, out_dir: str, show_tree: bool) -> str:
     lines.append("\nTiming:")
     for r in report.timing:
         lines.append(f"  {r['stage']:<16}{r['seconds']:>10.4f}s")
+    total_s = sum(r["seconds"] for r in report.timing)
+    # Usage / cost line (v0.7.5): calls + tokens, plus chunk mode so chunking
+    # overhead can be compared against a --no-chunk run of the same document.
+    u = report.usage or {}
+    mode = f"chunked x{report.num_chunks}" if report.chunked else "single-pass"
+    if u:
+        lines.append(
+            f"\nUsage [{mode}]: {u.get('calls', 0)} calls, "
+            f"{u.get('total_tokens', 0)} tokens "
+            f"(prompt {u.get('prompt_tokens', 0)} / completion {u.get('completion_tokens', 0)}), "
+            f"{total_s:.1f}s total"
+        )
+    else:
+        lines.append(f"\nUsage [{mode}]: {total_s:.1f}s total (offline; no token usage)")
     if show_tree:
         lines.append("")
         lines.append(build_tree_text(report))
@@ -113,7 +127,7 @@ def _run_all(args) -> int:
         if getattr(args, "resume", None) and (sub / "report.json").exists():
             emit(header)
             emit(f"  [resume] skipping {ex['name']} — already completed (report.json exists)")
-            summary.append((ex["name"], "done", "done", 0.0, str(sub)))
+            summary.append((ex["name"], "done", "done", 0.0, "-", str(sub)))
             continue
 
         emit(header)
@@ -130,22 +144,25 @@ def _run_all(args) -> int:
                 bridges_path=ex.get("bridges"),
                 model_overrides=getattr(args, "_overrides", None),
                 resume=bool(getattr(args, "resume", None)),
+                no_chunk=getattr(args, "no_chunk", False),
             )
         except Exception as exc:
             msg = f"\n!! ERROR on {ex['name']}: {type(exc).__name__}: {exc}\n   (skipped; batch continues)"
             emit(msg)
-            summary.append((ex["name"], "ERR", "ERR", 0.0, str(sub)))
+            summary.append((ex["name"], "ERR", "ERR", 0.0, "ERR", str(sub)))
             continue
         emit(_format_report(report, str(sub), show_tree=not args.no_tree))
         sets = _inconsistent_sets(report)
         total_ms = sum(r["seconds"] for r in report.timing) * 1000
-        summary.append((ex["name"], len(sets), len(report.screener), total_ms, str(sub)))
+        toks = (report.usage or {}).get("total_tokens", 0)
+        summary.append((ex["name"], len(sets), len(report.screener), total_ms, toks, str(sub)))
 
     summary_lines = ["\n" + "=" * 100, "SUMMARY (all examples)", "=" * 100]
-    summary_lines.append(f"{'example':<24}{'inconsistent_sets':>18}{'screener_flags':>16}{'total_ms':>12}   folder")
-    for name, nsets, nflags, ms, folder in summary:
+    summary_lines.append(f"{'example':<24}{'inconsistent_sets':>18}{'screener_flags':>16}{'total_ms':>12}{'tokens':>10}   folder")
+    for row in summary:
+        name, nsets, nflags, ms, toks, folder = row
         ms_s = f"{ms:>12.1f}" if isinstance(ms, float) else f"{ms:>12}"
-        summary_lines.append(f"{name:<24}{str(nsets):>18}{str(nflags):>16}{ms_s}   {folder}")
+        summary_lines.append(f"{name:<24}{str(nsets):>18}{str(nflags):>16}{ms_s}{str(toks):>10}   {folder}")
     summary_lines.append(f"\nAll outputs under: {parent}/")
     summary_text = "\n".join(summary_lines)
     emit(summary_text)
@@ -191,6 +208,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--bridges", default=None,
                         help="Optional JSON file of background bridge premises (tagged, never silent)")
     parser.add_argument("--no-tree", action="store_true", help="Skip printing the theory tree to the console")
+    parser.add_argument("--no-chunk", action="store_true",
+                        help="Force single-pass extraction even on long documents (control "
+                             "condition for measuring chunking overhead; may fail/truncate on "
+                             "very long inputs).")
     args = parser.parse_args(argv)
 
     # Resolve provider/model once (flags > interactive picker > .env fallback).
@@ -218,6 +239,7 @@ def main(argv: list[str] | None = None) -> int:
         bridges_path=args.bridges,
         model_overrides=overrides,
         resume=bool(args.resume),
+        no_chunk=args.no_chunk,
     )
     _print_report(report, out_dir, show_tree=not args.no_tree)
     print(f"             (also report.json, store.json, timing.json, theory_tree.txt,")
