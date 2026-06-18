@@ -40,7 +40,9 @@ You will receive a JSON object:
   "statements": [ { "id": "s1", "text": "..." }, ... ] }
 
 REUSE vocabulary symbols whenever the meaning matches; invent new CamelCase predicates only when nothing fits.
-NEVER invent a new predicate for the negation or antonym of an existing concept: if Mortal exists, translate 'immortal' as not Mortal(x); if Just exists, translate 'unjust' as not Just(x). Always prefer not P(x) over an OppositeOfP(x) predicate. Translate the literal logical content; do not add background knowledge. If a statement cannot be faithfully expressed in this FOL fragment (causation, modality, tense, comparatives, figurative language), return null for it rather than guessing.
+NEVER invent a new predicate for the negation or antonym of an existing concept: if Mortal exists, translate 'immortal' as not Mortal(x); if Just exists, translate 'unjust' as not Just(x). Always prefer not P(x) over an OppositeOfP(x) predicate. Translate the literal logical content; do not add background knowledge.
+
+Keep a predicate's ARITY consistent across statements so a rule and its instance can connect. Render a verb together with its object as ONE unary predicate over the subject, e.g. 'x publishes their decisions' -> PublishesDecisions(x), and translate 'x does not publish their decisions' as not PublishesDecisions(x) -- do NOT reify the object into a separate entity (Publish(x, decision) with Decision(...)). Do NOT add type guards the statement does not assert: translate 'everyone bound by the oath publishes their decisions' as forall x. (BoundByOath(x) -> PublishesDecisions(x)), never adding Person(x) to the antecedent. If a statement cannot be faithfully expressed in this FOL fragment (causation, modality, tense, comparatives, figurative language), return null for it rather than guessing.
 
 Output ONLY a JSON object mapping each id to its FOL string or null, e.g.
 { "s1": "forall x. (Human(x) -> Mortal(x))", "s2": null }

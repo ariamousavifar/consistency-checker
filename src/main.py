@@ -145,6 +145,7 @@ def _run_all(args) -> int:
                 model_overrides=getattr(args, "_overrides", None),
                 resume=bool(getattr(args, "resume", None)),
                 no_chunk=getattr(args, "no_chunk", False),
+                use_nli=getattr(args, "nli", False),
             )
         except Exception as exc:
             msg = f"\n!! ERROR on {ex['name']}: {type(exc).__name__}: {exc}\n   (skipped; batch continues)"
@@ -193,6 +194,12 @@ def main(argv: list[str] | None = None) -> int:
                         help="LLM provider short name (nim, groq). If omitted, prompts or uses .env.")
     parser.add_argument("--model", default=None,
                         help="Model id or short suffix. If omitted, prompts or uses .env.")
+    parser.add_argument("--seed", type=int, default=7,
+                        help="Determinism seed sent to the LLM (default 7). Same seed + same "
+                             "inputs => same completion where the endpoint honors it. Pass a "
+                             "negative value to omit the seed entirely.")
+    parser.add_argument("--temperature", type=float, default=None,
+                        help="Sampling temperature override (default: env LLM_TEMPERATURE or 0).")
 
     def _next_out() -> str:
         import re
@@ -208,6 +215,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--bridges", default=None,
                         help="Optional JSON file of background bridge premises (tagged, never silent)")
     parser.add_argument("--no-tree", action="store_true", help="Skip printing the theory tree to the console")
+    parser.add_argument("--nli", action="store_true",
+                        help="Enable the NLI semantic judge (live only; issues extra LLM calls "
+                             "for fidelity and modifier-divergence adjudication). Env: LLM_NLI=1")
     parser.add_argument("--no-chunk", action="store_true",
                         help="Force single-pass extraction even on long documents (control "
                              "condition for measuring chunking overhead; may fail/truncate on "
@@ -220,6 +230,14 @@ def main(argv: list[str] | None = None) -> int:
     if not args.offline:
         from .providers import resolve_model_config
         overrides = resolve_model_config(args.provider, args.model)
+        # Inject determinism controls. A negative --seed means "omit the seed".
+        # These apply even when resolve_model_config returned None (.env fallback).
+        if (args.seed is not None and args.seed >= 0) or args.temperature is not None:
+            overrides = dict(overrides or {})
+            if args.seed is not None and args.seed >= 0:
+                overrides["seed"] = args.seed
+            if args.temperature is not None:
+                overrides["temperature"] = args.temperature
     args._overrides = overrides
 
     if args.all_examples or args.tier or args.resume:
@@ -240,6 +258,7 @@ def main(argv: list[str] | None = None) -> int:
         model_overrides=overrides,
         resume=bool(args.resume),
         no_chunk=args.no_chunk,
+        use_nli=getattr(args, "nli", False),
     )
     _print_report(report, out_dir, show_tree=not args.no_tree)
     print(f"             (also report.json, store.json, timing.json, theory_tree.txt,")

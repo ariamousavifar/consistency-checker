@@ -62,19 +62,36 @@ def pred_key(name: str) -> str:
     return "".join(lemma(w) for w in ws)
 
 
+def _pred_gloss(words: list[str]) -> str:
+    """A minimal NL gloss of a unary predicate, for the semantic judge:
+    ['fellow'] -> 'something is a fellow'; ['fellow','of','academy'] ->
+    'something is a fellow of academy'."""
+    body = " ".join(words)
+    article = "an" if words and words[0][:1] in "aeiou" else "a"
+    return f"something is {article} {body}"
+
+
 class Vocabulary:
-    def __init__(self) -> None:
+    def __init__(self, judge=None) -> None:
         self._pred_by_key: dict[str, str] = {}
         self._neg_of: dict[str, str] = {}
         self._const_by_key: dict[str, str] = {}
+        # Optional SemanticJudge. When present, a brand-new predicate that shares
+        # a head noun with an existing one (Fellow vs FellowOfAcademy) is checked
+        # for coreference and, if the judge confirms it, aliased onto the existing
+        # symbol so a rule and its instance phrased with/without the modifier
+        # still meet inside Z3. Morphological canonicalization (below) runs first;
+        # this only fires for the residue it cannot resolve, and never without a
+        # judge -- so default behaviour is unchanged.
+        self._judge = judge
 
     @property
     def predicates(self) -> list[str]:
-        return sorted(self._pred_by_key.values())
+        return sorted(set(self._pred_by_key.values()))
 
     @property
     def constants(self) -> list[str]:
-        return sorted(self._const_by_key.values())
+        return sorted(set(self._const_by_key.values()))
 
     @property
     def negation_mappings(self) -> dict[str, str]:
@@ -97,11 +114,100 @@ class Vocabulary:
             if key.startswith(p) and len(key) - len(p) >= 3 and key[len(p):] in self._pred_by_key:
                 self._neg_of[key] = self._pred_by_key[key[len(p):]]
                 return self._neg_of[key], True
+        # Semantic alias (opt-in): before minting a fresh symbol, ask the judge
+        # whether this predicate corefers with an existing one that shares its
+        # head noun (modifier-folding divergence: Fellow vs FellowOfAcademy).
+        if self._judge is not None:
+            alias = self._semantic_alias(ws)
+            if alias is not None:
+                self._pred_by_key[key] = alias
+                return alias, False
         # Display name: readable (plural-stripped surface form), not the
         # aggressively-lemmatized key. Matching uses the key; humans see this.
         camel = "".join(_plural_strip(w).capitalize() for w in ws)
         self._pred_by_key[key] = camel
         return camel, False
+
+    def _semantic_alias(self, ws: list[str]) -> str | None:
+        """Return an existing canonical predicate the judge deems coreferent with
+        the new one `ws`, or None. Only predicates sharing the head noun and
+        differing by a modifier are considered, keeping judge calls bounded."""
+        if not ws:
+            return None
+        head = ws[0]
+        new_gloss = _pred_gloss(ws)
+        for existing_camel in dict.fromkeys(self._pred_by_key.values()):
+            ew = words_of(existing_camel)
+            if not ew or ew[0] != head or ew == ws:
+                continue
+            # one side must carry a modifier the other lacks (differ by length),
+            # i.e. this is granularity divergence, not two distinct same-head ideas
+            if len(ew) == len(ws):
+                continue
+            if self._judge.equivalent(new_gloss, _pred_gloss(ew)):
+                return existing_camel
+        return None
+
+    def finalize_modifier_aliases(self) -> dict[str, str]:
+        """Deterministic, document-scoped predicate unification (no LLM).
+
+        Run once after every predicate is registered. Group canonical predicate
+        names by head noun and merge a single modified form onto its bare head
+        form: 'Fellow' + 'FellowOfAcademy' -> 'Fellow'. This is what reconnects a
+        chain whose author wrote the consequent bare ('is a fellow') but the next
+        rule's antecedent modified ('every fellow of the Academy ...').
+
+        SAFETY: only fires when the head has EXACTLY ONE modifier variant beside
+        exactly one bare form. 'ResidentOfFrance' + 'ResidentOfGermany' (two
+        competing modifiers) are left untouched -- merging them, or either into a
+        bare 'Resident', would fabricate a contradiction. Fully reproducible: the
+        decision depends only on the set of predicates seen, not on any model.
+
+        Returns the alias map {old_name: new_name} and rewrites the registry so
+        `predicates`/`normalize_fol` report the merged symbol. Callers must also
+        rewrite already-emitted FOL via `apply_pred_aliases`.
+        """
+        names = list(dict.fromkeys(self._pred_by_key.values()))
+        by_head: dict[str, list[str]] = {}
+        for n in names:
+            ws = words_of(n)
+            if ws:
+                by_head.setdefault(lemma(ws[0]), []).append(n)
+
+        aliases: dict[str, str] = {}
+        for head, group in by_head.items():
+            bare = [n for n in group if len(words_of(n)) == 1]
+            modified = [n for n in group if len(words_of(n)) > 1 and lemma(words_of(n)[0]) == head]
+            if len(modified) == 1 and len(bare) == 1:
+                aliases[modified[0]] = bare[0]
+
+        if aliases:
+            for key, val in list(self._pred_by_key.items()):
+                if val in aliases:
+                    self._pred_by_key[key] = aliases[val]
+            for key, val in list(self._neg_of.items()):
+                if val in aliases:
+                    self._neg_of[key] = aliases[val]
+        return aliases
+
+    def apply_pred_aliases(self, fol: str, aliases: dict[str, str]) -> str:
+        """Rewrite predicate names in an already-normalized FOL string through the
+        alias map from `finalize_modifier_aliases`. Only names in predicate
+        position (immediately followed by '(') are touched."""
+        if not aliases:
+            return fol
+        toks = tokenize(fol)
+        out: list[str] = []
+        i = 0
+        while i < len(toks):
+            t = toks[i]
+            nxt = toks[i + 1] if i + 1 < len(toks) else None
+            if _IDENT.match(t) and t not in KEYWORDS and nxt == "(" and t in aliases:
+                out.append(aliases[t])
+            else:
+                out.append(t)
+            i += 1
+        return _detokenize(out)
 
     def canonical_pred(self, name: str) -> str:
         return self.resolve_pred(name)[0]

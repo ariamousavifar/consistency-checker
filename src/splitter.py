@@ -28,6 +28,40 @@ _VERB_CUES = re.compile(
 )
 _SUBJECT_START = re.compile(r"^(every|all|some|no|each|the|a|an|there)\b", re.IGNORECASE)
 
+# Appositive / participial / relative adjuncts hang an extra clause off a
+# self-contained copular fact: "Aldous is a laureate, having been elevated ...".
+# The extractor often keeps the whole thing as one statement, and the trailing
+# adjunct (tense/participial/relative) pushes it outside the FOL fragment, so the
+# atomic fact "Aldous is a laureate" is lost with it. We peel the fact off and
+# let the adjunct become its own statement (which then quarantines harmlessly).
+_ADJUNCT_CUE = re.compile(
+    r"^(having|being|who|whom|whose|which|that|where|when|since|now|then)\b", re.IGNORECASE
+)
+_COPULAR = re.compile(r"\b(?:is|was)\s+(?:a|an)\s+\w", re.IGNORECASE)
+# A subject-led copular instance followed by a bare relative clause, no comma:
+# "Aldous is a laureate who was elevated ..." -> the relative needs the subject
+# carried over. Restricted to a proper-name or pronoun subject to stay safe.
+_REL_NO_COMMA = re.compile(
+    r"^((?:[A-Z][\w']*|He|She|It|They)\s+(?:is|was)\s+(?:a|an)\s+[\w-]+(?:\s+[\w-]+){0,2}?)"
+    r"\s+(?:who|which|that)\s+(.+)$"
+)
+
+
+def _adjunct_split(text: str) -> list[str] | None:
+    # comma-introduced participial/relative adjunct
+    if "," in text:
+        left, _, right = text.partition(",")
+        left, right = left.strip(), right.strip()
+        if _ADJUNCT_CUE.match(right) and _COPULAR.search(left) and len(left.split()) >= 3:
+            return [left.rstrip(".") + ".", right.rstrip(".") + "."]
+    # bare relative clause off a named subject
+    m = _REL_NO_COMMA.match(text)
+    if m:
+        head, rest = m.group(1).strip(), m.group(2).strip()
+        subj = head.split()[0]
+        return [head.rstrip(".") + ".", f"{subj} {rest}".rstrip(".") + "."]
+    return None
+
 
 def _independent_clause(text: str) -> bool:
     t = text.strip()
@@ -53,6 +87,13 @@ def _top_level_and_split(text: str) -> list[str]:
 def split_statement(decontextualized: str) -> list[str]:
     """Return one or more self-contained clauses. Splits only when safe."""
     text = decontextualized.strip().rstrip(".")
+
+    # Peel a copular fact off a trailing participial/relative adjunct first, so
+    # "X is a Y, having ..." / "X is a Y who ..." yields the atomic "X is a Y".
+    adjunct = _adjunct_split(text)
+    if adjunct:
+        return adjunct
+
     if " and " not in f" {text} ".lower():
         return [decontextualized]
 

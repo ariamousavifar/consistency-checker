@@ -17,8 +17,11 @@ Nothing ambiguous or quarantined ever reaches the solver.
 """
 from __future__ import annotations
 
+import re
+
 from .fidelity import fidelity_check
-from .fol_parser import check_equivalence, parse_fol
+from .fol_parser import KEYWORDS, check_equivalence, parse_fol, tokenize
+from .lemmatizer import lemma
 from .rule_translator import rule_translate
 from .schema import (
     ExtractedStatement,
@@ -27,7 +30,7 @@ from .schema import (
     StatementType,
     TranslationCandidate,
 )
-from .vocabulary import Vocabulary
+from .vocabulary import Vocabulary, words_of
 
 _EXCLUDED_REASONS = {
     StatementType.NON_PROPOSITIONAL: "not truth-apt (figurative, expressive, or non-assertoric)",
@@ -35,6 +38,61 @@ _EXCLUDED_REASONS = {
     StatementType.ATTRIBUTED: "attributed to someone else; outside the author's own belief set (v1 scope)",
     StatementType.HYPOTHETICAL: "hypothetical or supposed, not asserted (v1 scope)",
 }
+
+_IDENT_RE = re.compile(r"[A-Za-z_]\w*$")
+
+
+def _skeleton_and_preds(fol: str) -> tuple[list[str], list[str]]:
+    """Abstract every predicate name (a name immediately followed by '(') to a
+    placeholder, keeping structure, constants and bound vars verbatim. Returns
+    (skeleton tokens, predicate names in order)."""
+    toks = tokenize(fol)
+    skel: list[str] = []
+    preds: list[str] = []
+    i = 0
+    while i < len(toks):
+        t = toks[i]
+        nxt = toks[i + 1] if i + 1 < len(toks) else None
+        if _IDENT_RE.match(t) and t not in KEYWORDS and nxt == "(":
+            skel.append("<P>")
+            preds.append(t)
+        else:
+            skel.append(t)
+        i += 1
+    return skel, preds
+
+
+def _is_modifier_variant(p: str, q: str) -> bool:
+    """True when two predicate names differ only by a restrictive modifier folded
+    into one of them: same head noun, and one word-set is a subset of the other
+    ('Fellow' vs 'FellowOfAcademy'). 'ResidentOfFrance' vs 'ResidentOfGermany'
+    share a head but neither is a subset, so this is False -- they are distinct
+    ideas, not a granularity difference."""
+    wp = [lemma(w) for w in words_of(p)]
+    wq = [lemma(w) for w in words_of(q)]
+    if not wp or not wq or wp[0] != wq[0]:
+        return False
+    sp, sq = set(wp), set(wq)
+    return sp != sq and (sp <= sq or sq <= sp)
+
+
+def _modifier_only_divergence(fol_a: str, fol_b: str) -> bool:
+    """Deterministic (no LLM) test for the modifier-folding divergence that the
+    NLI judge was meant to catch: two readings with identical logical structure
+    whose only difference is a restrictive modifier folded into a predicate name.
+    This is not genuine ambiguity, so the gate can resolve it without a judge."""
+    skel_a, preds_a = _skeleton_and_preds(fol_a)
+    skel_b, preds_b = _skeleton_and_preds(fol_b)
+    if skel_a != skel_b or len(preds_a) != len(preds_b):
+        return False
+    differed = False
+    for pa, pb in zip(preds_a, preds_b):
+        if pa == pb:
+            continue
+        if not _is_modifier_variant(pa, pb):
+            return False
+        differed = True
+    return differed
 
 
 def _validated(fol: str | None, vocab: Vocabulary) -> str | None:
@@ -48,7 +106,7 @@ def _validated(fol: str | None, vocab: Vocabulary) -> str | None:
         return None
 
 
-def run_gate(stmt: ExtractedStatement, llm_fol: str | None, vocab: Vocabulary) -> Proposition:
+def run_gate(stmt: ExtractedStatement, llm_fol: str | None, vocab: Vocabulary, judge=None) -> Proposition:
     base = dict(
         id=stmt.id,
         type=stmt.type,
@@ -101,6 +159,46 @@ def run_gate(stmt: ExtractedStatement, llm_fol: str | None, vocab: Vocabulary) -
                 gate_reason=f"translators diverged; only the {c.source} candidate passed fidelity (coverage {f.coverage})",
             )
         if len(passing) == 2:
+            # Both readings are individually faithful but not syntactically
+            # equivalent. They often diverge only by a restrictive modifier
+            # folded into a predicate name ("magistrate" vs "magistrate of the
+            # charter"), which is not real ambiguity.
+            #
+            # (1) Deterministic, no-LLM resolution: if the two readings have
+            # identical logical structure and differ only by such a folded
+            # modifier, keep the rule reading so predicate symbols stay
+            # consistent across statements. This is reproducible and free.
+            if _modifier_only_divergence(candidates[0].fol, candidates[1].fol):
+                pick = next((c for c in candidates if c.source == "rule"), candidates[0])
+                return Proposition(
+                    **base,
+                    fol=pick.fol,
+                    candidates=candidates,
+                    status=GateOutcome.ACCEPTED,
+                    confidence=0.75,
+                    gate_reason=f"translators diverged only by a folded modifier (same structure); kept the {pick.source} reading (deterministic)",
+                )
+            # (2) Opt-in NLI fallback for divergences the structural test cannot
+            # settle (e.g. different surface phrasing that is still synonymous).
+            # Fires ONLY here, on a genuine two-candidate divergence -- never on
+            # single-candidate fidelity. A true quantifier/structure ambiguity is
+            # judged non-equivalent and preserved. With no judge this is skipped.
+            if judge is not None:
+                from .verbalizer import verbalize
+                try:
+                    va, vb = verbalize(candidates[0].fol), verbalize(candidates[1].fol)
+                except Exception:
+                    va = vb = ""
+                if va and vb and judge.equivalent(va, vb):
+                    pick = next((c for c in candidates if c.source == "rule"), candidates[0])
+                    return Proposition(
+                        **base,
+                        fol=pick.fol,
+                        candidates=candidates,
+                        status=GateOutcome.ACCEPTED,
+                        confidence=0.75,
+                        gate_reason=f"translators diverged; NLI judged the readings equivalent, kept the {pick.source} reading",
+                    )
             return Proposition(
                 **base,
                 candidates=candidates,

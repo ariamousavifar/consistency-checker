@@ -10,12 +10,24 @@ Two interchangeable implementations of each:
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 from .llm_client import LLMClient
 from .prompts import EXTRACTION_SYSTEM, TRANSLATION_SYSTEM
 from .schema import ExtractedStatement
 from .splitter import split_statement
+
+# A predicate head in our FOL fragment is an uppercase-initial CamelCase symbol
+# immediately applied to arguments, e.g. Mortal(x), PublishDecision(corin).
+# Quantifiers, connectives and constants are all lowercase, so this is unambiguous.
+_PREDICATE_RE = re.compile(r"\b([A-Z][A-Za-z0-9_]*)\s*\(")
+
+
+def _predicate_names(fol: str | None) -> list[str]:
+    if not fol:
+        return []
+    return _PREDICATE_RE.findall(fol)
 
 
 def apply_compound_splitting(statements: list[ExtractedStatement]) -> list[ExtractedStatement]:
@@ -94,16 +106,30 @@ class LiveTranslator:
 
     def translate(self, statements: list[ExtractedStatement], vocabulary) -> dict[str, str | None]:
         result: dict[str, str | None] = {}
+        # Predicate-consistency feedback: batches are translated separately, so a
+        # rule in batch 1 ("...must publish their decisions" -> PublishDecision)
+        # and its negation in a later batch ("Corin does not publish...") would
+        # otherwise be coined as unrelated predicates and never contradict. We
+        # accumulate every predicate the model actually emits and feed the growing
+        # inventory forward, so later statements reuse earlier symbols. Order is
+        # preserved and duplicates dropped to keep the prompt vocabulary stable.
+        known: list[str] = list(vocabulary.predicates)
+        seen: set[str] = set(known)
         for i in range(0, len(statements), self.batch_size):
             batch = statements[i : i + self.batch_size]
             payload = {
                 "vocabulary": {
-                    "predicates": vocabulary.predicates,
+                    "predicates": known,
                     "constants": vocabulary.constants,
                 },
                 "statements": [{"id": s.id, "text": s.decontextualized} for s in batch],
             }
             data = self.client.complete_json(TRANSLATION_SYSTEM, json.dumps(payload))
             for s in batch:
-                result[s.id] = data.get(s.id)
+                fol = data.get(s.id)
+                result[s.id] = fol
+                for pred in _predicate_names(fol):
+                    if pred not in seen:
+                        seen.add(pred)
+                        known.append(pred)
         return result

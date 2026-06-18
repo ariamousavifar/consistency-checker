@@ -20,7 +20,21 @@ class LLMConfig:
         self.api_key = overrides.get("api_key") or os.getenv("LLM_API_KEY", "")
         self.model = overrides.get("model") or os.getenv("LLM_MODEL", "llama-3.3-70b-versatile")
         self.max_tokens = int(os.getenv("LLM_MAX_TOKENS", "2048"))
-        self.temperature = float(os.getenv("LLM_TEMPERATURE", "0"))
+        # Temperature: CLI override > env > 0. Default 0 already minimizes
+        # sampling noise; the flag lets a run dial it without touching .env.
+        _temp = overrides.get("temperature")
+        if _temp is None:
+            _temp = os.getenv("LLM_TEMPERATURE", "0")
+        self.temperature = float(_temp)
+        # Seed: same source order. Sent to OpenAI-compatible endpoints so two runs
+        # with the same inputs return the same completion (best-effort -- some
+        # reasoning models ignore it, but it removes a source of run-to-run drift
+        # where honored). None => omit the field entirely.
+        _seed = overrides.get("seed")
+        if _seed is None:
+            _env_seed = os.getenv("LLM_SEED", "").strip()
+            _seed = int(_env_seed) if _env_seed else None
+        self.seed = _seed
         # Some NIM reasoning models (DeepSeek V4, Qwen 3.5, Gemma 4) need an
         # explicit thinking toggle and may return content in reasoning_content.
         self.thinking = bool(overrides.get("thinking", False))
@@ -29,6 +43,13 @@ class LLMConfig:
         self.omit_sampling = bool(overrides.get("omit_sampling", False))
         # Cerebras uses 'max_completion_tokens' instead of 'max_tokens'.
         self.max_tokens_param = overrides.get("max_tokens_param", "max_tokens")
+        # Reasoning depth for models that support it (gpt-oss: low/medium/high).
+        # "low" stops a reasoning model from burning the completion budget on
+        # chain-of-thought and returning empty content. Env override wins so a
+        # run can be dialed without touching providers.json.
+        self.reasoning_effort = (
+            os.getenv("LLM_REASONING_EFFORT") or overrides.get("reasoning_effort") or None
+        )
         # Rate-limit pacing (free tiers are typically 30-40 requests/min). A
         # minimum interval between calls keeps a burst from tripping a 429; the
         # retry settings recover from one if it happens anyway.
@@ -157,9 +178,11 @@ class LLMClient:
         try:
             return self._client.chat.completions.create(**kwargs)
         except Exception:
-            # some endpoints reject extra_body (the thinking toggle); retry once without
-            if "extra_body" in kwargs:
+            # Some endpoints reject extra fields (the thinking toggle in
+            # extra_body, or an unsupported `seed`); strip them and retry once.
+            if "extra_body" in kwargs or "seed" in kwargs:
                 kwargs.pop("extra_body", None)
+                kwargs.pop("seed", None)
                 return self._client.chat.completions.create(**kwargs)
             raise
 
@@ -177,10 +200,19 @@ class LLMClient:
         # for determinism.
         if not self.config.omit_sampling:
             kwargs["temperature"] = self.config.temperature
+        # Determinism seed (when set and sampling isn't omitted). Harmless on
+        # endpoints that ignore it; _create strips unknown fields on retry.
+        if self.config.seed is not None and not self.config.omit_sampling:
+            kwargs["seed"] = self.config.seed
         # Reasoning models: disable thinking so we get a clean JSON answer rather
         # than a long chain-of-thought that buries (or replaces) the content.
         if self.config.thinking:
             kwargs["extra_body"] = {"chat_template_kwargs": {"thinking": False}}
+        # gpt-oss-style reasoning dial. Sent via extra_body so that if a provider
+        # rejects the field, _create's fallback strips extra_body and retries
+        # cleanly instead of failing the call.
+        if self.config.reasoning_effort:
+            kwargs.setdefault("extra_body", {})["reasoning_effort"] = self.config.reasoning_effort
 
         # Rate-limit-aware retry loop with throttle + exponential backoff that
         # honors the server's retry-after when present.

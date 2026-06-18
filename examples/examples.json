@@ -146,6 +146,27 @@
       "bridges": null,
       "tier": 25,
       "note": "multi-hop contradiction spanning chunk boundary"
+    },
+    {
+      "name": "t25a_long_consistent_original",
+      "file": "examples/t25a_long_consistent_original.txt",
+      "bridges": null,
+      "tier": 25,
+      "note": "ORIGINAL hard phrasing; expect 0 (consistent control, no simplification)"
+    },
+    {
+      "name": "t25b_crosschunk_contradiction_original",
+      "file": "examples/t25b_crosschunk_contradiction_origina.txt",
+      "bridges": null,
+      "tier": 25,
+      "note": "ORIGINAL hard phrasing; chain runs through deontic 'must' + 'therefore' + verb-object, beyond the unary-chain/NLI fix; may legitimately still miss (deontic is outside FOL)"
+    },
+    {
+      "name": "t25c_crosschunk_multihop_original",
+      "file": "examples/t25c_crosschunk_multihop_origina.txt",
+      "bridges": null,
+      "tier": 25,
+      "note": "ORIGINAL hard phrasing; modifier-inconsistent (laureate/fellow of the Academy) + participial instance; the target case for --nli (vocab unification + splitter)"
     }
   ]
 }

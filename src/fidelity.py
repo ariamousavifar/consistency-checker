@@ -124,6 +124,12 @@ def _word_match(word: str, sentence_lemmas: set[str]) -> bool:
 
 
 def fidelity_check(fol: str, sentence: str, threshold: float = 0.6) -> FidelityResult:
+    """Lexical fidelity only. The NLI judge is deliberately NOT wired in here:
+    a live experiment showed that judging every single-candidate translation
+    with the model over-quarantined faithful-but-lossy verb-object/relational
+    squashes (removing real chain links) and slowed the gate ~10x. The judge
+    now fires only where there is an actual divergence to adjudicate -- the
+    two-candidate branch in gate.py -- not on every statement here."""
     from .verbalizer import verbalize
 
     raw_words = re.findall(r"[a-z0-9]+", sentence.lower())

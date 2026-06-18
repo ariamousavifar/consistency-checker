@@ -111,8 +111,15 @@ def resolve_model_config(provider_flag: str | None, model_flag: str | None) -> d
     thinking = model in pcfg.get("thinking_models", [])
     omit_sampling = bool(pcfg.get("omit_sampling", False))
     max_tokens_param = pcfg.get("max_tokens_param", "max_tokens")
+    # Per-model reasoning depth. gpt-oss exposes low/medium/high (no full off, so
+    # "low" is the floor); GLM additionally accepts "none" to disable reasoning.
+    # Capping it stops a reasoning model from spending its whole completion budget
+    # on chain-of-thought and returning empty content -- the Cerebras empty-JSON
+    # failures (finish_reason=length before any answer tokens are emitted).
+    reasoning_effort = pcfg.get("reasoning_effort", {}).get(model)
     print(f"\nRunning with {pcfg['label']} / {model}"
-          f"{' [thinking model]' if thinking else ''}\n")
+          f"{' [thinking model]' if thinking else ''}"
+          f"{f' [reasoning_effort={reasoning_effort}]' if reasoning_effort else ''}\n")
     return {
         "base_url": pcfg["base_url"],
         "model": model,
@@ -120,4 +127,5 @@ def resolve_model_config(provider_flag: str | None, model_flag: str | None) -> d
         "thinking": thinking,
         "omit_sampling": omit_sampling,
         "max_tokens_param": max_tokens_param,
+        "reasoning_effort": reasoning_effort,
     }

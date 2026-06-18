@@ -6,6 +6,7 @@ dial controls solver depth (0 = screener only, 1 = clustered, 2 = global set).
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 from .cleaning import clean
@@ -20,6 +21,7 @@ from .normalize import retype_bare_instances
 from .chunked_extraction import extract_chunked
 from .gate import run_gate
 from .llm_client import LLMClient, LLMConfig
+from .semantics import LLMJudge
 from .report import render_markdown
 from .schema import GateOutcome, Proposition, RunReport, StatementType
 from .screener import screen
@@ -61,6 +63,7 @@ def run_pipeline(
     model_overrides: dict | None = None,
     resume: bool = False,
     no_chunk: bool = False,
+    use_nli: bool = False,
 ) -> RunReport:
     timer = StageTimer()
     file_path = Path(file_path)
@@ -68,6 +71,11 @@ def run_pipeline(
     out_dir.mkdir(parents=True, exist_ok=True)
     source_name = file_path.stem
     client = None
+    # Semantic judge (NLI). Opt-in and live-only: it issues extra LLM calls, so
+    # it is never created in offline mode and never unless explicitly enabled,
+    # keeping default runs (and the test suite) deterministic and free of cost.
+    use_nli = use_nli or os.getenv("LLM_NLI", "").strip().lower() in ("1", "true", "yes", "on")
+    judge = None
 
     with timer.stage("read_and_clean"):
         raw_text = file_path.read_text(encoding="utf-8")
@@ -87,7 +95,11 @@ def run_pipeline(
         client = LLMClient(config)
         extractor = LiveExtractor(client)
         translator = LiveTranslator(client)
+        if use_nli:
+            judge = LLMJudge(client)
         mode = f"live ({config.base_url}, {config.model})"
+        if use_nli:
+            mode += " [nli]"
 
     with timer.stage("extraction"):
         statements, num_chunks = extract_chunked(
@@ -95,20 +107,32 @@ def run_pipeline(
             offline=offline, resume=resume, no_chunk=no_chunk,
         )
 
-    vocab = Vocabulary()
+    vocab = Vocabulary(judge=judge)
     with timer.stage("translation"):
         llm_fols = translator.translate(statements, vocab)
 
     with timer.stage("gate"):
         propositions = []
         for stmt in statements:
-            prop = run_gate(stmt, llm_fols.get(stmt.id), vocab)
+            prop = run_gate(stmt, llm_fols.get(stmt.id), vocab, judge=judge)
             prop.span = doc.find_span(stmt.original_text)
             propositions.append(prop)
 
     with timer.stage("bridges"):
         if bridges_path:
             propositions.extend(_load_bridges(bridges_path, vocab))
+
+    # Deterministic, document-scoped predicate unification (no LLM): now that
+    # every predicate the document uses is registered, merge a lone modified form
+    # onto its bare head ('FellowOfAcademy' -> 'Fellow') so a chain split across
+    # bare/modified phrasings reconnects inside Z3. Reproducible and safe (a head
+    # with two competing modifiers is left untouched). Rewrites every emitted FOL.
+    with timer.stage("unify_predicates"):
+        aliases = vocab.finalize_modifier_aliases()
+        if aliases:
+            for prop in propositions:
+                if prop.fol:
+                    prop.fol = vocab.apply_pred_aliases(prop.fol, aliases)
 
     with timer.stage("screener"):
         flags = screen([(s.id, s.decontextualized) for s in statements])

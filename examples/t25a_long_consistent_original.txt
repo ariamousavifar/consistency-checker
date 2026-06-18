@@ -5,9 +5,11 @@ office within it draws its authority from that founding document. The charter is
 old, but its provisions remain in force, and every magistrate swears to uphold
 them upon taking office. This is the first principle of the province.
 
-Every magistrate is an officer. Every officer is a sworn servant. Every sworn
-servant is a public official. These three rules form the backbone of provincial
-administration, and they have not been amended in living memory.
+Every magistrate in the River Province is an officer of the charter. Every
+officer of the charter is bound by the oath of service. Every person bound by
+the oath of service must publish their decisions. These three rules form the
+backbone of provincial administration, and they have not been amended in living
+memory.
 
 The province is divided into seven districts, each with its own assembly. Each
 assembly elects a magistrate, and each magistrate appoints a clerk. The clerks
@@ -15,9 +17,9 @@ keep the records, and the records are stored in the provincial archive. The
 archive is open to any citizen who requests access, subject to the usual hours.
 
 Now consider the district of Lower Marsh. The assembly of Lower Marsh elected a
-magistrate named Corin in the spring. Corin is a magistrate. Corin took up
-residence in the district capital and began the work of office at once, as is
-customary for a newly elected magistrate.
+magistrate named Corin in the spring. Corin is therefore a magistrate in the
+River Province. By the rules already stated, Corin is an officer of the charter,
+Corin is bound by the oath of service, and Corin must publish their decisions.
 
 Corin appointed a clerk named Tamsin shortly after taking office. Tamsin keeps
 the records of Lower Marsh, and those records are stored in the provincial
@@ -34,7 +36,8 @@ beyond the provincial borders. Trade beyond the borders is taxed at the river
 gate, and the gate-keepers record every consignment. The records of the gate are
 also stored in the archive, alongside the district records.
 
-It must be recorded, in closing, that Corin is not a public official. Whatever
-the reason, the magistrate of Lower Marsh has never been counted among the
-officials of the province. This is simply how matters stand in the district at
-present.
+In all these arrangements the province has remained orderly. The charter is
+upheld, the magistrates publish their decisions, the clerks keep the records,
+and the archive remains open. Corin and Tamsin carry out their duties as the
+rules require, and Lower Marsh is governed no differently from the other six
+districts.
