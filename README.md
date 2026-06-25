@@ -90,6 +90,15 @@ right way matters as much as finding inconsistency.
     (`FellowOfAcademy` → `Fellow` only when exactly one modifier variant exists, so
     `ResidentOfFrance`/`ResidentOfGermany` stay untouched). NLI (`--nli`) is now
     scoped to genuine two-candidate adjudication only.
+13. **Per-statement translation retry.** The batch translator drops hard
+    sentences non-deterministically — a conditional/relational premise returns
+    `null` in one run and valid FOL in another. After the batch pass, every
+    statement that produced no *parseable* FOL is re-asked individually at a
+    higher reasoning effort (a one-statement prompt, so the deeper effort is
+    cheap) with the full accumulated vocabulary. A retry only replaces a failure
+    with a real success; a still-failing statement is left for the gate to
+    quarantine. On by default; `LLM_TRANSLATION_RETRY=0` disables it,
+    `LLM_TRANSLATION_RETRY_EFFORT` (default `high`) tunes it.
 
 ### New CLI / env
 
@@ -106,16 +115,19 @@ Rothbard excerpt as false-positive controls, a 1988 political speech with a
 cross-time bridge axiom, and a geometry theory-tree text (a layered
 axiom→theorem chain plus a reductio) that exercises the tree reconstruction.
 
-Test suite expanded to 181 offline tests.
+Test suite expanded to 184 offline tests.
 
 ### Known frontier (honest)
 
 The argument-tree machinery is complete and proven on clean, claim-dense text.
-On *dense* prose (e.g. the Rothbard excerpt) the remaining bottleneck is upstream:
-the conditional premises that would form a real multi-step tree translate
-non-deterministically (sometimes valid FOL, sometimes `null`), so the tree can be
-shallow even though the engine is correct. Reliable/deterministic translation of
-conditional and relational premises is the next workstream.
+On *dense* prose (e.g. the Rothbard excerpt) the binding constraint is upstream
+translation reliability: the conditional premises that would form a real
+multi-step tree translate non-deterministically (sometimes valid FOL, sometimes
+`null`), so the tree can be shallow even though the engine is correct. The
+per-statement translation retry (item 13) is the first attack on this; recovering
+the remaining relational premises (ownership, rule-over) needs the relational
+(EPR) fragment, which is the next logic extension the quarantine-shape histogram
+points to.
 
 ## What's new in v0.7
 

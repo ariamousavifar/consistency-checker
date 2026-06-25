@@ -14,6 +14,7 @@ import os
 import re
 from pathlib import Path
 
+from .fol_parser import Env, parse_fol
 from .llm_client import LLMClient
 from .prompts import EXTRACTION_SYSTEM, TRANSLATION_SYSTEM, TRANSLATION_SYSTEM_CONDITIONALS
 from .schema import ExtractedStatement
@@ -29,6 +30,20 @@ def _predicate_names(fol: str | None) -> list[str]:
     if not fol:
         return []
     return _PREDICATE_RE.findall(fol)
+
+
+def _parses(fol) -> bool:
+    """True if `fol` is a syntactically valid FOL string. Used by the translation
+    retry to decide which statements failed (null or malformed). A fresh Env
+    declares symbols on the fly, so this checks syntax, not vocabulary alignment
+    (that is the gate's job)."""
+    if not fol or not isinstance(fol, str):
+        return False
+    try:
+        parse_fol(fol, Env())
+        return True
+    except Exception:
+        return False
 
 
 def apply_compound_splitting(statements: list[ExtractedStatement]) -> list[ExtractedStatement]:
@@ -117,6 +132,21 @@ class LiveTranslator:
         # where deep reasoning pays off, so it can run hotter than extraction:
         # LLM_TRANSLATION_EFFORT=medium. None -> use client default.
         self.effort = os.getenv("LLM_TRANSLATION_EFFORT") or None
+        # Per-statement retry on null/unparseable output (default on; disable with
+        # LLM_TRANSLATION_RETRY=0). The batch translator drops hard sentences
+        # NON-DETERMINISTICALLY -- a conditional/relational premise returns null in
+        # one run and valid FOL in another. Re-asking JUST the failures, one at a
+        # time (small prompt, so a HIGHER reasoning effort is affordable) recovers
+        # most of them. Only overwrites when the retry actually parses; a still-
+        # failing retry leaves the original for the gate to quarantine.
+        self.retry = os.getenv("LLM_TRANSLATION_RETRY", "1").strip().lower() not in ("0", "false", "no", "off")
+        self.retry_effort = os.getenv("LLM_TRANSLATION_RETRY_EFFORT", "high") or None
+
+    def _register(self, fol, known: list[str], seen: set[str]) -> None:
+        for pred in _predicate_names(fol):
+            if pred not in seen:
+                seen.add(pred)
+                known.append(pred)
 
     def translate(self, statements: list[ExtractedStatement], vocabulary) -> dict[str, str | None]:
         result: dict[str, str | None] = {}
@@ -142,8 +172,28 @@ class LiveTranslator:
             for s in batch:
                 fol = data.get(s.id)
                 result[s.id] = fol
-                for pred in _predicate_names(fol):
-                    if pred not in seen:
-                        seen.add(pred)
-                        known.append(pred)
+                self._register(fol, known, seen)
+
+        # Retry pass: re-ask each statement that produced no parseable FOL, one at
+        # a time at a higher reasoning effort, with the full accumulated vocabulary.
+        if self.retry:
+            failed = [s for s in statements if not _parses(result.get(s.id))]
+            if failed:
+                print(f"  [translate-retry] re-asking {len(failed)} unparsed statement(s) "
+                      f"at higher effort...")
+                for s in failed:
+                    payload = {
+                        "vocabulary": {"predicates": known, "constants": vocabulary.constants},
+                        "statements": [{"id": s.id, "text": s.decontextualized}],
+                    }
+                    try:
+                        data = self.client.complete_json(
+                            self.system, json.dumps(payload), reasoning_effort=self.retry_effort,
+                        )
+                    except Exception:
+                        continue
+                    fol = data.get(s.id)
+                    if _parses(fol):     # only replace a failure with a real success
+                        result[s.id] = fol
+                        self._register(fol, known, seen)
         return result
