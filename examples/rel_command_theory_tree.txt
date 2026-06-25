@@ -1,0 +1,13 @@
+The chain of command on the expedition is fixed and total.
+
+Atlas commands Brava. Brava commands Cruz. Cruz commands Diaz. Diaz commands Estes.
+
+The command relation is transitive: if X commands Y and Y commands Z, then X commands Z.
+
+Whoever commands another person also outranks that person: if X commands Y, then X outranks Y.
+
+The rank order is asymmetric: if X outranks Y, then Y does not outrank X.
+
+Therefore Atlas commands Cruz. Therefore Atlas commands Diaz. Therefore Atlas commands Estes. Thus Atlas outranks Estes.
+
+Suppose, for the sake of argument, that Estes outranks Atlas.

@@ -16,7 +16,12 @@ from pathlib import Path
 
 from .fol_parser import Env, parse_fol
 from .llm_client import LLMClient
-from .prompts import EXTRACTION_SYSTEM, TRANSLATION_SYSTEM, TRANSLATION_SYSTEM_CONDITIONALS
+from .prompts import (
+    EXTRACTION_SYSTEM,
+    TRANSLATION_SYSTEM,
+    TRANSLATION_SYSTEM_CONDITIONALS,
+    TRANSLATION_SYSTEM_RELATIONS,
+)
 from .schema import ExtractedStatement
 from .splitter import split_statement
 
@@ -121,13 +126,20 @@ class FixtureTranslator:
 
 
 class LiveTranslator:
-    def __init__(self, client: LLMClient, batch_size: int = 8, allow_conditionals: bool = False) -> None:
+    def __init__(self, client: LLMClient, batch_size: int = 8, allow_conditionals: bool = False,
+                 allow_relations: bool = False) -> None:
         self.client = client
         self.batch_size = batch_size
-        # Opt-in: the relaxed prompt keeps conditional/disjunctive and deontic
-        # structure instead of nulling it. Off by default so existing runs are
-        # byte-identical.
-        self.system = TRANSLATION_SYSTEM_CONDITIONALS if allow_conditionals else TRANSLATION_SYSTEM
+        # Opt-in prompts, most permissive wins. --allow-relations admits binary
+        # relations (and includes the conditional/deontic handling); fall back to
+        # conditionals, then the strict unary base. Off by default so existing
+        # runs are byte-identical.
+        if allow_relations:
+            self.system = TRANSLATION_SYSTEM_RELATIONS
+        elif allow_conditionals:
+            self.system = TRANSLATION_SYSTEM_CONDITIONALS
+        else:
+            self.system = TRANSLATION_SYSTEM
         # Per-stage reasoning override. Translation (esp. with conditionals) is
         # where deep reasoning pays off, so it can run hotter than extraction:
         # LLM_TRANSLATION_EFFORT=medium. None -> use client default.

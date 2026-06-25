@@ -1,0 +1,9 @@
+Munich is the capital and most populous city of Bavaria. Munich is located in Bavaria. Bavaria is located in Germany.
+
+Containment is transitive: if X is located in Y and Y is located in Z, then X is located in Z.
+
+No place is located in itself.
+
+Germany is located in Bavaria.
+
+(Fixture note, not part of the argument: the last sentence is fabricated and absent from the real Wikipedia text. This variant exists only for contradiction-detection tests; the contradiction must be DERIVED by the reasoner, so this note deliberately states no conclusion.)

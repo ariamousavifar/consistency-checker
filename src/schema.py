@@ -91,6 +91,10 @@ class ClusterReport(BaseModel):
     solver_calls: int = 0
     solver_ms: float = 0.0
     hit_timeout: bool = False
+    # When the set is inconsistent, a forward-chaining refutation showing HOW the
+    # contradiction is derived (chains of theorems colliding), so the inconsistent
+    # case renders as a derivation tree, not a flat unsat-core fan.
+    refutation: Optional[dict] = None
 
 
 class RunReport(BaseModel):

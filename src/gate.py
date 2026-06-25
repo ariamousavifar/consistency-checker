@@ -20,7 +20,7 @@ from __future__ import annotations
 import re
 
 from .fidelity import fidelity_check
-from .fol_parser import KEYWORDS, check_equivalence, parse_fol, tokenize
+from .fol_parser import KEYWORDS, tokenize, check_equivalence, parse_fol, tokenize
 from .lemmatizer import lemma
 from .linguistics import deontic_cue, hedge_cue, quarantine_shape
 from .rule_translator import rule_translate
@@ -110,8 +110,58 @@ def _validated(fol: str | None, vocab: Vocabulary) -> str | None:
         return None
 
 
+def max_arity(fol: str) -> int:
+    """Highest predicate arity in the formula. >=2 means the formula uses a
+    genuine relation, which is the new content the EPR fragment admits."""
+    toks = tokenize(fol)
+    best = 0
+    for i, t in enumerate(toks):
+        if _IDENT_RE.match(t) and t not in KEYWORDS and i + 1 < len(toks) and toks[i + 1] == "(":
+            depth, commas, content = 0, 0, False
+            for tj in toks[i + 1:]:
+                if tj == "(":
+                    depth += 1
+                elif tj == ")":
+                    depth -= 1
+                    if depth == 0:
+                        break
+                elif depth == 1:
+                    if tj == ",":
+                        commas += 1
+                    else:
+                        content = True
+            best = max(best, (commas + 1) if content else 0)
+    return best
+
+
+def is_epr_safe(fol: str) -> bool:
+    """False iff an existential quantifier occurs inside the scope of a universal
+    -- the forall/exists alternation that escapes the decidable Bernays-
+    Schoenfinkel (EPR) class once a relation links the two variables (a role
+    restriction: 'every city is located in some country'). True for ground
+    formulas, pure-forall, pure-exists, and exists*forall* prefixes."""
+    toks = tokenize(fol)
+    forall_depths: list[int] = []
+    depth = 0
+    pending = None
+    for t in toks:
+        if t in ("forall", "exists"):
+            pending = t
+        elif t == "(":
+            depth += 1
+            if pending == "forall":
+                forall_depths.append(depth)
+            elif pending == "exists" and forall_depths:
+                return False
+            pending = None
+        elif t == ")":
+            forall_depths = [d for d in forall_depths if d < depth]
+            depth -= 1
+    return True
+
+
 def run_gate(stmt: ExtractedStatement, llm_fol: str | None, vocab: Vocabulary, judge=None,
-             guard_deontic: bool = False) -> Proposition:
+             guard_deontic: bool = False, allow_relations: bool = False) -> Proposition:
     base = dict(
         id=stmt.id,
         type=stmt.type,
@@ -178,6 +228,44 @@ def run_gate(stmt: ExtractedStatement, llm_fol: str | None, vocab: Vocabulary, j
             gate_reason="no translator produced valid FOL (outside rule fragment; LLM candidate absent or unparseable)",
             quarantine_shape=quarantine_shape(stmt.decontextualized),
         )
+
+    # EPR-shape guard (only when relations are admitted). A relational formula
+    # with a forall/exists alternation is a role restriction outside the decidable
+    # Bernays-Schoenfinkel class -- Z3 can no longer guarantee a verdict on it, so
+    # it is set aside for description logic rather than trusted. Ground relations
+    # and exists*forall* rules pass. Unary forall/exists is untouched (monadic FOL
+    # is decidable regardless), so existing behavior is unchanged.
+    if allow_relations:
+        good = [c for c in candidates if not (max_arity(c.fol) >= 2 and not is_epr_safe(c.fol))]
+        if not good:
+            return Proposition(
+                **base,
+                status=GateOutcome.QUARANTINED,
+                gate_reason=(
+                    "relational role-restriction (forall/exists over a relation): outside the "
+                    "decidable EPR fragment; needs description logic"
+                ),
+                quarantine_shape="relational-role(∀∃)",
+            )
+        candidates = good
+
+    if len(candidates) == 2 and allow_relations:
+        # Under --allow-relations the rule translator's UNARY reading
+        # ('MemberOfClassR(x)') competes with the LLM's RELATIONAL reading
+        # ('MemberOf(x, r)') and would otherwise read as genuine ambiguity. The
+        # relational reading is the one the flag asked for, so prefer it instead
+        # of excluding the statement.
+        arities = [max_arity(c.fol) for c in candidates]
+        if arities[0] != arities[1]:
+            pick = candidates[0] if arities[0] > arities[1] else candidates[1]
+            return Proposition(
+                **base,
+                fol=pick.fol,
+                candidates=candidates,
+                status=GateOutcome.ACCEPTED,
+                confidence=0.75,
+                gate_reason=f"translators diverged on arity; kept the relational {pick.source} reading (--allow-relations)",
+            )
 
     if len(candidates) == 2:
         a, b = candidates[0].fol, candidates[1].fol

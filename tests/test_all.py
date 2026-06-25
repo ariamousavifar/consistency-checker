@@ -242,7 +242,11 @@ def test_tree_dot_svg_outputs(tmp_path):
 
     dot = build_dot(report)
     assert dot.startswith("digraph")
-    assert 'conflict_hub' in dot                      # set hub, not pairwise edges
+    # The Socrates inconsistency is now shown as a refutation: a direct red clash
+    # edge between the two contradictory statements (here Mortal vs not Mortal are
+    # both asserted, so it is a direct 2-statement clash rather than a long chain).
+    assert "contradiction" in dot                     # the red mutual clash edge
+    assert "s7 -> s8" in dot or "s8 -> s7" in dot     # the clashing pair linked directly
     assert '#a32d2d' in dot and '#cfe0f5' in dot      # red conflict + blue axiom colors
 
     svg = build_svg(report)

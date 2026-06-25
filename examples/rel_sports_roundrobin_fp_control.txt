@@ -1,0 +1,9 @@
+The following results are from a hypothetical round-robin group stage (the pattern is common in real leagues and tournaments).
+
+Arsenal beat Brentford. Brentford beat Chelsea. Chelsea beat Arsenal.
+
+No transitivity axiom is stated for the "beat" relation. "Beat" only records the outcome of a single match; it does not imply a strict ordering.
+
+Expected behavior: the system should detect NO contradiction. This is a false-positive boundary test. A relational reasoner must not infer Arsenal beat Arsenal (or any cycle-as-contradiction) in the absence of an explicit transitivity axiom.
+
+Source: The A-beats-B, B-beats-C, C-beats-A pattern is routine in Premier League and Champions League group stages.

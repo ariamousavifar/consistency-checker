@@ -1,0 +1,11 @@
+The following lineage is drawn from Genesis chapters 5 and 11 (KJV, public domain), paraphrased.
+
+Adam was the father of Seth. Seth was the father of Enosh. Enosh was the father of Kenan. Kenan was the father of Mahalalel. Mahalalel was the father of Jared. Jared was the father of Enoch. Enoch was the father of Methuselah. Methuselah was the father of Lamech. Lamech was the father of Noah. Noah was the father of Shem. Shem was the father of Arphaxad. Arphaxad was the father of Shelah. Shelah was the father of Eber. Eber was the father of Peleg.
+
+Fatherhood implies ancestry: if X is the father of Y, then X is an ancestor of Y.
+
+The ancestry relation is transitive: if X is an ancestor of Y and Y is an ancestor of Z, then X is an ancestor of Z.
+
+No person is their own ancestor.
+
+Source: Genesis 5:1-32 and 11:10-17, KJV (public domain), paraphrased.

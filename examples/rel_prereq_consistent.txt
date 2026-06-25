@@ -1,0 +1,15 @@
+The following prerequisite relationships are drawn from the MIT Course 6 catalog (student.mit.edu/catalog/m6a.html, IAP/Spring 2026).
+
+6.100A (Introduction to Computer Science Programming in Python) has no prerequisites.
+6.100B (Introduction to Computational Thinking and Data Science) requires 6.100A.
+6.1010 (Fundamentals of Programming) requires 6.100A and 6.100B.
+6.1020 (Software Construction) requires 6.1010.
+6.1040 (Software Design) requires 6.1020 and 6.1200.
+6.1060 (Software Performance Engineering) requires 6.1020, 6.1210, and 6.1910.
+6.5060 (Algorithm Engineering) requires 6.1060 and 6.1220.
+
+The prerequisite relation is transitive: if course A is a prerequisite for course B, and course B is a prerequisite for course C, then course A is a (transitive) prerequisite for course C.
+
+No course is a prerequisite for itself (the prerequisite relation is irreflexive).
+
+Source: MIT Course 6 catalog, paraphrased from official descriptions.

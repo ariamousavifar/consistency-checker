@@ -66,6 +66,35 @@ def _trunc(s: str, n: int) -> str:
     return s if len(s) <= n else s[: n - 3] + "..."
 
 
+# ---------------------------------------------------------------- refutation
+
+def _refutation_node(nid: str, nodes: dict, seen: set) -> tuple:
+    n = nodes.get(nid)
+    if not n:
+        return (nid, [])
+    if n["is_fact"]:
+        return (f"[{n['stmt_id']}] {n['label']}", [])
+    label = f"{n['label']}  (by {n['stmt_id']})"
+    if nid in seen:
+        return (label + "  (shown above)", [])
+    seen.add(nid)
+    kids = [_refutation_node(p, nodes, seen) for p in n["premises"]]
+    return (label, kids)
+
+
+def _refutation_tree(ref: dict, lines: list[str]) -> None:
+    nodes = ref.get("nodes", {})
+    seen: set = set()
+    children = [
+        (f"both derived:  {ref['left_label']}   ><   {ref['right_label']}", []),
+        ("chain A:", [_refutation_node(ref["left"], nodes, seen)]),
+        ("chain B:", [_refutation_node(ref["right"], nodes, seen)]),
+    ]
+    _render_tree("DERIVATION OF THE CONTRADICTION (forward-chained refutation)",
+                 children, lines, is_root=True)
+    lines.append("")
+
+
 # ---------------------------------------------------------------- ASCII tree
 
 def _render_tree(label: str, children: list, lines: list[str], prefix: str = "", is_last: bool = True,
@@ -121,6 +150,8 @@ def build_tree_text(report: RunReport, width: int = 56) -> str:
                                 [(leaf(by_id[i]), []) for i in c.axiom_conflict if i in by_id]))
         _render_tree(root_label, children, lines, is_root=True)
         lines.append("")
+        if c.refutation:
+            _refutation_tree(c.refutation, lines)
 
     excluded = [p for p in report.propositions if _kind(p) == "excluded"]
     if excluded:
@@ -142,6 +173,14 @@ def build_tree_text(report: RunReport, width: int = 56) -> str:
 def build_dot(report: RunReport) -> str:
     by_id = {p.id: p for p in report.propositions}
     out = ["digraph theory {", '  rankdir=TB;', '  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=10];']
+    # Statement ids that live in a cluster whose contradiction we reconstruct as a
+    # derivation -- for these we draw the derivation chains instead of the flat
+    # conflict hub.
+    refut_members: set[str] = set()
+    for c in report.clusters:
+        if c.refutation:
+            refut_members.update(c.statement_ids)
+
     for c in report.clusters:
         out.append(f"  subgraph cluster_{c.cluster_id} {{")
         cons = "?" if c.axioms_consistent is None else ("consistent" if c.axioms_consistent else "INCONSISTENT")
@@ -151,6 +190,18 @@ def build_dot(report: RunReport) -> str:
             fill, border = _FILL[_kind(p)]
             label = f"{p.id} [{_kind(p)}]\\n{_trunc(p.decontextualized, 40)}"
             out.append(f'    {p.id} [label="{label}", fillcolor="{fill}", color="{border}"];')
+        # derived (non-fact) theorem nodes of the refutation, drawn in-cluster
+        if c.refutation:
+            nodes = c.refutation["nodes"]
+            tips = {c.refutation["left"], c.refutation["right"]}
+            for nid, n in nodes.items():
+                if n["is_fact"]:
+                    continue           # a fact reuses its existing statement node
+                fill, border = _FILL["contradicts"] if nid in tips else _FILL["entailed"]
+                out.append(
+                    f'    {nid} [label="{_escape(n["label"])}\\n(derived by {n["stmt_id"]})", '
+                    f'fillcolor="{fill}", color="{border}"];'
+                )
         out.append("  }")
     excluded = [p for p in report.propositions if _kind(p) == "excluded"]
     for p in excluded:
@@ -164,13 +215,42 @@ def build_dot(report: RunReport) -> str:
             if did in by_id:
                 out.append(f'  {did} -> {p.id} [color="#185fa5", style=dotted, arrowsize=0.6];')
 
+    # Refutation derivation edges: premise -> derived conclusion (labeled with the
+    # rule that fired), and a red mutual edge between the two clashing tips.
+    for c in report.clusters:
+        if not c.refutation:
+            continue
+        nodes = c.refutation["nodes"]
+
+        def gid(nid: str) -> str:
+            n = nodes.get(nid)
+            return n["stmt_id"] if (n and n["is_fact"]) else nid
+
+        for nid, n in nodes.items():
+            if n["is_fact"]:
+                continue
+            for prem in n["premises"]:
+                out.append(
+                    f'  {gid(prem)} -> {nid} [color="#3b6d11", arrowsize=0.7, '
+                    f'fontsize=8, fontname="Helvetica", label="{n["stmt_id"]}"];'
+                )
+        left, right = c.refutation["left"], c.refutation["right"]
+        out.append(
+            f'  {gid(left)} -> {gid(right)} [dir=both, color="#a32d2d", '
+            f'style=bold, constraint=false, label="contradiction", fontsize=9, '
+            f'fontcolor="#a32d2d"];'
+        )
+
     # Minimal inconsistent sets: draw ONE hub per set, with every member joined
     # to the hub. This shows the set is JOINTLY unsatisfiable, not that any pair
     # individually contradicts (the old pairwise edges drew a misleading triangle
-    # implying every member conflicts with every other).
+    # implying every member conflicts with every other). Skipped for clusters whose
+    # contradiction we already render as a derivation (above).
     seen_sets: set[frozenset] = set()
     hub_i = 0
     for p in report.propositions:
+        if p.id in refut_members:
+            continue
         if p.verdict == Verdict.CONTRADICTS:
             members = frozenset({p.id, *p.conflict})
             if not members or members in seen_sets:

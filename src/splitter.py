@@ -28,6 +28,13 @@ _VERB_CUES = re.compile(
 )
 _SUBJECT_START = re.compile(r"^(every|all|some|no|each|the|a|an|there)\b", re.IGNORECASE)
 
+# A conditional/disjunctive sentence is a SINGLE inference rule: tearing its
+# antecedent and consequent apart (or splitting the 'and' that joins the two
+# halves of an antecedent) destroys the logic. The 'then' clause also reads as a
+# participial adjunct to _adjunct_split, so this must be checked first. Matches a
+# leading or clause-introducing if/when/whenever/either.
+_CONDITIONAL = re.compile(r"(^|[\s,;:])(if|when|whenever|either)\b", re.IGNORECASE)
+
 # Appositive / participial / relative adjuncts hang an extra clause off a
 # self-contained copular fact: "Aldous is a laureate, having been elevated ...".
 # The extractor often keeps the whole thing as one statement, and the trailing
@@ -87,6 +94,10 @@ def _top_level_and_split(text: str) -> list[str]:
 def split_statement(decontextualized: str) -> list[str]:
     """Return one or more self-contained clauses. Splits only when safe."""
     text = decontextualized.strip().rstrip(".")
+
+    # Leave a conditional/disjunctive sentence whole -- it is one inference rule.
+    if _CONDITIONAL.search(" " + text):
+        return [decontextualized]
 
     # Peel a copular fact off a trailing participial/relative adjunct first, so
     # "X is a Y, having ..." / "X is a Y who ..." yields the atomic "X is a Y".

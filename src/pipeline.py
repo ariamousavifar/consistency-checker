@@ -67,6 +67,8 @@ def run_pipeline(
     allow_conditionals: bool = False,
     guard_deontic: bool = False,
     unify_self_ref: bool = False,
+    allow_relations: bool = False,
+    prune_derivation: bool = False,
 ) -> RunReport:
     timer = StageTimer()
     file_path = Path(file_path)
@@ -97,14 +99,18 @@ def run_pipeline(
             )
         client = LLMClient(config)
         extractor = LiveExtractor(client)
-        translator = LiveTranslator(client, allow_conditionals=allow_conditionals)
+        translator = LiveTranslator(
+            client, allow_conditionals=allow_conditionals, allow_relations=allow_relations,
+        )
         if use_nli:
             judge = LLMJudge(client)
         mode = f"live ({config.base_url}, {config.model})"
         if use_nli:
             mode += " [nli]"
 
-    if allow_conditionals:
+    if allow_relations:
+        mode += " [+relations]"
+    elif allow_conditionals:
         mode += " [+conditionals]"
     if guard_deontic:
         mode += " [+deontic-guard]"
@@ -124,7 +130,8 @@ def run_pipeline(
     with timer.stage("gate"):
         propositions = []
         for stmt in statements:
-            prop = run_gate(stmt, llm_fols.get(stmt.id), vocab, judge=judge, guard_deontic=guard_deontic)
+            prop = run_gate(stmt, llm_fols.get(stmt.id), vocab, judge=judge,
+                            guard_deontic=guard_deontic, allow_relations=allow_relations)
             prop.span = doc.find_span(stmt.original_text)
             propositions.append(prop)
 
@@ -162,7 +169,8 @@ def run_pipeline(
         flags = screen([(s.id, s.decontextualized) for s in statements])
 
     with timer.stage("solver"):
-        clusters = verify(propositions, timeout_ms=solver_timeout_ms, effort=effort) if effort >= 1 else []
+        clusters = verify(propositions, timeout_ms=solver_timeout_ms, effort=effort,
+                          prune_derivation=prune_derivation) if effort >= 1 else []
 
     report = RunReport(
         source_file=str(file_path),

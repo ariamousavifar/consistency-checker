@@ -53,6 +53,11 @@ def _format_report(report, out_dir: str, show_tree: bool) -> str:
         tag = " [bridged: relies on a background premise]" if bridged else ""
         lines.append(f"INCONSISTENT SET {{{', '.join(members)}}}: these cannot all be true; "
                      f"at least one must be abandoned (the system does not pick which){tag}")
+    for c in report.clusters:
+        if c.refutation:
+            lines.append(f"DERIVATION: the contradiction is reached by reasoning -- "
+                         f"{c.refutation['left_label']}  vs  {c.refutation['right_label']} "
+                         f"(see the refutation tree below)")
     for p in report.propositions:
         if p.verdict == Verdict.REFUTED:
             conflict = ", ".join(p.conflict) if p.conflict else "the theory"
@@ -163,6 +168,8 @@ def _run_all(args) -> int:
                 allow_conditionals=getattr(args, "allow_conditionals", False),
                 guard_deontic=getattr(args, "guard_deontic", False),
                 unify_self_ref=getattr(args, "unify_self_ref", False),
+                allow_relations=getattr(args, "allow_relations", False),
+                prune_derivation=getattr(args, "prune_derivation", False),
             )
         except Exception as exc:
             msg = f"\n!! ERROR on {ex['name']}: {type(exc).__name__}: {exc}\n   (skipped; batch continues)"
@@ -251,6 +258,15 @@ def main(argv: list[str] | None = None) -> int:
                         help="Merge first-person self-reference constants (author/speaker/I/...) "
                              "to one entity so a bridge written against 'author' connects to text "
                              "that emitted 'speaker'. Single-author docs only (not multi-speaker).")
+    parser.add_argument("--allow-relations", action="store_true",
+                        help="Admit binary relations (G owns R, rule-over, located-in) -- the EPR "
+                             "fragment Z3 decides completely. Includes conditional/deontic handling. "
+                             "A relational forall/exists role-restriction is set aside for description "
+                             "logic. Off by default.")
+    parser.add_argument("--prune-derivation", action="store_true",
+                        help="When a set is inconsistent, prune the refutation tree/graph to ONLY the "
+                             "nodes on the two chains that collide. Off by default: the full "
+                             "forward-chaining closure (every derived fact) is shown.")
     args = parser.parse_args(argv)
 
     # Resolve provider/model once (flags > interactive picker > .env fallback).
@@ -291,6 +307,8 @@ def main(argv: list[str] | None = None) -> int:
         allow_conditionals=args.allow_conditionals,
         guard_deontic=args.guard_deontic,
         unify_self_ref=args.unify_self_ref,
+        allow_relations=args.allow_relations,
+        prune_derivation=args.prune_derivation,
     )
     _print_report(report, out_dir, show_tree=not args.no_tree)
     print(f"             (also report.json, store.json, timing.json, theory_tree.txt,")

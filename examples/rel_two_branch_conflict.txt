@@ -1,0 +1,11 @@
+Atlas allies with Brava. Brava allies with Cruz. Cruz allies with Diaz.
+
+If X allies with Y and Y allies with Z, then X allies with Z.
+
+If X allies with Y, then X trusts Y.
+
+Atlas rivals Echo. Echo rivals Felix. Felix rivals Diaz.
+
+If X rivals Y and Y rivals Z, then X rivals Z.
+
+If X rivals Y, then X does not trust Y.

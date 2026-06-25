@@ -1,0 +1,7 @@
+Atlas governs Brava. Brava governs Cruz. Cruz governs Diaz.
+
+If X governs Y and Y governs Z, then X governs Z.
+
+If X governs Y, then X is accountable for Y.
+
+Atlas is not accountable for Diaz.

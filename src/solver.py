@@ -19,6 +19,7 @@ import time as _time
 
 import z3
 
+from . import forward_chain
 from .fol_parser import Env, parse_fol, tokenize, KEYWORDS
 from .schema import ClusterReport, GateOutcome, Proposition, StatementType, Verdict
 
@@ -133,7 +134,8 @@ def _minimize(ids: list[str], formulas: dict[str, z3.ExprRef], extra: list[z3.Ex
     return current
 
 
-def verify(props: list[Proposition], timeout_ms: int = 8000, effort: int = 1) -> list[ClusterReport]:
+def verify(props: list[Proposition], timeout_ms: int = 8000, effort: int = 1,
+           prune_derivation: bool = False) -> list[ClusterReport]:
     accepted = [p for p in props if p.status == GateOutcome.ACCEPTED and p.fol]
     reports: list[ClusterReport] = []
 
@@ -199,6 +201,17 @@ def verify(props: list[Proposition], timeout_ms: int = 8000, effort: int = 1) ->
                 "this set of statements is mutually inconsistent; at least one member "
                 "of the minimal set must be abandoned (the system does not pick which)"
             )
+            # Reconstruct HOW the contradiction is derived (the chains of theorems
+            # that collide), so the inconsistent case shows a derivation, not just
+            # a flat unsat-core fan. Forward chaining is constructive, so it works
+            # where Z3-entailment cannot (from an inconsistent set everything is
+            # "entailed"). Best-effort: None if the clause shapes are unsupported.
+            try:
+                ref = forward_chain.explain([p for p in cluster if p.id in formulas])
+                if ref is not None:
+                    report.refutation = forward_chain.serialize(ref, prune=prune_derivation)
+            except Exception:
+                report.refutation = None
             # The givens MINUS the conflicting members may still be consistent and
             # may still entail some claims. Compute that context so the report can
             # explain WHY the conflict arises, instead of collapsing all to unknown.

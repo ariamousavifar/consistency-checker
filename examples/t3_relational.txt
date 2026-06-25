@@ -1,0 +1,7 @@
+Ranks in the Academy
+
+The Academy divides its members into two classes, G and R.
+
+Class G rules over class R. If one class rules over another, the ruled class does not have full self-ownership. Class R has full self-ownership.
+
+Every member of class R is a scholar. Aldous is a member of class R. Therefore Aldous is a scholar.

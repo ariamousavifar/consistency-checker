@@ -41,3 +41,29 @@ def test_universal_relative_not_split_as_appositive():
     s = "Every person who is bound by the oath publishes their decisions."
     out = split_statement(s)
     assert out == [s]
+
+
+# --- conditional/disjunctive sentences are ONE inference rule ----------------
+
+def test_conditional_with_and_in_antecedent_not_split():
+    # A transitivity rule: the ', then ...' looked like a participial adjunct and
+    # the 'and' in the antecedent looked like a clause boundary -- splitting it
+    # destroyed the rule and the relational cycle could never close.
+    s = ("If a course A is a prerequisite for course B and course B is a "
+         "prerequisite for course C, then course A is a prerequisite for course C.")
+    assert split_statement(s) == [s]
+
+
+def test_leading_when_conditional_not_split():
+    s = "When X is located in Y and Y is located in Z, X is located in Z."
+    assert split_statement(s) == [s]
+
+
+def test_either_or_disjunction_not_split():
+    s = "Either the class is co-owned by everyone and no one owns it, or one group rules it."
+    assert split_statement(s) == [s]
+
+
+def test_mid_sentence_if_not_split():
+    s = "The relation is transitive: if X precedes Y and Y precedes Z, then X precedes Z."
+    assert split_statement(s) == [s]

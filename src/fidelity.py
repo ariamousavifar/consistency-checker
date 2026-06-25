@@ -86,11 +86,36 @@ def _content_words(words: list[str]) -> list[str]:
     return [w for w in words if w not in _STOP and not w.isdigit() and len(w) >= 2]
 
 
+# A code-like constant: a short letter tag (0-3 chars) glued to digits, the form
+# the translator coins for identifiers like course numbers -- '6.100B' -> c6100b,
+# '6.5060' -> c6_5060. Its DIGITS are the content, so the word-split path (which
+# drops pure-digit pieces) wrongly quarantines it. Match its alphanumeric
+# signature against the sentence's punctuation-stripped text instead.
+_CODE_RE = re.compile(r"[a-z]{0,3}\d[\da-z]*$")
+
+
+def _is_code(tok: str) -> bool:
+    return bool(_CODE_RE.fullmatch(re.sub(r"[^a-z0-9]", "", tok.lower())))
+
+
+def _code_forms(tok: str) -> set[str]:
+    """Alphanumeric signatures of a code-like constant: the run-together form and,
+    if a lone letter tag precedes the digits ('c6100b'), the de-tagged form
+    ('6100b'). Either may appear in the joined sentence ('6.100B' -> '...6100b...')."""
+    s = re.sub(r"[^a-z0-9]", "", tok.lower())
+    forms = {s}
+    if len(s) >= 2 and s[0].isalpha() and s[1].isdigit():
+        forms.add(s[1:])
+    return {f for f in forms if len(f) >= 2}
+
+
 def _symbols(fol: str) -> tuple[list[tuple[str, str]], list[str]]:
     """Return (predicate content words tagged with their predicate symbol,
-    constant content words) from FOL. The symbol tag lets the caller exempt
+    raw constant tokens) from FOL. The symbol tag lets the caller exempt
     words that belong to a REUSED predicate (vetted when first coined) from the
-    invention penalty."""
+    invention penalty. Constants are returned RAW (un-split) so the caller can
+    route code-like ones (course numbers) to signature matching and word-like
+    ones to per-word coverage."""
     toks = tokenize(fol)
     pred_words: list[tuple[str, str]] = []
     consts: list[str] = []
@@ -110,7 +135,7 @@ def _symbols(fol: str) -> tuple[list[tuple[str, str]], list[str]]:
             if nxt == "(":
                 pred_words.extend((w, t) for w in _content_words(words_of(t)))
             elif t not in bound:
-                consts.extend(_content_words(_split_const(t)))
+                consts.append(t)
         i += 1
     return pred_words, consts
 
@@ -148,6 +173,9 @@ def fidelity_check(fol: str, sentence: str, threshold: float = 0.6,
     known_preds = known_preds or set()
     raw_words = re.findall(r"[a-z0-9]+", sentence.lower())
     sentence_lemmas = {lemma(w) for w in raw_words} | set(raw_words)
+    # punctuation-stripped run for code-like constants: '6.100B requires 6.100A'
+    # -> '6100brequires6100a', so 'c6100b' (signature '6100b') matches.
+    joined_sentence = re.sub(r"[^a-z0-9]+", "", sentence.lower())
     for sw in list(sentence_lemmas):
         for pfx in NEG_PREFIXES:
             if sw.startswith(pfx) and len(sw) - len(pfx) >= 3:
@@ -166,12 +194,21 @@ def fidelity_check(fol: str, sentence: str, threshold: float = 0.6,
             matched += 1
         else:
             missing.append(w)
-    for w in consts:
-        total += 1
-        if _word_match(w, sentence_lemmas):
-            matched += 1
+    for c in consts:
+        if _is_code(c):
+            # one unit: its digits are the identity, matched as a signature
+            total += 1
+            if any(f in joined_sentence for f in _code_forms(c)):
+                matched += 1
+            else:
+                missing.append(c)
         else:
-            missing.append(w)
+            for w in _content_words(_split_const(c)):
+                total += 1
+                if _word_match(w, sentence_lemmas):
+                    matched += 1
+                else:
+                    missing.append(w)
     coverage = matched / total if total else 1.0
 
     # Adaptive threshold: a single-predicate statement ("Old Ferry has no
