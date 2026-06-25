@@ -134,13 +134,16 @@ class LiveTranslator:
         self.effort = os.getenv("LLM_TRANSLATION_EFFORT") or None
         # Per-statement retry on null/unparseable output (default on; disable with
         # LLM_TRANSLATION_RETRY=0). The batch translator drops hard sentences
-        # NON-DETERMINISTICALLY -- a conditional/relational premise returns null in
-        # one run and valid FOL in another. Re-asking JUST the failures, one at a
-        # time (small prompt, so a HIGHER reasoning effort is affordable) recovers
-        # most of them. Only overwrites when the retry actually parses; a still-
-        # failing retry leaves the original for the gate to quarantine.
+        # NON-DETERMINISTICALLY -- a conditional premise returns null in one run
+        # and valid FOL in another. Re-asking JUST the failures, one at a time,
+        # recovers many of them: an isolated single-statement prompt with the full
+        # accumulated vocabulary and a fresh sampling draw. Effort defaults to
+        # `medium` (the recovery-vs-cost sweet spot; `high` roughly doubles cost
+        # for marginal extra recall -- see LLM_TRANSLATION_RETRY_EFFORT). Only
+        # overwrites when the retry actually parses; a still-failing retry leaves
+        # the original for the gate to quarantine.
         self.retry = os.getenv("LLM_TRANSLATION_RETRY", "1").strip().lower() not in ("0", "false", "no", "off")
-        self.retry_effort = os.getenv("LLM_TRANSLATION_RETRY_EFFORT", "high") or None
+        self.retry_effort = os.getenv("LLM_TRANSLATION_RETRY_EFFORT", "medium") or None
 
     def _register(self, fol, known: list[str], seen: set[str]) -> None:
         for pred in _predicate_names(fol):
@@ -180,7 +183,7 @@ class LiveTranslator:
             failed = [s for s in statements if not _parses(result.get(s.id))]
             if failed:
                 print(f"  [translate-retry] re-asking {len(failed)} unparsed statement(s) "
-                      f"at higher effort...")
+                      f"individually...")
                 for s in failed:
                     payload = {
                         "vocabulary": {"predicates": known, "constants": vocabulary.constants},

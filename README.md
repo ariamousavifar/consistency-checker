@@ -91,14 +91,16 @@ right way matters as much as finding inconsistency.
     `ResidentOfFrance`/`ResidentOfGermany` stay untouched). NLI (`--nli`) is now
     scoped to genuine two-candidate adjudication only.
 13. **Per-statement translation retry.** The batch translator drops hard
-    sentences non-deterministically — a conditional/relational premise returns
-    `null` in one run and valid FOL in another. After the batch pass, every
-    statement that produced no *parseable* FOL is re-asked individually at a
-    higher reasoning effort (a one-statement prompt, so the deeper effort is
-    cheap) with the full accumulated vocabulary. A retry only replaces a failure
-    with a real success; a still-failing statement is left for the gate to
-    quarantine. On by default; `LLM_TRANSLATION_RETRY=0` disables it,
-    `LLM_TRANSLATION_RETRY_EFFORT` (default `high`) tunes it.
+    sentences non-deterministically — a conditional premise returns `null` in one
+    run and valid FOL in another. After the batch pass, every statement that
+    produced no *parseable* FOL is re-asked individually (an isolated
+    single-statement prompt with the full accumulated vocabulary and a fresh
+    draw) and recovers many of them. A retry only replaces a failure with a real
+    success; a still-failing statement is left for the gate to quarantine. On by
+    default; `LLM_TRANSLATION_RETRY=0` disables it, `LLM_TRANSLATION_RETRY_EFFORT`
+    (default `medium`; `high` adds recall at roughly double the cost) tunes it.
+    It recovers conditional premises; relational ones (`G owns R`) still need the
+    EPR fragment.
 
 ### New CLI / env
 
