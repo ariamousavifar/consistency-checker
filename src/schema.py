@@ -29,6 +29,11 @@ class Verdict(str, Enum):
     CONTRADICTS = "contradicts"
     UNKNOWN = "unknown"
     ERROR = "error"
+    # A hypothetical supposition that contradicts the established theory: a
+    # successful reductio ad absurdum, so its NEGATION is thereby proven. Kept
+    # distinct from CONTRADICTS so the author's deliberate "assume the opposite"
+    # move is never reported as the author contradicting himself.
+    REFUTED = "refuted"
 
 
 class SourceSpan(BaseModel):
@@ -67,6 +72,10 @@ class Proposition(BaseModel):
     status: GateOutcome
     confidence: float = 0.0
     gate_reason: str = ""
+    # For statements quarantined because they fell outside the unary FOL fragment:
+    # a coarse heuristic bucket of the expressiveness they need (relational, modal,
+    # numeric, ...). Drives the relations-roadmap measurement; None otherwise.
+    quarantine_shape: Optional[str] = None
     verdict: Optional[Verdict] = None
     support: list[str] = Field(default_factory=list)   # axiom ids proving an entailed claim
     conflict: list[str] = Field(default_factory=list)  # minimal conflicting set for a contradiction

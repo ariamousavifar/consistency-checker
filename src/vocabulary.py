@@ -27,6 +27,14 @@ _IDENT = re.compile(r"[A-Za-z_]\w*$")
 _STOPWORDS = {"a", "an", "the"}
 NEG_PREFIXES = ("non", "un", "im", "ir", "dis", "in")
 
+# First-person self-reference constants a first-person document/bridge may use
+# for the same single author. Merged to one entity by finalize_self_reference_
+# aliases (opt-in; single-author scope). Lowercased to match constant keys.
+_SELF_REF = frozenset({
+    "i", "me", "myself", "author", "speaker", "narrator", "writer",
+    "presenter", "oneself", "we", "us",
+})
+
 
 def _plural_strip(word: str) -> str:
     if len(word) > 4 and word.endswith(("ses", "xes", "zes", "ches", "shes")):
@@ -207,6 +215,47 @@ class Vocabulary:
             else:
                 out.append(t)
             i += 1
+        return _detokenize(out)
+
+    def finalize_self_reference_aliases(self) -> dict[str, str]:
+        """Merge first-person self-reference constants onto one canonical entity
+        (opt-in, single-author scope). A first-person document whose subject the
+        extractor decontextualized as 'speaker' in one place and 'author' in
+        another -- or a bridge premise an analyst wrote against 'author' while the
+        text emitted 'speaker' -- should resolve to ONE constant, or a bridge
+        cannot connect (the 'not RaiseTax(speaker)' vs 'RaiseTax(author)' miss).
+
+        Canonical is 'author' when present, else the first self-ref token seen
+        (deterministic). Only fires with >=2 distinct self-ref constants, so a
+        document using a single label is untouched. SCOPE: single-author only --
+        in a multi-speaker debate 'speaker' need NOT be the author, so this stays
+        opt-in (Tier 5 will need per-speaker constants instead). Returns the alias
+        map; callers rewrite emitted FOL via `apply_const_aliases`.
+        """
+        present = sorted({c for c in self._const_by_key.values() if c in _SELF_REF})
+        if len(present) < 2:
+            return {}
+        canon = "author" if "author" in present else present[0]
+        aliases = {c: canon for c in present if c != canon}
+        for key, val in list(self._const_by_key.items()):
+            if val in aliases:
+                self._const_by_key[key] = aliases[val]
+        return aliases
+
+    def apply_const_aliases(self, fol: str, aliases: dict[str, str]) -> str:
+        """Rewrite constant names through a self-reference alias map. Constants are
+        identifiers in ARGUMENT position (not followed by '('), which also excludes
+        bound variables -- and the map only holds self-ref tokens, never 'x'/'y'."""
+        if not aliases:
+            return fol
+        toks = tokenize(fol)
+        out: list[str] = []
+        for i, t in enumerate(toks):
+            nxt = toks[i + 1] if i + 1 < len(toks) else None
+            if _IDENT.match(t) and t not in KEYWORDS and nxt != "(" and t in aliases:
+                out.append(aliases[t])
+            else:
+                out.append(t)
         return _detokenize(out)
 
     def canonical_pred(self, name: str) -> str:

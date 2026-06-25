@@ -22,6 +22,7 @@ import re
 from .fidelity import fidelity_check
 from .fol_parser import KEYWORDS, check_equivalence, parse_fol, tokenize
 from .lemmatizer import lemma
+from .linguistics import deontic_cue, hedge_cue, quarantine_shape
 from .rule_translator import rule_translate
 from .schema import (
     ExtractedStatement,
@@ -32,11 +33,14 @@ from .schema import (
 )
 from .vocabulary import Vocabulary, words_of
 
+# Types excluded from the theory before translation. HYPOTHETICAL is NOT here:
+# a supposition is translated and carried to the solver as a reductio ASSUMPTION
+# (kept out of the asserted-theory consistency base, tested for "assume-opposite
+# leads to contradiction"). See solver.verify Step 3.
 _EXCLUDED_REASONS = {
     StatementType.NON_PROPOSITIONAL: "not truth-apt (figurative, expressive, or non-assertoric)",
     StatementType.RHETORICAL: "rhetorical; not asserted as a proposition",
     StatementType.ATTRIBUTED: "attributed to someone else; outside the author's own belief set (v1 scope)",
-    StatementType.HYPOTHETICAL: "hypothetical or supposed, not asserted (v1 scope)",
 }
 
 _IDENT_RE = re.compile(r"[A-Za-z_]\w*$")
@@ -106,7 +110,8 @@ def _validated(fol: str | None, vocab: Vocabulary) -> str | None:
         return None
 
 
-def run_gate(stmt: ExtractedStatement, llm_fol: str | None, vocab: Vocabulary, judge=None) -> Proposition:
+def run_gate(stmt: ExtractedStatement, llm_fol: str | None, vocab: Vocabulary, judge=None,
+             guard_deontic: bool = False) -> Proposition:
     base = dict(
         id=stmt.id,
         type=stmt.type,
@@ -115,9 +120,48 @@ def run_gate(stmt: ExtractedStatement, llm_fol: str | None, vocab: Vocabulary, j
         decontextualized=stmt.decontextualized,
         depends_on=stmt.depends_on,
     )
+    # Predicates established by EARLIER statements (snapshot BEFORE this one
+    # registers its own via _validated below). Fidelity exempts these from the
+    # invention penalty: a reused symbol was grounded when first coined, so a
+    # later reuse needn't re-mention its words. See fidelity_check docstring.
+    known_preds = set(vocab.predicates)
 
     if stmt.type in _EXCLUDED_REASONS:
         return Proposition(**base, status=GateOutcome.QUARANTINED, gate_reason=_EXCLUDED_REASONS[stmt.type])
+
+    # Generic / defeasible guard (deterministic): a hedged generalization
+    # ("birds typically fly", "ceteris paribus ...") is not a strict universal.
+    # Letting it become a `forall` axiom manufactures false contradictions on an
+    # exception, so it is quarantined (never silently dropped) before translation.
+    hedge = hedge_cue(stmt.decontextualized, stmt.original_text)
+    if hedge is not None:
+        return Proposition(
+            **base,
+            status=GateOutcome.QUARANTINED,
+            gate_reason=(
+                f"defeasible/hedged generalization (cue: '{hedge}'); excluded from the "
+                "strict-universal axiom set so a generic with exceptions cannot produce "
+                "a false contradiction"
+            ),
+        )
+
+    # Deontic / is-ought guard (opt-in, pairs with --allow-conditionals). Once
+    # prescriptive content is admitted, formalizing 'X should Y' like the fact
+    # 'X is Y' manufactures false contradictions against a descriptive claim.
+    # Quarantine (never drop) prescriptive statements so the descriptive axiom
+    # set stays is-only. A policy exclusion, not a fragment limit -> no shape.
+    if guard_deontic:
+        deontic = deontic_cue(stmt.decontextualized, stmt.original_text)
+        if deontic is not None:
+            return Proposition(
+                **base,
+                status=GateOutcome.QUARANTINED,
+                gate_reason=(
+                    f"prescriptive/deontic claim (cue: '{deontic}'); excluded to keep "
+                    "norms (ought) out of the descriptive (is) axiom set and avoid "
+                    "is/ought false contradictions"
+                ),
+            )
 
     candidates: list[TranslationCandidate] = []
     rule_fol = _validated(rule_translate(stmt.decontextualized, vocab), vocab)
@@ -132,6 +176,7 @@ def run_gate(stmt: ExtractedStatement, llm_fol: str | None, vocab: Vocabulary, j
             **base,
             status=GateOutcome.QUARANTINED,
             gate_reason="no translator produced valid FOL (outside rule fragment; LLM candidate absent or unparseable)",
+            quarantine_shape=quarantine_shape(stmt.decontextualized),
         )
 
     if len(candidates) == 2:
@@ -146,7 +191,7 @@ def run_gate(stmt: ExtractedStatement, llm_fol: str | None, vocab: Vocabulary, j
                 confidence=0.95,
                 gate_reason="rule and LLM translations independently agree (Z3-proved equivalent)",
             )
-        fids = [(c, fidelity_check(c.fol, stmt.decontextualized)) for c in candidates]
+        fids = [(c, fidelity_check(c.fol, stmt.decontextualized, known_preds=known_preds)) for c in candidates]
         passing = [(c, f) for c, f in fids if f.passed]
         if len(passing) == 1:
             c, f = passing[0]
@@ -213,7 +258,7 @@ def run_gate(stmt: ExtractedStatement, llm_fol: str | None, vocab: Vocabulary, j
         )
 
     c = candidates[0]
-    fid = fidelity_check(c.fol, stmt.decontextualized)
+    fid = fidelity_check(c.fol, stmt.decontextualized, known_preds=known_preds)
     if fid.passed:
         return Proposition(
             **base,
@@ -228,4 +273,5 @@ def run_gate(stmt: ExtractedStatement, llm_fol: str | None, vocab: Vocabulary, j
         candidates=candidates,
         status=GateOutcome.QUARANTINED,
         gate_reason=f"single {c.source} candidate failed fidelity (coverage {fid.coverage}; missing {fid.missing})",
+        quarantine_shape=quarantine_shape(stmt.decontextualized),
     )

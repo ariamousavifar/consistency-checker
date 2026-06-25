@@ -25,7 +25,7 @@ from .semantics import LLMJudge
 from .report import render_markdown
 from .schema import GateOutcome, Proposition, RunReport, StatementType
 from .screener import screen
-from .solver import verify
+from .solver import mark_duplicate_fols, verify
 from .timing import StageTimer
 from .tree_builder import build_dot, build_svg, build_tree_text, render_png
 from .vocabulary import Vocabulary
@@ -64,6 +64,9 @@ def run_pipeline(
     resume: bool = False,
     no_chunk: bool = False,
     use_nli: bool = False,
+    allow_conditionals: bool = False,
+    guard_deontic: bool = False,
+    unify_self_ref: bool = False,
 ) -> RunReport:
     timer = StageTimer()
     file_path = Path(file_path)
@@ -94,12 +97,19 @@ def run_pipeline(
             )
         client = LLMClient(config)
         extractor = LiveExtractor(client)
-        translator = LiveTranslator(client)
+        translator = LiveTranslator(client, allow_conditionals=allow_conditionals)
         if use_nli:
             judge = LLMJudge(client)
         mode = f"live ({config.base_url}, {config.model})"
         if use_nli:
             mode += " [nli]"
+
+    if allow_conditionals:
+        mode += " [+conditionals]"
+    if guard_deontic:
+        mode += " [+deontic-guard]"
+    if unify_self_ref:
+        mode += " [+self-ref]"
 
     with timer.stage("extraction"):
         statements, num_chunks = extract_chunked(
@@ -114,7 +124,7 @@ def run_pipeline(
     with timer.stage("gate"):
         propositions = []
         for stmt in statements:
-            prop = run_gate(stmt, llm_fols.get(stmt.id), vocab, judge=judge)
+            prop = run_gate(stmt, llm_fols.get(stmt.id), vocab, judge=judge, guard_deontic=guard_deontic)
             prop.span = doc.find_span(stmt.original_text)
             propositions.append(prop)
 
@@ -129,10 +139,24 @@ def run_pipeline(
     # with two competing modifiers is left untouched). Rewrites every emitted FOL.
     with timer.stage("unify_predicates"):
         aliases = vocab.finalize_modifier_aliases()
-        if aliases:
+        # Self-reference constant unification (opt-in): merge author/speaker/I/...
+        # so a bridge written against 'author' connects to text that emitted
+        # 'speaker'. Bridges are already in `propositions` here, so their FOL is
+        # rewritten too. Single-author scope (see finalize_self_reference_aliases).
+        const_aliases = vocab.finalize_self_reference_aliases() if unify_self_ref else {}
+        if aliases or const_aliases:
             for prop in propositions:
                 if prop.fol:
-                    prop.fol = vocab.apply_pred_aliases(prop.fol, aliases)
+                    if aliases:
+                        prop.fol = vocab.apply_pred_aliases(prop.fol, aliases)
+                    if const_aliases:
+                        prop.fol = vocab.apply_const_aliases(prop.fol, const_aliases)
+
+    # Deduplicate AFTER vocabulary unification (so predicate-aligned statements
+    # that became identical are caught) and BEFORE the solver (so duplicates
+    # can't seed spurious 'X proved from X' derivation edges or inflate counts).
+    with timer.stage("dedup"):
+        mark_duplicate_fols(propositions)
 
     with timer.stage("screener"):
         flags = screen([(s.id, s.decontextualized) for s in statements])

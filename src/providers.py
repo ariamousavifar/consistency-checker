@@ -116,7 +116,9 @@ def resolve_model_config(provider_flag: str | None, model_flag: str | None) -> d
     # Capping it stops a reasoning model from spending its whole completion budget
     # on chain-of-thought and returning empty content -- the Cerebras empty-JSON
     # failures (finish_reason=length before any answer tokens are emitted).
-    reasoning_effort = pcfg.get("reasoning_effort", {}).get(model)
+    # Env override wins (LLMConfig applies it too); read it here so the header
+    # reports the EFFECTIVE effort, not just the registry default.
+    reasoning_effort = os.getenv("LLM_REASONING_EFFORT") or pcfg.get("reasoning_effort", {}).get(model)
     print(f"\nRunning with {pcfg['label']} / {model}"
           f"{' [thinking model]' if thinking else ''}"
           f"{f' [reasoning_effort={reasoning_effort}]' if reasoning_effort else ''}\n")

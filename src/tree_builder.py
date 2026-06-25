@@ -30,6 +30,7 @@ _FILL = {
     "entailed": ("#d6edcb", "#3b6d11"),
     "not_entailed": ("#faeeda", "#854f0b"),
     "contradicts": ("#f7c1c1", "#a32d2d"),
+    "refuted": ("#f3e2c0", "#9a6a16"),
     "unknown": ("#e8e8e4", "#5f5e5a"),
     "error": ("#e8e8e4", "#5f5e5a"),
     "excluded": ("#f1efe8", "#888780"),
@@ -41,6 +42,7 @@ _MARK = {
     "entailed": "OK",
     "not_entailed": "??",
     "contradicts": "XX",
+    "refuted": "RA",
     "unknown": "~?",
     "error": "ER",
     "excluded": "--",
@@ -130,7 +132,7 @@ def build_tree_text(report: RunReport, width: int = 56) -> str:
         )
         lines.append("")
 
-    legend = "legend: AX axiom | BR bridge premise | OK entailed | ?? not entailed (unprovable) | XX member of an inconsistent set | ~? unknown | -- excluded"
+    legend = "legend: AX axiom | BR bridge premise | OK entailed | ?? not entailed (unprovable) | XX member of an inconsistent set | RA refuted supposition (reductio) | ~? unknown | -- excluded"
     lines.append(legend)
     return "\n".join(lines)
 

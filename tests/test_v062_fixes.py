@@ -17,7 +17,7 @@ def _client_with_fake_raw(responses):
     seen = []
     seq = iter(responses)
 
-    def fake_raw(system, user):
+    def fake_raw(system, user, reasoning_effort=None):
         seen.append(user)
         return next(seq)
 

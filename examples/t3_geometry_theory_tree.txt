@@ -1,0 +1,21 @@
+The Hierarchy of Quadrilaterals
+
+We begin with the basic facts of the figures.
+
+A square is a rectangle.
+A rectangle is a parallelogram.
+A parallelogram is a quadrilateral.
+A quadrilateral is a polygon.
+A polygon is a closed figure.
+
+From these we may reason in steps.
+
+Since a square is a rectangle, and a rectangle is a parallelogram, it follows that a square is a parallelogram.
+
+Since a square is a parallelogram, and a parallelogram is a quadrilateral, it follows that a square is a quadrilateral.
+
+Since a square is a quadrilateral, and a quadrilateral is a polygon, it follows that a square is a polygon.
+
+Therefore a square is a closed figure.
+
+We may also reach the same conclusion the other way around. Suppose, for the sake of argument, that some square were not a closed figure. Then that square would not be a polygon, for every polygon is a closed figure. But we have already established that every square is a polygon. The supposition therefore leads to a contradiction, and we must reject it. Hence every square is a closed figure after all.

@@ -86,10 +86,13 @@ def _content_words(words: list[str]) -> list[str]:
     return [w for w in words if w not in _STOP and not w.isdigit() and len(w) >= 2]
 
 
-def _symbols(fol: str) -> tuple[list[str], list[str]]:
-    """Return (predicate content words, constant content words) from FOL."""
+def _symbols(fol: str) -> tuple[list[tuple[str, str]], list[str]]:
+    """Return (predicate content words tagged with their predicate symbol,
+    constant content words) from FOL. The symbol tag lets the caller exempt
+    words that belong to a REUSED predicate (vetted when first coined) from the
+    invention penalty."""
     toks = tokenize(fol)
-    pred_words: list[str] = []
+    pred_words: list[tuple[str, str]] = []
     consts: list[str] = []
     bound: set[str] = set()
     i = 0
@@ -105,7 +108,7 @@ def _symbols(fol: str) -> tuple[list[str], list[str]]:
         if re.match(r"[A-Za-z_]\w*$", t) and t not in KEYWORDS:
             nxt = toks[i + 1] if i + 1 < len(toks) else None
             if nxt == "(":
-                pred_words.extend(_content_words(words_of(t)))
+                pred_words.extend((w, t) for w in _content_words(words_of(t)))
             elif t not in bound:
                 consts.extend(_content_words(_split_const(t)))
         i += 1
@@ -123,15 +126,26 @@ def _word_match(word: str, sentence_lemmas: set[str]) -> bool:
     return False
 
 
-def fidelity_check(fol: str, sentence: str, threshold: float = 0.6) -> FidelityResult:
+def fidelity_check(fol: str, sentence: str, threshold: float = 0.6,
+                   known_preds: set[str] | None = None) -> FidelityResult:
     """Lexical fidelity only. The NLI judge is deliberately NOT wired in here:
     a live experiment showed that judging every single-candidate translation
     with the model over-quarantined faithful-but-lossy verb-object/relational
     squashes (removing real chain links) and slowed the gate ~10x. The judge
     now fires only where there is an actual divergence to adjudicate -- the
-    two-candidate branch in gate.py -- not on every statement here."""
+    two-candidate branch in gate.py -- not on every statement here.
+
+    `known_preds`: predicate symbols already established by EARLIER statements.
+    Fidelity's job is to catch INVENTION (a predicate the sentence never
+    mentions), but a reused symbol was grounded in the sentence that first
+    coined it -- a later statement that reuses it needn't re-mention its words.
+    Without this, vocabulary reuse (which is what connects a long argument's
+    chain) reads as low coverage and quarantines correct conclusions: e.g.
+    'RightToFullBodyOwnership' coined at an earlier premise, reused in the
+    'therefore' conclusion whose sentence says 'self-ownership' (no 'body')."""
     from .verbalizer import verbalize
 
+    known_preds = known_preds or set()
     raw_words = re.findall(r"[a-z0-9]+", sentence.lower())
     sentence_lemmas = {lemma(w) for w in raw_words} | set(raw_words)
     for sw in list(sentence_lemmas):
@@ -139,17 +153,26 @@ def fidelity_check(fol: str, sentence: str, threshold: float = 0.6) -> FidelityR
             if sw.startswith(pfx) and len(sw) - len(pfx) >= 3:
                 sentence_lemmas.add(sw[len(pfx):])
 
-    pred_words, consts = _symbols(fol)
-    all_words = pred_words + consts
+    pred_pairs, consts = _symbols(fol)
+    pred_words = [w for w, _ in pred_pairs]
     missing: list[str] = []
 
     matched = 0
-    for w in all_words:
+    total = 0
+    for w, sym in pred_pairs:
+        total += 1
+        # A word from a reused (already-established) predicate is vetted; exempt.
+        if sym in known_preds or _word_match(w, sentence_lemmas):
+            matched += 1
+        else:
+            missing.append(w)
+    for w in consts:
+        total += 1
         if _word_match(w, sentence_lemmas):
             matched += 1
         else:
             missing.append(w)
-    coverage = matched / len(all_words) if all_words else 1.0
+    coverage = matched / total if total else 1.0
 
     # Adaptive threshold: a single-predicate statement ("Old Ferry has no
     # population" -> not HasPopulation(old_ferry)) has very few content words, so

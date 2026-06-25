@@ -186,7 +186,7 @@ class LLMClient:
                 return self._client.chat.completions.create(**kwargs)
             raise
 
-    def _raw(self, system: str, user: str) -> str:
+    def _raw(self, system: str, user: str, reasoning_effort: str | None = None) -> str:
         kwargs = {
             "model": self.config.model,
             self.config.max_tokens_param: self.config.max_tokens,
@@ -208,11 +208,14 @@ class LLMClient:
         # than a long chain-of-thought that buries (or replaces) the content.
         if self.config.thinking:
             kwargs["extra_body"] = {"chat_template_kwargs": {"thinking": False}}
-        # gpt-oss-style reasoning dial. Sent via extra_body so that if a provider
-        # rejects the field, _create's fallback strips extra_body and retries
-        # cleanly instead of failing the call.
-        if self.config.reasoning_effort:
-            kwargs.setdefault("extra_body", {})["reasoning_effort"] = self.config.reasoning_effort
+        # gpt-oss-style reasoning dial. A per-CALL override (reasoning_effort arg)
+        # wins over the config default, so extraction can run lean (low) while
+        # translation runs deep (medium) in the same pipeline -- the cheap stage
+        # stays under the token budget while the stage that needs reasoning gets
+        # it. Sent via extra_body so _create's fallback can strip it on reject.
+        effort = reasoning_effort if reasoning_effort is not None else self.config.reasoning_effort
+        if effort:
+            kwargs.setdefault("extra_body", {})["reasoning_effort"] = effort
 
         # Rate-limit-aware retry loop with throttle + exponential backoff that
         # honors the server's retry-after when present.
@@ -249,14 +252,14 @@ class LLMClient:
             self.total_tokens += getattr(usage, "total_tokens", 0) or 0
         return content
 
-    def complete_json(self, system: str, user: str, retries: int = 2):
+    def complete_json(self, system: str, user: str, retries: int = 2, reasoning_effort: str | None = None):
         original_user = user
         current_user = user
         last_text = ""
         for attempt in range(retries + 1):
             # _raw now handles rate-limit retries internally; this loop is only
             # for JSON-shape self-correction.
-            last_text = self._raw(system, current_user)
+            last_text = self._raw(system, current_user, reasoning_effort=reasoning_effort)
             for candidate in (_strip_fences(last_text), _balanced_extract(last_text) or ""):
                 if not candidate:
                     continue

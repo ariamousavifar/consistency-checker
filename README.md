@@ -1,4 +1,121 @@
-# Internal-Inconsistency Checker (prototype v0.7)
+# Internal-Inconsistency Checker (prototype v0.8)
+
+## What's new in v0.8
+
+v0.8 turns the tool from a contradiction *flagger* into an argument
+*reconstructor*: it rebuilds the author's derivation tree (axioms → theorems →
+theorems-from-theorems), captures proof-by-contradiction, and is hardened to take
+dense real prose (speeches, philosophy, op-eds) into logic. The argument-tree
+machinery is validated end-to-end on a live geometry theory-tree run (a layered
+axiom→theorem chain plus a reductio). On a *consistent* author it now shows the
+proof structure, not just "no contradictions found"; finding consistency the
+right way matters as much as finding inconsistency.
+
+### Reconstructing the argument
+
+1. **Theory trees, not fans (layered entailment).** The solver used to test each
+   claim only against the axioms, so the support graph was a flat star: every
+   theorem hung directly off the axioms with no theorem→theorem edges. It now grows
+   a `proven` set — each established theorem becomes available as a premise for
+   later ones — and attributes a claim's support to the *deepest* (most compressed)
+   intermediate theorem. `square→quadrilateral` is shown following from the theorem
+   `square→parallelogram` plus one axiom, not flatly from three axioms. Genuine
+   multi-level derivation trees now render in `graph.png`/`theory_tree.txt`.
+2. **Asserted-premise roots.** A foundational premise the author states without
+   deriving (which the extractor often types `derived_claim`, not `axiom`) is
+   promoted to a root of the argument so the claims that follow from it actually
+   derive — instead of the branch collapsing to `not_entailed` for want of an axiom
+   label.
+3. **Reductio ad absurdum.** Hypothetical suppositions are no longer discarded:
+   they are translated and carried to the solver as *assumptions*, kept out of the
+   asserted-theory consistency base. A supposition that contradicts the established
+   theory is a successful reductio — its negation is proven — reported with the new
+   `refuted` verdict (`RA` mark, a dedicated report section, a `REDUCTIO` console
+   line). The author's deliberate "assume the opposite" move is never misreported
+   as the author contradicting himself. Verdicts are now six-valued.
+4. **Semantic deduplication.** Over-extraction produces near-duplicate sentences
+   whose FOL is identical modulo bound-variable names. They collapse to one
+   canonical node (alpha-normalized key), so duplication can no longer manufacture
+   spurious "X proved from X" derivation edges or inflate counts. Nothing is
+   dropped: the duplicate stays in the report, excluded with a pointer to its
+   canonical.
+
+### Getting dense real prose into logic
+
+5. **Conditional & deontic translation (`--allow-conditionals`).** An opt-in
+   relaxed prompt stops nulling if/then/either-or structure — it emits `->`/`or`
+   directly — and reifies normative claims ("entitled to", "must", "ought") into
+   modality-named predicates so a norm never silently clashes with a plain fact.
+   This is what lets a conditional argument (the spine of any real essay) reach the
+   solver. Off by default; the base prompt is byte-identical to v0.7.
+6. **Is/ought guard (`--guard-deontic`).** Optionally quarantine prescriptive
+   statements so norms stay out of the descriptive axiom set — the control knob for
+   is/ought false positives once deontic content is admitted.
+7. **Self-reference unification (`--unify-self-ref`).** Merge first-person
+   constants (author/speaker/I/…) to one entity so a bridge premise written against
+   `author` connects to text that emitted `speaker`. Single-author scope.
+8. **Fidelity stops punishing reuse.** The lexical-fidelity gate exempts the words
+   of an already-established (reused) predicate from the invention penalty: a
+   predicate coined and grounded earlier, then reused in a later conclusion phrased
+   differently, no longer reads as low coverage and get quarantined. Freshly
+   *invented* ungrounded predicates still fail, so real mistranslations are still
+   caught.
+9. **Generic/hedge guard + quarantine-shape instrumentation** (`src/linguistics.py`).
+   Defeasible generalizations ("birds typically fly", "as a rule …") are quarantined
+   before translation so a generic-with-exceptions can't become a strict `forall`
+   and manufacture a false contradiction. A companion classifier buckets every
+   outside-fragment statement (relational-ground / modal-deontic / comparative / …)
+   into a histogram that measures, from real documents, which logic extension (EPR
+   vs description logic vs modal) is the highest-leverage thing to build next.
+
+### Reproducibility & model control
+
+10. **Per-stage reasoning effort.** `LLM_EXTRACTION_EFFORT` and
+    `LLM_TRANSLATION_EFFORT` set the reasoning depth of the extraction and
+    translation stages independently — run extraction lean (reliable, cheap, under
+    the token budget) while translation runs deep (where conditional reasoning
+    pays off). Resolves the dense-document failures where one global effort either
+    starved translation (under-thinking → null FOL) or blew the budget on
+    extraction (empty JSON / HTTP 413).
+11. **Seed & temperature; truthful effort reporting.** `--seed` / `--temperature`
+    (also `LLM_SEED` / `LLM_TEMPERATURE`) for reproducible runs; the run header now
+    reports the *effective* reasoning effort including env overrides (it used to
+    print the registry default and mislead).
+12. **Deterministic modifier-divergence resolution (NLI retired from the hot
+    path).** A live experiment showed a blanket NLI judge was net-negative
+    (over-quarantined faithful relational squashes, ~10× slower gate). It was
+    replaced by deterministic, reproducible machinery: a modifier-only-divergence
+    check in the gate (`FellowOfAcademy` vs `Fellow` → same skeleton, kept without
+    an LLM) and a document-scoped unique-modifier merge in the vocabulary
+    (`FellowOfAcademy` → `Fellow` only when exactly one modifier variant exists, so
+    `ResidentOfFrance`/`ResidentOfGermany` stay untouched). NLI (`--nli`) is now
+    scoped to genuine two-candidate adjudication only.
+
+### New CLI / env
+
+```
+python -m src.main --file doc.txt --allow-conditionals          # admit conditional/deontic structure
+python -m src.main --file doc.txt --allow-conditionals --guard-deontic
+python -m src.main --file speech.txt --bridges b.json --unify-self-ref
+LLM_EXTRACTION_EFFORT=low LLM_TRANSLATION_EFFORT=medium python -m src.main --file doc.txt --allow-conditionals
+python -m src.main --file doc.txt --seed 7 --temperature 0
+```
+
+New Tier-3 examples (single-author real text): a TED-talk transcript and a
+Rothbard excerpt as false-positive controls, a 1988 political speech with a
+cross-time bridge axiom, and a geometry theory-tree text (a layered
+axiom→theorem chain plus a reductio) that exercises the tree reconstruction.
+
+Test suite expanded to 181 offline tests.
+
+### Known frontier (honest)
+
+The argument-tree machinery is complete and proven on clean, claim-dense text.
+On *dense* prose (e.g. the Rothbard excerpt) the remaining bottleneck is upstream:
+the conditional premises that would form a real multi-step tree translate
+non-deterministically (sometimes valid FOL, sometimes `null`), so the tree can be
+shallow even though the engine is correct. Reliable/deterministic translation of
+conditional and relational premises is the next workstream.
 
 ## What's new in v0.7
 
@@ -317,8 +434,11 @@ Design commitments carried through the code:
 3. Nothing enters the solver unverified. Statements are accepted, flagged
    ambiguous, or quarantined with a recorded reason. Quarantine is a report
    section, not a silent drop.
-4. Five-valued verdicts: entailed / not_entailed / contradicts / unknown /
-   error. Solver timeouts map to `unknown`, never misreported.
+4. Six-valued verdicts: entailed / not_entailed / contradicts / refuted /
+   unknown / error. `refuted` marks a hypothetical refuted by reductio (its
+   negation proven), kept distinct from `contradicts` so the author's own
+   "assume the opposite" is never reported as self-contradiction. Solver
+   timeouts map to `unknown`, never misreported.
 5. Minimal conflict sets. On contradiction, the unsat core is shrunk
    (deletion-based) to a minimal set of statements that cannot all be true,
    which is the actual product output.
@@ -346,7 +466,7 @@ Requirements: Python 3.10+ (tested on 3.12), internet for `pip install`.
    Press Run. The console prints the verdict table; open `out/report.md`
    to see the full report (PyCharm renders Markdown).
 5. Run the tests: right-click the `tests/` folder -> "Run pytest in tests".
-   All 104 tests run offline in about a second.
+   All 181 tests run offline in about a second.
 
 Command-line equivalents:
 ```
@@ -388,18 +508,24 @@ end-to-end test.
 - Fidelity check is a lexical-coverage heuristic over the deterministic
   verbalization, not yet bidirectional NLI entailment. It catches invented
   predicates/entities, not subtle meaning drift.
-- Vocabulary alignment is deterministic plural/case normalization; synonym and
-  paraphrase merging (embedding clustering + LLM adjudication) is not built,
-  so paraphrased contradictions across different predicate names are missed.
 - The rule translator covers a small controlled fragment on purpose
   (precision-first; it refuses the rest).
 - Plain-text input only; PDF/HTML cleaning modules are planned behind the same
   interface.
-- FOL cannot express causation, modality, tense, generics, or comparatives;
-  the translator is instructed to return null for those, and the gate
-  quarantines them.
-- Single-speaker belief sets per run; `attributed` and `hypothetical`
-  statements are excluded with a recorded reason rather than modeled.
+- FOL still cannot express causation, tense, or comparatives; the translator
+  returns null for those and the gate quarantines them. Deontic/normative
+  content is now reifiable into predicates under `--allow-conditionals` (modality
+  carried in the predicate name, not as a true modal operator), and defeasible
+  generics are deliberately quarantined by the hedge guard rather than forced
+  into a strict `forall`.
+- Single-speaker belief sets per run; `attributed` statements are excluded with
+  a recorded reason. `hypothetical` statements are now modeled as reductio
+  assumptions (kept out of the asserted base; a supposition that contradicts the
+  theory is reported `refuted`).
+- Vocabulary alignment is deterministic: plural/case/lemma normalization,
+  negation mapping, a unique-modifier head-noun merge, and opt-in self-reference
+  unification. Embedding/LLM synonym merging across unrelated predicate names is
+  still not built, so paraphrased contradictions can be missed.
 
 ## Roadmap (matches the agreed target architecture)
 

@@ -53,9 +53,23 @@ def _format_report(report, out_dir: str, show_tree: bool) -> str:
         tag = " [bridged: relies on a background premise]" if bridged else ""
         lines.append(f"INCONSISTENT SET {{{', '.join(members)}}}: these cannot all be true; "
                      f"at least one must be abandoned (the system does not pick which){tag}")
+    for p in report.propositions:
+        if p.verdict == Verdict.REFUTED:
+            conflict = ", ".join(p.conflict) if p.conflict else "the theory"
+            lines.append(f"REDUCTIO {p.id}: supposition contradicts {{{conflict}}}; "
+                         f"its negation is proven (the author refutes it on purpose)")
     if report.screener:
         lines.append(f"\nSurface screener flagged {len(report.screener)} pair(s): "
                      + ", ".join(f"{f['a']}~{f['b']}" for f in report.screener))
+    shapes: dict[str, int] = {}
+    for p in report.propositions:
+        if p.quarantine_shape:
+            shapes[p.quarantine_shape] = shapes.get(p.quarantine_shape, 0) + 1
+    if shapes:
+        ordered = sorted(shapes.items(), key=lambda kv: (-kv[1], kv[0]))
+        total = sum(shapes.values())
+        lines.append(f"\nQuarantine shapes [{total} outside-fragment] (heuristic; informs EPR-vs-DL): "
+                     + ", ".join(f"{k} {v}" for k, v in ordered))
     lines.append("\nTiming:")
     for r in report.timing:
         lines.append(f"  {r['stage']:<16}{r['seconds']:>10.4f}s")
@@ -146,6 +160,9 @@ def _run_all(args) -> int:
                 resume=bool(getattr(args, "resume", None)),
                 no_chunk=getattr(args, "no_chunk", False),
                 use_nli=getattr(args, "nli", False),
+                allow_conditionals=getattr(args, "allow_conditionals", False),
+                guard_deontic=getattr(args, "guard_deontic", False),
+                unify_self_ref=getattr(args, "unify_self_ref", False),
             )
         except Exception as exc:
             msg = f"\n!! ERROR on {ex['name']}: {type(exc).__name__}: {exc}\n   (skipped; batch continues)"
@@ -222,6 +239,18 @@ def main(argv: list[str] | None = None) -> int:
                         help="Force single-pass extraction even on long documents (control "
                              "condition for measuring chunking overhead; may fail/truncate on "
                              "very long inputs).")
+    parser.add_argument("--allow-conditionals", action="store_true",
+                        help="Relax translation to keep conditional/disjunctive and deontic "
+                             "structure (reified as named predicates) instead of nulling it. "
+                             "Lets if/then/either-or arguments enter the solver. Live only.")
+    parser.add_argument("--guard-deontic", action="store_true",
+                        help="Quarantine prescriptive (ought/should/must/entitled) statements so "
+                             "norms stay out of the descriptive (is) axiom set. Pairs with "
+                             "--allow-conditionals to control is/ought false positives.")
+    parser.add_argument("--unify-self-ref", action="store_true",
+                        help="Merge first-person self-reference constants (author/speaker/I/...) "
+                             "to one entity so a bridge written against 'author' connects to text "
+                             "that emitted 'speaker'. Single-author docs only (not multi-speaker).")
     args = parser.parse_args(argv)
 
     # Resolve provider/model once (flags > interactive picker > .env fallback).
@@ -259,6 +288,9 @@ def main(argv: list[str] | None = None) -> int:
         resume=bool(args.resume),
         no_chunk=args.no_chunk,
         use_nli=getattr(args, "nli", False),
+        allow_conditionals=args.allow_conditionals,
+        guard_deontic=args.guard_deontic,
+        unify_self_ref=args.unify_self_ref,
     )
     _print_report(report, out_dir, show_tree=not args.no_tree)
     print(f"             (also report.json, store.json, timing.json, theory_tree.txt,")

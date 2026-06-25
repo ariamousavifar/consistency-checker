@@ -167,6 +167,34 @@
       "bridges": null,
       "tier": 25,
       "note": "ORIGINAL hard phrasing; modifier-inconsistent (laureate/fellow of the Academy) + participial instance; the target case for --nli (vocab unification + splitter)"
+    },
+    {
+      "name": "t3_ted_robinson",
+      "file": "examples/t3-Do schools kill creativity  Sir Ken Robinson  TED [DownSub.com].txt",
+      "bridges": null,
+      "tier": 3,
+      "note": "Real TED talk transcript; single speaker; false-positive control — expect 0 contradictions, heavy quarantine (hedges, comparatives, rhetorical questions)"
+    },
+    {
+      "name": "t3_rothbard_selfownership",
+      "file": "examples/t3-self ownership.txt",
+      "bridges": null,
+      "tier": 3,
+      "note": "Rothbard self-ownership argument (Austrian econ); hard false-positive control — dense normative reasoning should accept only strict universals, expect 0 contradictions"
+    },
+    {
+      "name": "t3_bush_1988_notaxes",
+      "file": "examples/t3-1988 Flashback George H.W. Bush Says, Read My lips No New Taxes  NBC News.txt",
+      "bridges": "examples/t3-bush-1988.bridges.json",
+      "tier": 3,
+      "note": "Bush 1988 'no new taxes' speech; with bridge axiom asserting he later raised taxes (1990 Omnibus Act) — expect 1 bridged contradiction; without bridge expect 0"
+    },
+    {
+      "name": "t3_geometry_theory_tree",
+      "file": "examples/t3_geometry_theory_tree.txt",
+      "bridges": null,
+      "tier": 3,
+      "note": "Quadrilateral hierarchy: a LAYERED theory tree (axioms -> T1 -> T2 -> T3 -> T4) plus a reductio. Tests derivation-tree reconstruction: each theorem should derive from the previous one, not flatly from the axioms (a fan). Reductio currently quarantined (hypothetical) — the next gap."
     }
   ]
 }

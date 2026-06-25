@@ -97,6 +97,25 @@ def render_markdown(report: RunReport) -> str:
             lines.append(f"- {p.id}: \u201c{p.decontextualized}\u201d follows from: {support}")
         lines.append("")
 
+    refuted = [p for p in props if p.verdict == Verdict.REFUTED]
+    if refuted:
+        lines.append("## Refuted suppositions (reductio ad absurdum)")
+        lines.append("")
+        lines.append(
+            "The author introduces these suppositions in order to refute them: each "
+            "contradicts the established theory, so its negation is proven. This is a "
+            "valid argumentative move (proof by contradiction), NOT an inconsistency "
+            "in the author's own asserted claims."
+        )
+        lines.append("")
+        for p in refuted:
+            conflict = ", ".join(p.conflict) if p.conflict else "the established theory"
+            lines.append(
+                f"- {p.id}: “{p.original_text}” contradicts {conflict} "
+                f"→ its negation is thereby proven"
+            )
+        lines.append("")
+
     not_entailed = [p for p in props if p.verdict == Verdict.NOT_ENTAILED]
     if not_entailed:
         lines.append("## Unverifiable claims (consistent with the axioms but not provable from them)")
@@ -125,6 +144,27 @@ def render_markdown(report: RunReport) -> str:
         lines.append("")
         for p in flagged:
             lines.append(f"- {p.id} [{p.status.value}]: \u201c{p.original_text}\u201d :: {p.gate_reason}")
+        lines.append("")
+
+    shapes: dict[str, int] = {}
+    for p in props:
+        if p.quarantine_shape:
+            shapes[p.quarantine_shape] = shapes.get(p.quarantine_shape, 0) + 1
+    if shapes:
+        total = sum(shapes.values())
+        lines.append("## Outside-fragment shapes (what relations/logic would buy us)")
+        lines.append("")
+        lines.append(
+            "Heuristic buckets for statements that fell outside the unary FOL fragment. "
+            "Aggregate proportions, not individual labels, indicate which extension is "
+            "highest-leverage next: `relational-ground` favors EPR; `relational-role(\u2200\u2203)` "
+            "favors description logic; `modal-deontic`/`causal`/`comparative-numeric` need "
+            "their own logics. Total outside-fragment: "
+            f"{total}."
+        )
+        lines.append("")
+        for k, v in sorted(shapes.items(), key=lambda kv: (-kv[1], kv[0])):
+            lines.append(f"- {k}: {v} ({100 * v / total:.0f}%)")
         lines.append("")
 
     lines.append("## Surface screener (lexical placeholder for the NLI path)")

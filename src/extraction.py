@@ -10,11 +10,12 @@ Two interchangeable implementations of each:
 from __future__ import annotations
 
 import json
+import os
 import re
 from pathlib import Path
 
 from .llm_client import LLMClient
-from .prompts import EXTRACTION_SYSTEM, TRANSLATION_SYSTEM
+from .prompts import EXTRACTION_SYSTEM, TRANSLATION_SYSTEM, TRANSLATION_SYSTEM_CONDITIONALS
 from .schema import ExtractedStatement
 from .splitter import split_statement
 
@@ -75,13 +76,18 @@ class LiveExtractor:
     def __init__(self, client: LLMClient, max_chars: int = 6000) -> None:
         self.client = client
         self.max_chars = max_chars
+        # Per-stage reasoning override. Extraction is segmentation, not deep
+        # inference, so it can run lean: LLM_EXTRACTION_EFFORT=low keeps it under
+        # the token budget (the empty-JSON / TPM-413 failures on dense chunks)
+        # while translation can still run at medium. None -> use client default.
+        self.effort = os.getenv("LLM_EXTRACTION_EFFORT") or None
 
     def extract(self, text: str) -> list[ExtractedStatement]:
         if len(text) > self.max_chars:
             # v1 keeps a single call within free-tier TPM limits; chunked
             # extraction with running context is the planned upgrade.
             text = text[: self.max_chars]
-        data = self.client.complete_json(EXTRACTION_SYSTEM, text)
+        data = self.client.complete_json(EXTRACTION_SYSTEM, text, reasoning_effort=self.effort)
         from .normalize import parse_statements
         return parse_statements(data)
 
@@ -100,9 +106,17 @@ class FixtureTranslator:
 
 
 class LiveTranslator:
-    def __init__(self, client: LLMClient, batch_size: int = 8) -> None:
+    def __init__(self, client: LLMClient, batch_size: int = 8, allow_conditionals: bool = False) -> None:
         self.client = client
         self.batch_size = batch_size
+        # Opt-in: the relaxed prompt keeps conditional/disjunctive and deontic
+        # structure instead of nulling it. Off by default so existing runs are
+        # byte-identical.
+        self.system = TRANSLATION_SYSTEM_CONDITIONALS if allow_conditionals else TRANSLATION_SYSTEM
+        # Per-stage reasoning override. Translation (esp. with conditionals) is
+        # where deep reasoning pays off, so it can run hotter than extraction:
+        # LLM_TRANSLATION_EFFORT=medium. None -> use client default.
+        self.effort = os.getenv("LLM_TRANSLATION_EFFORT") or None
 
     def translate(self, statements: list[ExtractedStatement], vocabulary) -> dict[str, str | None]:
         result: dict[str, str | None] = {}
@@ -124,7 +138,7 @@ class LiveTranslator:
                 },
                 "statements": [{"id": s.id, "text": s.decontextualized} for s in batch],
             }
-            data = self.client.complete_json(TRANSLATION_SYSTEM, json.dumps(payload))
+            data = self.client.complete_json(self.system, json.dumps(payload), reasoning_effort=self.effort)
             for s in batch:
                 fol = data.get(s.id)
                 result[s.id] = fol

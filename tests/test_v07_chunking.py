@@ -151,7 +151,7 @@ def test_empty_response_retries_original_not_correction():
     seen = []
     seq = iter(["", '[{"id":"s1","type":"axiom","original_text":"a","decontextualized":"a"}]'])
 
-    def fake_raw(system, user):
+    def fake_raw(system, user, reasoning_effort=None):
         seen.append(user)
         return next(seq)
 

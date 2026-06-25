@@ -33,6 +33,62 @@ def _predicates_of(fol: str) -> set[str]:
     return preds
 
 
+def _alpha_key(fol: str) -> str:
+    """Canonical, alpha-invariant form of a FOL string: bound variables are
+    renamed to a positional sequence so 'forall s. P(s)' and 'forall x. P(x)'
+    map to one key, while different predicates/structure stay distinct. Used to
+    collapse statements the extractor produced more than once (over-extraction
+    yields near-duplicate sentences whose FOL is identical)."""
+    toks = tokenize(fol)
+    out: list[str] = []
+    mapping: dict[str, str] = {}
+    i = 0
+    while i < len(toks):
+        t = toks[i]
+        if t in ("forall", "exists") and i + 1 < len(toks):
+            out.append(t)
+            var = toks[i + 1]
+            if var not in mapping:
+                mapping[var] = f"#{len(mapping)}"
+            out.append(mapping[var])
+            i += 2
+            continue
+        out.append(mapping.get(t, t))
+        i += 1
+    return " ".join(out)
+
+
+def mark_duplicate_fols(props: list[Proposition]) -> int:
+    """Quarantine accepted statements whose FOL is logically identical to an
+    earlier one (same alpha-normalized form), keeping the first as canonical.
+    Prevents over-extraction from manufacturing spurious 'X proved from X' tree
+    edges and inflating the statement count. Bridges are never deduped (a
+    user-supplied premise is kept verbatim). Nothing is dropped silently: the
+    duplicate stays in the report, excluded with a reason pointing at its
+    canonical. Returns the number marked."""
+    seen: dict[str, str] = {}
+    marked = 0
+    for p in props:
+        if (p.status != GateOutcome.ACCEPTED or not p.fol
+                or p.type == StatementType.BRIDGE):
+            continue
+        try:
+            key = _alpha_key(p.fol)
+        except Exception:
+            continue
+        if key in seen:
+            p.status = GateOutcome.QUARANTINED
+            p.gate_reason = (
+                f"duplicate of {seen[key]} (identical logical content after normalization); "
+                "excluded so over-extraction can't manufacture spurious derivation edges"
+            )
+            p.quarantine_shape = None
+            marked += 1
+        else:
+            seen[key] = p.id
+    return marked
+
+
 def cluster_propositions(props: list[Proposition]) -> list[list[Proposition]]:
     parent: dict[str, str] = {p.id: p.id for p in props}
 
@@ -99,14 +155,22 @@ def verify(props: list[Proposition], timeout_ms: int = 8000, effort: int = 1) ->
                 p.gate_reason += f" | FOL parse failed at solver stage: {exc}"
 
         # Item 9: inconsistency is a property of a SET, independent of role.
-        # Every accepted statement participates in the consistency base.
-        all_ids = [p.id for p in cluster if p.id in formulas]
+        # Every ASSERTED statement participates in the consistency base.
+        # HYPOTHETICAL suppositions are NOT asserted -- they are reductio
+        # assumptions, kept out of the base (else the author's deliberate
+        # "assume the opposite" would read as the author contradicting himself)
+        # and tested separately in Step 3.
+        hypos = [p for p in cluster
+                 if p.type == StatementType.HYPOTHETICAL and p.id in formulas]
+        all_ids = [p.id for p in cluster
+                   if p.id in formulas and p.type != StatementType.HYPOTHETICAL]
         base = {pid: formulas[pid] for pid in all_ids}
         # The axiom/bridge distinction is kept ONLY for entailment direction.
         given_ids = [p.id for p in cluster
                      if p.type in (StatementType.AXIOM, StatementType.BRIDGE) and p.id in formulas]
         claims = [p for p in cluster
-                  if p.type not in (StatementType.AXIOM, StatementType.BRIDGE) and p.id in formulas]
+                  if p.type not in (StatementType.AXIOM, StatementType.BRIDGE, StatementType.HYPOTHETICAL)
+                  and p.id in formulas]
 
         if effort >= 2:
             report.note = "global set (effort 2): deeper cross-topic reasoning, higher timeout risk"
@@ -176,37 +240,124 @@ def verify(props: list[Proposition], timeout_ms: int = 8000, effort: int = 1) ->
         if res == z3.unknown:
             report.note = "solver could not certify satisfiability (quantified SAT is hard); proceeding with claim checks"
 
-        # ---- Step 2: the set is consistent, so classify each claim by ----
-        # entailment from the GIVEN statements (axioms + bridges).
+        # ---- Step 2: LAYERED entailment -> reconstruct the derivation TREE. ----
+        # The old check tested each claim only against the AXIOMS, so the support
+        # graph was a flat FAN: every theorem hung directly off the axioms, with
+        # no theorem->theorem edges. We instead grow a `proven` set: once a
+        # theorem is established it becomes available as a premise for later ones.
+        # When we then minimize a claim's support we seed minimization with the
+        # already-proven theorems and strip AXIOMS BEFORE THEOREMS, so the
+        # irreducible support kept is the *deepest* one -- the compact intermediate
+        # theorem that packages several axioms (T2 supported by {T1, a3}, not by
+        # {a1, a2, a3}). That turns the fan into Euclid's tree. Logically the set
+        # of entailed claims is unchanged (entailment is transitive); only the
+        # support ATTRIBUTION -- i.e. the tree edges -- changes.
         given = {pid: base[pid] for pid in given_ids}
-        for p in claims:
-            f = formulas[p.id]
-            # entailment: given + not(claim) unsat
+        given_set = set(given_ids)
+        proven: dict[str, z3.ExprRef] = dict(given)
+        pending = list(claims)
+
+        def _derive_to_fixpoint() -> None:
+            """Derive every pending claim that follows from the current `proven`
+            set, attributing each to the DEEPEST (most compressed) support, and
+            add it to `proven` so later claims can build on it. Repeats until no
+            new claim derives."""
+            progress = True
+            while progress:
+                progress = False
+                for p in list(pending):
+                    f = formulas[p.id]
+                    s = z3.Solver()
+                    s.set("timeout", timeout_ms)
+                    ptrack: dict[str, str] = {}
+                    for pid, gf in proven.items():
+                        b = z3.Bool(f"p_{pid}")
+                        ptrack[str(b)] = pid
+                        s.assert_and_track(gf, b)
+                    s.push()
+                    s.add(z3.Not(f))
+                    r1 = s.check()
+                    core1 = [ptrack[str(b)] for b in s.unsat_core()] if r1 == z3.unsat else []
+                    s.pop()
+                    if r1 == z3.unsat:
+                        # Seed with the core PLUS every proven THEOREM (non-given),
+                        # then order givens first so minimization drops redundant
+                        # axioms and keeps the compact intermediate theorem.
+                        seed = list(core1) + [pid for pid in proven
+                                              if pid not in given_set and pid not in core1]
+                        seed.sort(key=lambda x: 0 if x in given_set else 1)
+                        p.verdict = Verdict.ENTAILED
+                        p.support = _minimize(seed, proven, [z3.Not(f)], timeout_ms)
+                        proven[p.id] = f
+                        pending.remove(p)
+                        progress = True
+                    elif r1 == z3.unknown:
+                        p.verdict = Verdict.UNKNOWN
+                        pending.remove(p)
+
+        # Phase 1: derive everything that follows from the axioms/bridges.
+        _derive_to_fixpoint()
+
+        # Phase 2: ASSERTED-PREMISE ROOTS. A claim still pending isn't derivable
+        # from the axioms -- but the author may USE it as a premise that other
+        # claims follow from (common when the extractor types a foundational
+        # premise as `derived_claim`). Promote a pending "source" (a claim not
+        # entailed by the rest of the pending set) into the foundation as an
+        # asserted premise, then derive its dependents. Repeat. This assembles the
+        # argument tree past the axiom layer. Acyclic by construction: a source is
+        # promoted only when nothing else entails it; if every remaining claim is
+        # mutually entailed (a cycle of equivalents) we break it arbitrarily.
+        while pending:
+            src = None
+            for p in pending:
+                others = dict(proven)
+                for q in pending:
+                    if q.id != p.id:
+                        others[q.id] = formulas[q.id]
+                s = z3.Solver()
+                s.set("timeout", timeout_ms)
+                for gf in others.values():
+                    s.add(gf)
+                s.add(z3.Not(formulas[p.id]))
+                if s.check() != z3.unsat:   # not entailed by the others -> a root
+                    src = p
+                    break
+            if src is None:
+                src = pending[0]            # mutual-entailment cycle: break it
+            src.verdict = Verdict.NOT_ENTAILED
+            src.gate_reason = (src.gate_reason + " | " if src.gate_reason else "") + (
+                "asserted premise (not derivable from the other statements); a root of the argument"
+            )
+            proven[src.id] = formulas[src.id]
+            pending.remove(src)
+            _derive_to_fixpoint()
+
+        # ---- Step 3: REDUCTIO. A hypothetical supposition that contradicts the ----
+        # established theory is a successful reductio ad absurdum: its negation is
+        # thereby proven. One that is consistent with the theory is an ordinary
+        # supposition (a case split), not a contradiction.
+        for h in hypos:
             s = z3.Solver()
             s.set("timeout", timeout_ms)
-            gtrack: dict[str, str] = {}
-            for pid, gf in given.items():
-                b = z3.Bool(f"g_{pid}")
-                gtrack[str(b)] = pid
-                s.assert_and_track(gf, b)
-            s.push()
-            s.add(z3.Not(f))
-            r1 = s.check()
-            core1 = [gtrack[str(b)] for b in s.unsat_core()] if r1 == z3.unsat else []
-            s.pop()
-            if r1 == z3.unsat:
-                p.verdict = Verdict.ENTAILED
-                p.support = _minimize(core1, given, [z3.Not(f)], timeout_ms)
-                continue
-            # not entailed: consistent with the set (we already know the whole
-            # set is SAT, so the claim cannot contradict the givens here).
-            # Item 10: flag that the author's premises are insufficient.
-            if r1 == z3.unknown:
-                p.verdict = Verdict.UNKNOWN
+            htrack: dict[str, str] = {}
+            for pid, pf in proven.items():
+                b = z3.Bool(f"h_{pid}")
+                htrack[str(b)] = pid
+                s.assert_and_track(pf, b)
+            s.add(formulas[h.id])           # assume the supposition
+            if s.check() == z3.unsat:
+                h.verdict = Verdict.REFUTED
+                h.conflict = _minimize(
+                    [htrack[str(b)] for b in s.unsat_core()], proven, [formulas[h.id]], timeout_ms,
+                )
+                h.gate_reason = (h.gate_reason + " | " if h.gate_reason else "") + (
+                    "reductio ad absurdum: this supposition contradicts the established "
+                    "theory, so its negation is proven"
+                )
             else:
-                p.verdict = Verdict.NOT_ENTAILED
-                p.gate_reason = (p.gate_reason + " | " if p.gate_reason else "") + (
-                    "premises insufficient to prove this claim; may rely on unstated assumptions"
+                h.verdict = Verdict.NOT_ENTAILED
+                h.gate_reason = (h.gate_reason + " | " if h.gate_reason else "") + (
+                    "supposition consistent with the theory (a case split); no contradiction follows"
                 )
 
         reports.append(report)
