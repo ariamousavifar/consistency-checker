@@ -1,0 +1,7 @@
+[
+  {
+    "id": "b1",
+    "fol": "RaiseTax(author)",
+    "gloss": "Bush, having promised no new taxes, signed the Omnibus Budget Reconciliation Act of 1990 raising taxes (historical fact, not stated in this speech). Predicate/constant match the document's first-person 'author' subject and folded 'RaiseTax' so the bridge unifies with s1 'not RaiseTax(author)'."
+  }
+]
