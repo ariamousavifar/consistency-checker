@@ -145,7 +145,12 @@ class LLMClient:
         self.config = config or LLMConfig()
         from openai import OpenAI
 
-        self._client = OpenAI(base_url=self.config.base_url, api_key=self.config.api_key)
+        # max_retries=0: the SDK otherwise retries 429s INTERNALLY with silent
+        # backoff (the hidden ~50s stalls that made timings meaningless, N5). We
+        # disable it so every rate-limit wait bubbles to our own retry loop, which
+        # LOGS "[rate limit] waiting Xs" and honors retry-after.
+        self._client = OpenAI(base_url=self.config.base_url, api_key=self.config.api_key,
+                              max_retries=0)
         self._last_call_ts = 0.0
         # Usage tracking (v0.7.5): accumulate across every API call so the
         # pipeline can report token cost and compare chunking vs single-pass.
@@ -285,4 +290,15 @@ class LLMClient:
                 "JSON: no prose, no apologies, no markdown fences. If you cannot extract "
                 "anything, return an empty JSON array []."
             )
-        raise ValueError(f"could not obtain valid JSON from model; last output:\n{last_text[:500]}")
+        # N7: name the likely cause instead of a bare "could not obtain valid JSON".
+        if not last_text.strip():
+            raise ValueError(
+                "model returned an EMPTY response after retries -- usually a transient "
+                "truncation, a rate-limit/quota backoff that exhausted, or a model that "
+                "does not follow this JSON task (e.g. zai-glm on the translation prompt). "
+                "Try another provider/model or lower load with LLM_MIN_INTERVAL."
+            )
+        raise ValueError(
+            "model returned NON-JSON output after retries (it ignored the JSON "
+            f"instruction). last output:\n{last_text[:500]}"
+        )

@@ -180,14 +180,21 @@
       "file": "examples/t3-self ownership.txt",
       "bridges": null,
       "tier": 3,
-      "note": "Rothbard self-ownership argument (Austrian econ); hard false-positive control — dense normative reasoning should accept only strict universals, expect 0 contradictions"
+      "note": "Rothbard self-ownership argument (Austrian econ); hard false-positive control — dense normative reasoning should accept only strict universals, expect 0 contradictions",
+      "flags": {
+        "allow_conditionals": true,
+        "guard_deontic": true
+      }
     },
     {
       "name": "t3_bush_1988_notaxes",
       "file": "examples/t3-1988 Flashback George H.W. Bush Says, Read My lips No New Taxes  NBC News.txt",
       "bridges": "examples/t3-bush-1988.bridges.json",
       "tier": 3,
-      "note": "Bush 1988 'no new taxes' speech; with bridge axiom asserting he later raised taxes (1990 Omnibus Act) — expect 1 bridged contradiction; without bridge expect 0"
+      "note": "Bush 1988 'no new taxes' speech; with bridge axiom asserting he later raised taxes (1990 Omnibus Act) — expect 1 bridged contradiction; without bridge expect 0",
+      "flags": {
+        "unify_self_ref": true
+      }
     },
     {
       "name": "t3_geometry_theory_tree",
@@ -201,77 +208,110 @@
       "file": "examples/t3_relational.txt",
       "bridges": null,
       "tier": 3,
-      "note": "EPR/relational demo (needs --allow-relations): a binary 'G rules over R' contradiction the unary fragment literally cannot express (rules-over + 'ruling denies full self-ownership' + 'R retains it'), plus a relational entailment (member-of R -> scholar). Expect 1 contradiction + Aldous-is-scholar entailed."
+      "note": "EPR/relational demo (needs --allow-relations): a binary 'G rules over R' contradiction the unary fragment literally cannot express (rules-over + 'ruling denies full self-ownership' + 'R retains it'), plus a relational entailment (member-of R -> scholar). Expect 1 contradiction + Aldous-is-scholar entailed.",
+      "flags": {
+        "allow_relations": true
+      }
     },
     {
       "name": "rel_prereq_consistent",
       "file": "examples/rel_prereq_consistent.txt",
       "bridges": null,
       "tier": 3,
-      "note": "EPR (--allow-relations): real MIT Course 6 prerequisite chain + transitivity + irreflexivity. FP control. Expect 0 contradictions, transitive prereq entailed (6.100A required by 6.5060)."
+      "note": "EPR (--allow-relations): real MIT Course 6 prerequisite chain + transitivity + irreflexivity. FP control. Expect 0 contradictions, transitive prereq entailed (6.100A required by 6.5060).",
+      "flags": {
+        "allow_relations": true
+      }
     },
     {
       "name": "rel_prereq_broken",
       "file": "examples/rel_prereq_broken.txt",
       "bridges": null,
       "tier": 3,
-      "note": "EPR (--allow-relations): same MIT chain + one planted edge '6.100A requires 6.5060' -> a prerequisite cycle. Expect 1 contradiction (cycle DERIVED via transitivity + irreflexivity); minimal set is the cycle edges only (off-cycle edges excluded). Note states no conclusion, so the contradiction must be derived."
+      "note": "EPR (--allow-relations): same MIT chain + one planted edge '6.100A requires 6.5060' -> a prerequisite cycle. Expect 1 contradiction (cycle DERIVED via transitivity + irreflexivity); minimal set is the cycle edges only (off-cycle edges excluded). Note states no conclusion, so the contradiction must be derived.",
+      "flags": {
+        "allow_relations": true
+      }
     },
     {
       "name": "rel_geo_consistent",
       "file": "examples/rel_geo_containment_consistent.txt",
       "bridges": null,
       "tier": 3,
-      "note": "EPR (--allow-relations): real Wikipedia Munich->Bavaria->Germany containment + transitivity. FP control. Expect 0 contradictions, Munich-in-Germany entailed."
+      "note": "EPR (--allow-relations): real Wikipedia Munich->Bavaria->Germany containment + transitivity. FP control. Expect 0 contradictions, Munich-in-Germany entailed.",
+      "flags": {
+        "allow_relations": true
+      }
     },
     {
       "name": "rel_geo_broken",
       "file": "examples/rel_geo_containment_broken.txt",
       "bridges": null,
       "tier": 3,
-      "note": "EPR (--allow-relations): same geography (single 'located in' relation) + one planted 'Germany is located in Bavaria' -> a 2-hop containment cycle via transitivity + irreflexivity. Expect 1 contradiction; minimal set is the cycle edges only (off-cycle Munich facts excluded)."
+      "note": "EPR (--allow-relations): same geography (single 'located in' relation) + one planted 'Germany is located in Bavaria' -> a 2-hop containment cycle via transitivity + irreflexivity. Expect 1 contradiction; minimal set is the cycle edges only (off-cycle Munich facts excluded).",
+      "flags": {
+        "allow_relations": true
+      }
     },
     {
       "name": "rel_genealogy_consistent",
       "file": "examples/rel_genealogy_consistent.txt",
       "bridges": null,
       "tier": 3,
-      "note": "EPR (--allow-relations): Genesis 5/11 lineage (Adam->...->Peleg, 14 generations) + 'fatherhood implies ancestry' bridge + ancestry transitivity + irreflexivity. FP control. Expect 0 contradictions."
+      "note": "EPR (--allow-relations): Genesis 5/11 lineage (Adam->...->Peleg, 14 generations) + 'fatherhood implies ancestry' bridge + ancestry transitivity + irreflexivity. FP control. Expect 0 contradictions.",
+      "flags": {
+        "allow_relations": true
+      }
     },
     {
       "name": "rel_genealogy_broken",
       "file": "examples/rel_genealogy_broken.txt",
       "bridges": null,
       "tier": 3,
-      "note": "EPR (--allow-relations): same lineage + a 'fatherhood implies ancestry' bridge rule + one planted 'Peleg was an ancestor of Adam' -> a 14-generation ancestry cycle. Expect 1 contradiction (bridge + transitivity over 14 father-facts + irreflexivity)."
+      "note": "EPR (--allow-relations): same lineage + a 'fatherhood implies ancestry' bridge rule + one planted 'Peleg was an ancestor of Adam' -> a 14-generation ancestry cycle. Expect 1 contradiction (bridge + transitivity over 14 father-facts + irreflexivity).",
+      "flags": {
+        "allow_relations": true
+      }
     },
     {
       "name": "rel_sports_fp_control",
       "file": "examples/rel_sports_roundrobin_fp_control.txt",
       "bridges": null,
       "tier": 3,
-      "note": "EPR boundary/FP control (--allow-relations): A beat B, B beat C, C beat A, with NO transitivity axiom stated. Expect 0 contradictions -- the reasoner must NOT invent a cycle without a transitivity premise."
+      "note": "EPR boundary/FP control (--allow-relations): A beat B, B beat C, C beat A, with NO transitivity axiom stated. Expect 0 contradictions -- the reasoner must NOT invent a cycle without a transitivity premise.",
+      "flags": {
+        "allow_relations": true
+      }
     },
     {
       "name": "rel_command_tree",
       "file": "examples/rel_command_theory_tree.txt",
       "bridges": null,
       "tier": 3,
-      "note": "EPR theory-TREE (--allow-relations): a chain-of-command ladder (Atlas>Brava>Cruz>Diaz>Estes) + command transitivity + a command->outrank bridge + rank asymmetry. Unlike the cycle fixtures this is tree-SHAPED: each derived claim builds on the previous theorem (Atlas commands Cruz -> Atlas commands Diaz -> Atlas commands Estes -> Atlas outranks Estes), a depth-4 relational ladder, then a relational REDUCTIO ('suppose Estes outranks Atlas' -> refuted via the derived outranking + asymmetry). Expect 0 contradictions, a layered tree, and 1 refuted supposition."
+      "note": "EPR theory-TREE (--allow-relations): a chain-of-command ladder (Atlas>Brava>Cruz>Diaz>Estes) + command transitivity + a command->outrank bridge + rank asymmetry. Unlike the cycle fixtures this is tree-SHAPED: each derived claim builds on the previous theorem (Atlas commands Cruz -> Atlas commands Diaz -> Atlas commands Estes -> Atlas outranks Estes), a depth-4 relational ladder, then a relational REDUCTIO ('suppose Estes outranks Atlas' -> refuted via the derived outranking + asymmetry). Expect 0 contradictions, a layered tree, and 1 refuted supposition.",
+      "flags": {
+        "allow_relations": true
+      }
     },
     {
       "name": "rel_authority_conflict",
       "file": "examples/rel_authority_conflict.txt",
       "bridges": null,
       "tier": 3,
-      "note": "EPR HIDDEN inconsistency, no planted cycle (--allow-relations): each premise is fine alone, but the relational derivation surfaces a conflict -- 'Atlas governs Diaz' (transitive over Atlas>Brava>Cruz>Diaz) + 'governing implies accountability' bridge entails 'Atlas is accountable for Diaz', which contradicts the axiom 'Atlas is not accountable for Diaz'. The negative axiom targets Atlas SPECIFICALLY (reachable only through all 3 hops), so the minimal inconsistent set is the WHOLE ladder (3 governance edges + transitivity + bridge + the negative axiom): the inconsistency is reachable only through multi-step relational reasoning, not a single bridge step."
+      "note": "EPR HIDDEN inconsistency, no planted cycle (--allow-relations): each premise is fine alone, but the relational derivation surfaces a conflict -- 'Atlas governs Diaz' (transitive over Atlas>Brava>Cruz>Diaz) + 'governing implies accountability' bridge entails 'Atlas is accountable for Diaz', which contradicts the axiom 'Atlas is not accountable for Diaz'. The negative axiom targets Atlas SPECIFICALLY (reachable only through all 3 hops), so the minimal inconsistent set is the WHOLE ladder (3 governance edges + transitivity + bridge + the negative axiom): the inconsistency is reachable only through multi-step relational reasoning, not a single bridge step.",
+      "flags": {
+        "allow_relations": true
+      }
     },
     {
       "name": "rel_two_branch_conflict",
       "file": "examples/rel_two_branch_conflict.txt",
       "bridges": null,
       "tier": 3,
-      "note": "EPR TWO-BRANCH inconsistency (--allow-relations): NEITHER contradicting conclusion is a stated axiom -- both are DERIVED deep in two separate chains that collide. Branch A: Atlas>Brava>Cruz>Diaz allies-chain + ally-transitivity + 'ally implies trust' bridge entails 'Atlas trusts Diaz'. Branch B: Atlas>Echo>Felix>Diaz rivals-chain + rival-transitivity + 'rival implies NOT trust' bridge entails 'Atlas does not trust Diaz'. The two derived theorems are direct negations, so the minimal inconsistent set spans BOTH full branches (all 6 edges + both transitivity rules + both bridges). Proves the axiom set inconsistent purely because deep two-sided derivation produces P and not-P; rendered as a flat minimal set (no consistent theory to grow a tree from)."
+      "note": "EPR TWO-BRANCH inconsistency (--allow-relations): NEITHER contradicting conclusion is a stated axiom -- both are DERIVED deep in two separate chains that collide. Branch A: Atlas>Brava>Cruz>Diaz allies-chain + ally-transitivity + 'ally implies trust' bridge entails 'Atlas trusts Diaz'. Branch B: Atlas>Echo>Felix>Diaz rivals-chain + rival-transitivity + 'rival implies NOT trust' bridge entails 'Atlas does not trust Diaz'. The two derived theorems are direct negations, so the minimal inconsistent set spans BOTH full branches (all 6 edges + both transitivity rules + both bridges). Proves the axiom set inconsistent purely because deep two-sided derivation produces P and not-P; rendered as a flat minimal set (no consistent theory to grow a tree from).",
+      "flags": {
+        "allow_relations": true
+      }
     }
   ]
 }

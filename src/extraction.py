@@ -156,6 +156,14 @@ class LiveTranslator:
         # the original for the gate to quarantine.
         self.retry = os.getenv("LLM_TRANSLATION_RETRY", "1").strip().lower() not in ("0", "false", "no", "off")
         self.retry_effort = os.getenv("LLM_TRANSLATION_RETRY_EFFORT", "medium") or None
+        # Cap the per-statement retry. It was built for a FEW unlucky nulls; when a
+        # dense document fails many translations, re-asking each one individually is
+        # pathological -- it exhausts the provider's hourly request quota (locking
+        # everyone out) and adds minutes of runtime for marginal recall. Above the
+        # cap, the failures are a translation-QUALITY problem (those statements
+        # quarantine harmlessly), not stray nulls worth retrying. Override with
+        # LLM_TRANSLATION_RETRY_MAX (0 = unlimited).
+        self.retry_max = int(os.getenv("LLM_TRANSLATION_RETRY_MAX", "25"))
 
     def _register(self, fol, known: list[str], seen: set[str]) -> None:
         for pred in _predicate_names(fol):
@@ -193,6 +201,11 @@ class LiveTranslator:
         # a time at a higher reasoning effort, with the full accumulated vocabulary.
         if self.retry:
             failed = [s for s in statements if not _parses(result.get(s.id))]
+            if self.retry_max and len(failed) > self.retry_max:
+                print(f"  [translate-retry] SKIPPED: {len(failed)} unparsed > cap "
+                      f"{self.retry_max} -- treating as a translation-quality issue "
+                      f"(those statements quarantine); set LLM_TRANSLATION_RETRY_MAX=0 to force.")
+                failed = []
             if failed:
                 print(f"  [translate-retry] re-asking {len(failed)} unparsed statement(s) "
                       f"individually...")

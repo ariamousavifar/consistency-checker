@@ -232,7 +232,10 @@ def test_report_language_is_neutral(tmp_path):
     assert "does not determine which" in md
     assert "violated" not in md
     tree = (tmp_path / "theory_tree.txt").read_text()
-    assert "INCOMPATIBLE WITH" in tree
+    # The contradiction is shown as a forward-chained derivation (Mortal vs not
+    # Mortal), not as misleading pairwise "incompatible with" edges (N4).
+    assert "MINIMAL INCONSISTENT SET" in tree
+    assert "DERIVATION OF THE CONTRADICTION" in tree
 
 
 # ---------- Extra parser / solver / verbalizer / gate coverage ----------

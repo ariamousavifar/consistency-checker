@@ -55,9 +55,10 @@ def _format_report(report, out_dir: str, show_tree: bool) -> str:
                      f"at least one must be abandoned (the system does not pick which){tag}")
     for c in report.clusters:
         if c.refutation:
+            # N21: only point at "the tree below" when the tree is actually printed.
+            tail = " (see the refutation tree below)" if show_tree else ""
             lines.append(f"DERIVATION: the contradiction is reached by reasoning -- "
-                         f"{c.refutation['left_label']}  vs  {c.refutation['right_label']} "
-                         f"(see the refutation tree below)")
+                         f"{c.refutation['left_label']}  vs  {c.refutation['right_label']}{tail}")
     for p in report.propositions:
         if p.verdict == Verdict.REFUTED:
             conflict = ", ".join(p.conflict) if p.conflict else "the theory"
@@ -152,6 +153,16 @@ def _run_all(args) -> int:
         emit(header)
         # Item 15: per-example isolation. One failure (e.g. a model returning
         # prose instead of JSON) must not abort the whole batch.
+        # N20: each example may declare its own fragment flags in examples.json
+        # ("flags": {"allow_relations": true, ...}). The batch otherwise blanket-
+        # applies one CLI flag set to every example, which mixes regimes -- e.g.
+        # forcing --allow-relations onto a normative text (Rothbard) manufactures a
+        # false positive. A per-example flag, when present, wins over the CLI flag.
+        ex_flags = ex.get("flags", {}) or {}
+
+        def _flag(name):
+            return ex_flags.get(name, getattr(args, name, False))
+
         try:
             report = run_pipeline(
                 file_path=ex["file"],
@@ -165,10 +176,10 @@ def _run_all(args) -> int:
                 resume=bool(getattr(args, "resume", None)),
                 no_chunk=getattr(args, "no_chunk", False),
                 use_nli=getattr(args, "nli", False),
-                allow_conditionals=getattr(args, "allow_conditionals", False),
-                guard_deontic=getattr(args, "guard_deontic", False),
-                unify_self_ref=getattr(args, "unify_self_ref", False),
-                allow_relations=getattr(args, "allow_relations", False),
+                allow_conditionals=_flag("allow_conditionals"),
+                guard_deontic=_flag("guard_deontic"),
+                unify_self_ref=_flag("unify_self_ref"),
+                allow_relations=_flag("allow_relations"),
                 prune_derivation=getattr(args, "prune_derivation", False),
             )
         except Exception as exc:
@@ -202,7 +213,31 @@ def _run_all(args) -> int:
 
 def main(argv: list[str] | None = None) -> int:
     load_dotenv()
-    parser = argparse.ArgumentParser(description="Internal-inconsistency checker (prototype v0.6)")
+    _ENV_EPILOG = """\
+environment variables (no CLI flag; set as a PREFIX before the command,
+e.g.  LLM_EXTRACTION_EFFORT=low LLM_TRANSLATION_EFFORT=medium python -m src.main ...):
+
+  per-stage reasoning effort (override the model default):
+    LLM_EXTRACTION_EFFORT          effort for extraction (e.g. low -- keeps dense chunks under the token cap)
+    LLM_TRANSLATION_EFFORT         effort for translation (e.g. medium)
+    LLM_REASONING_EFFORT           global fallback used when the per-stage vars are unset
+  translation retry:
+    LLM_TRANSLATION_RETRY          re-ask null/unparseable statements one at a time (1=on default, 0=off)
+    LLM_TRANSLATION_RETRY_EFFORT   effort for that retry pass (default: medium)
+  connection / pacing:
+    LLM_MIN_INTERVAL               minimum seconds between LLM calls (rate-limit pacing; eases 429s)
+    LLM_MAX_TOKENS                 max completion tokens per call
+    LLM_MAX_RETRIES                client retry count on transient errors
+    LLM_API_KEY / LLM_BASE_URL     generic key / endpoint override
+    provider keys: CEREBRAS_API_KEY, GROQ_API_KEY, NIM_API_KEY (or NVIDIA_API_KEY), GEMINI_API_KEY (or GOOGLE_API_KEY)
+  mirror a CLI flag (the flag wins if both are given):
+    LLM_SEED (--seed), LLM_TEMPERATURE (--temperature), LLM_MODEL (--model), LLM_NLI (--nli)
+"""
+    parser = argparse.ArgumentParser(
+        description="Internal-inconsistency checker (FOL + Z3 consistency / theory-tree analysis).",
+        epilog=_ENV_EPILOG,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
     parser.add_argument("--file", help="Path to a .txt document")
     parser.add_argument("--all-examples", action="store_true",
                         help="Run every example in examples/examples.json into one timestamped folder")
@@ -215,13 +250,16 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--offline", action="store_true", help="Use shipped fixtures instead of an LLM API")
     parser.add_argument("--fixtures", default="examples/fixtures", help="Fixtures directory (offline mode)")
     parser.add_argument("--provider", default=None,
-                        help="LLM provider short name (nim, groq). If omitted, prompts or uses .env.")
+                        help="LLM provider short name (cerebras, groq, nim). If omitted, prompts or uses .env.")
     parser.add_argument("--model", default=None,
                         help="Model id or short suffix. If omitted, prompts or uses .env.")
     parser.add_argument("--seed", type=int, default=7,
-                        help="Determinism seed sent to the LLM (default 7). Same seed + same "
-                             "inputs => same completion where the endpoint honors it. Pass a "
-                             "negative value to omit the seed entirely.")
+                        help="Determinism seed sent to the LLM (default 7). At the default "
+                             "temperature 0 the seed is an on/off switch, not a sampling knob: "
+                             "PROVIDING any seed pins reproducible output (the value is irrelevant "
+                             "-- seed 7 == seed 21), while a negative value OMITS the seed and "
+                             "allows minor backend non-determinism. To test sampling robustness, "
+                             "vary --temperature (>0), not the seed.")
     parser.add_argument("--temperature", type=float, default=None,
                         help="Sampling temperature override (default: env LLM_TEMPERATURE or 0).")
 
@@ -240,8 +278,10 @@ def main(argv: list[str] | None = None) -> int:
                         help="Optional JSON file of background bridge premises (tagged, never silent)")
     parser.add_argument("--no-tree", action="store_true", help="Skip printing the theory tree to the console")
     parser.add_argument("--nli", action="store_true",
-                        help="Enable the NLI semantic judge (live only; issues extra LLM calls "
-                             "for fidelity and modifier-divergence adjudication). Env: LLM_NLI=1")
+                        help="Enable the NLI semantic judge (live only; extra LLM calls). "
+                             "DISCOURAGED: in testing it added large gate-stage latency for no "
+                             "change in verdict -- the deterministic modifier-divergence path "
+                             "already handles its target cases. Env: LLM_NLI=1")
     parser.add_argument("--no-chunk", action="store_true",
                         help="Force single-pass extraction even on long documents (control "
                              "condition for measuring chunking overhead; may fail/truncate on "
@@ -292,24 +332,36 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("provide --file PATH, --all-examples, or --tier N")
 
     out_dir = args.out or _next_out()
-    report = run_pipeline(
-        file_path=args.file,
-        offline=args.offline,
-        fixtures_dir=args.fixtures,
-        out_dir=out_dir,
-        solver_timeout_ms=args.solver_timeout_ms,
-        effort=args.effort,
-        bridges_path=args.bridges,
-        model_overrides=overrides,
-        resume=bool(args.resume),
-        no_chunk=args.no_chunk,
-        use_nli=getattr(args, "nli", False),
-        allow_conditionals=args.allow_conditionals,
-        guard_deontic=args.guard_deontic,
-        unify_self_ref=args.unify_self_ref,
-        allow_relations=args.allow_relations,
-        prune_derivation=args.prune_derivation,
-    )
+    # N23: single-file runs get the same failure isolation as the batch path -- an
+    # LLM error (rate-limit/quota, empty or non-JSON response, model incompat)
+    # should print a clean message, not a raw traceback with an empty output folder.
+    try:
+        report = run_pipeline(
+            file_path=args.file,
+            offline=args.offline,
+            fixtures_dir=args.fixtures,
+            out_dir=out_dir,
+            solver_timeout_ms=args.solver_timeout_ms,
+            effort=args.effort,
+            bridges_path=args.bridges,
+            model_overrides=overrides,
+            resume=bool(args.resume),
+            no_chunk=args.no_chunk,
+            use_nli=getattr(args, "nli", False),
+            allow_conditionals=args.allow_conditionals,
+            guard_deontic=args.guard_deontic,
+            unify_self_ref=args.unify_self_ref,
+            allow_relations=args.allow_relations,
+            prune_derivation=args.prune_derivation,
+        )
+    except KeyboardInterrupt:
+        print("\n!! interrupted; partial outputs (if any) are in", out_dir)
+        return 130
+    except Exception as exc:
+        print(f"\n!! ERROR: {type(exc).__name__}: {exc}")
+        print(f"   (no report written to {out_dir}; the model/provider likely failed "
+              f"-- try another provider, lower load with LLM_MIN_INTERVAL, or wait out a rate limit)")
+        return 1
     _print_report(report, out_dir, show_tree=not args.no_tree)
     print(f"             (also report.json, store.json, timing.json, theory_tree.txt,")
     print(f"             graph.svg, graph.dot, graph.png if Graphviz is installed)")

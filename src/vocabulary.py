@@ -25,6 +25,22 @@ from .lemmatizer import lemma
 
 _IDENT = re.compile(r"[A-Za-z_]\w*$")
 _STOPWORDS = {"a", "an", "the"}
+
+# A code-like constant: a short letter tag glued to digits (a course number,
+# id, etc.) -- 'c6100b', 'c6_5060'. The translator is NON-deterministic about the
+# inner underscore, coining '6.5060' as 'c65060' in one batch and 'c6_5060' in
+# another, which makes them DIFFERENT Z3 constants and silently breaks any chain
+# that links them (the prereq-cycle false negative). Canonicalize by stripping the
+# underscores so all spellings of one code map to one constant.
+_CODE_CONST = re.compile(r"[a-z]{0,3}\d[\da-z_]*$")
+
+
+def _const_key(name: str) -> str:
+    """Morphology-insensitive constant key. For code-like constants, drop inner
+    underscores so 'c6_5060' and 'c65060' canonicalize to the same entity."""
+    if "_" in name and _CODE_CONST.match(name):
+        return name.replace("_", "")
+    return name
 NEG_PREFIXES = ("non", "un", "im", "ir", "dis", "in")
 
 # First-person self-reference constants a first-person document/bridge may use
@@ -262,7 +278,7 @@ class Vocabulary:
         return self.resolve_pred(name)[0]
 
     def canonical_const(self, name: str) -> str:
-        key = name.lower()
+        key = _const_key(name.lower())
         if key not in self._const_by_key:
             self._const_by_key[key] = key
         return self._const_by_key[key]

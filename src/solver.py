@@ -244,7 +244,19 @@ def verify(props: list[Proposition], timeout_ms: int = 8000, effort: int = 1,
                             )
                             proved = True
                     if not proved:
-                        p.verdict = Verdict.UNKNOWN
+                        # N1/N3: don't collapse the consistent REMAINDER to
+                        # `unknown`. A bystander axiom not in the conflict is part
+                        # of the consistent base -> leave its verdict unset (renders
+                        # as a plain axiom, like the consistent path). A claim that
+                        # the safe context doesn't entail but is consistent with is
+                        # `not_entailed`, not `unknown`. `unknown` is reserved for a
+                        # genuine solver failure (the context itself unsatisfiable).
+                        if p.id in given_ids:
+                            p.verdict = None
+                        elif context_consistent:
+                            p.verdict = Verdict.NOT_ENTAILED
+                        else:
+                            p.verdict = Verdict.UNKNOWN
             report.solver_ms = round((_time.perf_counter() - t_cluster) * 1000, 2)
             reports.append(report)
             continue

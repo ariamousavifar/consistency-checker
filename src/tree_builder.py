@@ -61,6 +61,17 @@ def _kind(p: Proposition) -> str:
     return p.verdict.value
 
 
+def _node_colors(p: Proposition) -> tuple[str, str]:
+    """Fill + border for a graph node. Role determines the FILL (axiom blue,
+    bridge purple, ...), but a CONFLICT member (in the minimal inconsistent set,
+    or a refuted supposition) gets a red BORDER so BOTH sides of a contradiction
+    are marked -- not just the derived tip (N11) -- while keeping its role color."""
+    fill, border = _FILL[_kind(p)]
+    if p.verdict in (Verdict.CONTRADICTS, Verdict.REFUTED):
+        border = _FILL[p.verdict.value][1]
+    return fill, border
+
+
 def _trunc(s: str, n: int) -> str:
     s = " ".join(s.split())
     return s if len(s) <= n else s[: n - 3] + "..."
@@ -125,6 +136,7 @@ def build_tree_text(report: RunReport, width: int = 56) -> str:
         bridges = [p for p in members if p.type == StatementType.BRIDGE]
         claims = [p for p in members if p.type not in (StatementType.AXIOM, StatementType.BRIDGE)]
 
+        has_refutation = bool(c.refutation)
         claim_nodes = []
         for p in claims:
             kids = []
@@ -132,10 +144,21 @@ def build_tree_text(report: RunReport, width: int = 56) -> str:
                 sp = by_id.get(sid)
                 if sp:
                     kids.append((f"proved from {leaf(sp)}", []))
-            for cid in p.conflict:
-                cp = by_id.get(cid)
-                if cp:
-                    kids.append((f"INCOMPATIBLE WITH {leaf(cp)}", []))
+            if p.conflict:
+                if p.verdict == Verdict.REFUTED:
+                    # a reductio supposition genuinely contradicts each member of
+                    # the proven subset it clashes with -- keep the per-member edges
+                    for cid in p.conflict:
+                        cp = by_id.get(cid)
+                        if cp:
+                            kids.append((f"INCOMPATIBLE WITH {leaf(cp)}", []))
+                elif not has_refutation:
+                    # N4: members of an inconsistent SET are JOINTLY unsatisfiable,
+                    # not pairwise-incompatible. Show ONE joint line, not an edge to
+                    # every other member (which falsely implied pairwise conflict).
+                    # When a forward-chained refutation exists it explains the
+                    # contradiction already, so we omit this entirely.
+                    kids.append((f"jointly inconsistent with the set {{{', '.join(p.conflict)}}}", []))
             claim_nodes.append((leaf(p), kids))
 
         root_label = f"theory cluster {c.cluster_id}  [axioms consistent: {cons}]"
@@ -187,7 +210,7 @@ def build_dot(report: RunReport) -> str:
         out.append(f'    label="cluster {c.cluster_id} ({cons})"; color="#b4b2a9";')
         for sid in c.statement_ids:
             p = by_id[sid]
-            fill, border = _FILL[_kind(p)]
+            fill, border = _node_colors(p)
             label = f"{p.id} [{_kind(p)}]\\n{_trunc(p.decontextualized, 40)}"
             out.append(f'    {p.id} [label="{label}", fillcolor="{fill}", color="{border}"];')
         # derived (non-fact) theorem nodes of the refutation, drawn in-cluster
@@ -292,7 +315,7 @@ _NODE_W, _NODE_H, _GAP_X, _GAP_Y = 230, 52, 24, 90
 
 def _node_svg(p: Proposition, x: int, y: int) -> str:
     kind = _kind(p)
-    fill, border = _FILL[kind]
+    fill, border = _node_colors(p)
     dash = ' stroke-dasharray="5,4"' if kind == "excluded" else ""
     tag = kind if p.type != StatementType.AXIOM or kind == "excluded" else "axiom"
     line1 = f"{p.id}  [{tag}]"
