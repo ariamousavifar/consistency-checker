@@ -21,6 +21,10 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
+# All run outputs land under this folder so the repo root stays clean.
+# A bare relative path (not absolute) so it sits next to the code the run came from.
+RESULTS_DIR = Path("results")
+
 from .pipeline import run_pipeline
 from .schema import StatementType, Verdict
 from .tree_builder import build_tree_text
@@ -127,7 +131,7 @@ def _run_all(args) -> int:
             return 1
         print(f"Resuming into {parent}")
     else:
-        parent = Path(f"out_all_{stamp}{tier_tag}_{eff}")
+        parent = RESULTS_DIR / f"out_all_{stamp}{tier_tag}_{eff}"
     parent.mkdir(parents=True, exist_ok=True)
     summary = []
     transcript: list[str] = []
@@ -245,8 +249,8 @@ e.g.  LLM_EXTRACTION_EFFORT=low LLM_TRANSLATION_EFFORT=medium python -m src.main
                         help="Run only examples with this tier (1, 2, 3...). Filters examples.json. "
                              "Without it, --all-examples runs everything.")
     parser.add_argument("--resume", default=None,
-                        help="Resume an interrupted batch: pass the out_all_... folder to reuse "
-                             "already-extracted chunks and finished examples.")
+                        help="Resume an interrupted batch: pass the results/out_all_... folder to "
+                             "reuse already-extracted chunks and finished examples.")
     parser.add_argument("--offline", action="store_true", help="Use shipped fixtures instead of an LLM API")
     parser.add_argument("--fixtures", default="examples/fixtures", help="Fixtures directory (offline mode)")
     parser.add_argument("--provider", default=None,
@@ -265,11 +269,13 @@ e.g.  LLM_EXTRACTION_EFFORT=low LLM_TRANSLATION_EFFORT=medium python -m src.main
 
     def _next_out() -> str:
         import re
-        existing = [p for p in Path(".").iterdir() if re.match(r"^out(\d*)$", p.name) and p.is_dir()]
+        RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+        existing = [p for p in RESULTS_DIR.iterdir() if re.match(r"^out(\d*)$", p.name) and p.is_dir()]
         nums = [int(re.match(r"^out(\d*)$", p.name).group(1) or 0) for p in existing]
-        return "out" if not nums else f"out{max(nums) + 1}"
+        return str(RESULTS_DIR / ("out" if not nums else f"out{max(nums) + 1}"))
 
-    parser.add_argument("--out", default=None, help="Output directory (default: next free out/out1/out2...)")
+    parser.add_argument("--out", default=None,
+                        help="Output directory (default: next free results/out, results/out1, ...)")
     parser.add_argument("--solver-timeout-ms", type=int, default=8000)
     parser.add_argument("--effort", type=int, default=1, choices=[0, 1, 2, 3],
                         help="0 = surface screener only, 1 = clustered symbolic checks (default), "

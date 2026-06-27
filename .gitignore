@@ -1,4 +1,5 @@
 .env
+results/
 out*/
 __pycache__/
 *.pyc
