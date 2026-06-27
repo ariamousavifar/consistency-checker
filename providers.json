@@ -54,6 +54,23 @@
         "zai-glm-4.7": "none"
       }
     },
+    "cerebras2": {
+      "label": "Cerebras (account 2, 1M/day)",
+      "base_url": "https://api.cerebras.ai/v1",
+      "api_key_env": [
+        "CEREBRAS2_API_KEY"
+      ],
+      "models": [
+        "gpt-oss-120b",
+        "zai-glm-4.7"
+      ],
+      "thinking_models": [],
+      "max_tokens_param": "max_completion_tokens",
+      "reasoning_effort": {
+        "gpt-oss-120b": "low",
+        "zai-glm-4.7": "none"
+      }
+    },
     "google": {
       "label": "Google AI Studio (Gemini)",
       "base_url": "https://generativelanguage.googleapis.com/v1beta/openai",
