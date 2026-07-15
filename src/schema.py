@@ -110,3 +110,8 @@ class RunReport(BaseModel):
     usage: dict = Field(default_factory=dict)
     chunked: bool = False
     num_chunks: int = 1
+    # Provenance of deterministic vocabulary normalizations, so every rewrite of
+    # the author's emitted FOL is auditable (loyalty-to-text): curated relational
+    # synonym merges (Require/Prerequisite) and stripped dangling type guards.
+    predicate_merges: list[dict] = Field(default_factory=list)
+    guard_strips: list[dict] = Field(default_factory=list)

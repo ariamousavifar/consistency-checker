@@ -1,5 +1,17 @@
 """Prompts for live (API) mode."""
 
+# Opt-in addendum (env LLM_PREDICATE_GROUNDING=1), appended to whichever
+# translation prompt is active. Source-side nudge against the relation-synonym
+# split (facts named off the verb 'requires', rules off the noun 'prerequisite'
+# -> two predicates Z3 can never connect). Deliberately PERMISSIVE wording: the
+# model must never shoehorn a genuinely different relation into an existing name
+# just to comply -- over-merging at the source is silent and irreversible,
+# whereas the deterministic post-hoc merge (vocabulary.py) is logged and
+# auditable. That merge remains the load-bearing fix; this addendum only reduces
+# how often it has to fire. A/B before promoting to default.
+PREDICATE_GROUNDING_ADDENDUM = """
+PREDICATE GROUNDING: the vocabulary lists predicates that earlier statements in THIS document already use. If a statement expresses the SAME relation or property as an existing vocabulary predicate -- merely phrased with a different verb or noun ('X requires Y' vs 'X is a prerequisite for Y'; 'located in' vs 'contained in') -- REUSE the existing predicate name, keeping its established argument order (flip the arguments if the phrasing reverses direction: if Require(b, a) means 'B requires A', then 'A is a prerequisite for B' is Require(b, a), not Prerequisite(a, b)). Only reuse when the meaning is truly identical; when in doubt, coin a new name rather than force a fit."""
+
 EXTRACTION_SYSTEM = """You are the extraction judge in a logical consistency-checking pipeline.
 
 You will receive a passage of text. Identify every sentence or clause that makes a claim, and output a JSON array. Each element:

@@ -117,7 +117,8 @@ class FixtureTranslator:
         self.path = Path(fixtures_dir) / f"{source_name}.translation.json"
         self._map: dict[str, str | None] | None = None
 
-    def translate(self, statements: list[ExtractedStatement], vocabulary) -> dict[str, str | None]:
+    def translate(self, statements: list[ExtractedStatement], vocabulary,
+                  cache_path=None) -> dict[str, str | None]:
         if self._map is None:
             if not self.path.exists():
                 raise FileNotFoundError(f"No translation fixture at {self.path}.")
@@ -140,6 +141,13 @@ class LiveTranslator:
             self.system = TRANSLATION_SYSTEM_CONDITIONALS
         else:
             self.system = TRANSLATION_SYSTEM
+        # Opt-in source-side predicate grounding (LLM_PREDICATE_GROUNDING=1):
+        # permissive nudge to reuse an existing relation predicate instead of
+        # coining a synonym. Experimental -- the deterministic merge in
+        # vocabulary.py stays the load-bearing fix; A/B before promoting.
+        if os.getenv("LLM_PREDICATE_GROUNDING", "").strip().lower() in ("1", "true", "yes", "on"):
+            from .prompts import PREDICATE_GROUNDING_ADDENDUM
+            self.system = self.system + PREDICATE_GROUNDING_ADDENDUM
         # Per-stage reasoning override. Translation (esp. with conditionals) is
         # where deep reasoning pays off, so it can run hotter than extraction:
         # LLM_TRANSLATION_EFFORT=medium. None -> use client default.
@@ -171,7 +179,16 @@ class LiveTranslator:
                 seen.add(pred)
                 known.append(pred)
 
-    def translate(self, statements: list[ExtractedStatement], vocabulary) -> dict[str, str | None]:
+    @staticmethod
+    def _cache_key(s: ExtractedStatement) -> str:
+        """Content-addressed cache key: the id plus a hash of the exact text, so
+        a stale cache from a different extraction never matches."""
+        import hashlib
+        h = hashlib.sha1(s.decontextualized.encode("utf-8")).hexdigest()[:12]
+        return f"{s.id}|{h}"
+
+    def translate(self, statements: list[ExtractedStatement], vocabulary,
+                  cache_path=None) -> dict[str, str | None]:
         result: dict[str, str | None] = {}
         # Predicate-consistency feedback: batches are translated separately, so a
         # rule in batch 1 ("...must publish their decisions" -> PublishDecision)
@@ -182,8 +199,53 @@ class LiveTranslator:
         # preserved and duplicates dropped to keep the prompt vocabulary stable.
         known: list[str] = list(vocabulary.predicates)
         seen: set[str] = set(known)
-        for i in range(0, len(statements), self.batch_size):
-            batch = statements[i : i + self.batch_size]
+
+        # N8 statement-level checkpointing: every successfully parsed translation
+        # is appended to a JSONL cache the moment its batch completes, and a rerun
+        # into the same out dir resumes from it -- so a 429 lockout or crash hours
+        # into a book-length run loses nothing, and a provider swap (kill the
+        # cerebras run, relaunch with --provider cerebras2 --out SAME_DIR)
+        # continues from the last checkpoint. Only PARSED translations are cached:
+        # a null/unparseable statement is not completed work, and a resumed run
+        # (possibly on a stronger provider) should re-attempt it.
+        # Disable with LLM_TRANSLATION_CACHE=0.
+        cache_on = cache_path is not None and os.getenv(
+            "LLM_TRANSLATION_CACHE", "1").strip().lower() not in ("0", "false", "no", "off")
+        cached: dict[str, str] = {}
+        cache_file = None
+        if cache_on:
+            cp = Path(cache_path)
+            if cp.exists():
+                for line in cp.read_text(encoding="utf-8").splitlines():
+                    try:
+                        obj = json.loads(line)
+                    except Exception:
+                        continue   # a torn last line from a crash is expected
+                    if _parses(obj.get("fol")):
+                        cached[obj.get("key", "")] = obj["fol"]   # later lines win
+            cp.parent.mkdir(parents=True, exist_ok=True)
+            cache_file = cp.open("a", encoding="utf-8")
+
+        def _checkpoint(s: ExtractedStatement, fol) -> None:
+            if cache_file is not None and _parses(fol):
+                cache_file.write(json.dumps(
+                    {"key": self._cache_key(s), "fol": fol}, ensure_ascii=False) + "\n")
+                cache_file.flush()
+
+        todo: list[ExtractedStatement] = []
+        for s in statements:
+            key = self._cache_key(s)
+            if key in cached:
+                result[s.id] = cached[key]
+                self._register(cached[key], known, seen)
+            else:
+                todo.append(s)
+        if len(statements) - len(todo):
+            print(f"  [translate-cache] resumed {len(statements) - len(todo)}/"
+                  f"{len(statements)} statement(s) from {Path(cache_path).name}")
+
+        for i in range(0, len(todo), self.batch_size):
+            batch = todo[i : i + self.batch_size]
             payload = {
                 "vocabulary": {
                     "predicates": known,
@@ -196,6 +258,7 @@ class LiveTranslator:
                 fol = data.get(s.id)
                 result[s.id] = fol
                 self._register(fol, known, seen)
+                _checkpoint(s, fol)
 
         # Retry pass: re-ask each statement that produced no parseable FOL, one at
         # a time at a higher reasoning effort, with the full accumulated vocabulary.
@@ -224,4 +287,7 @@ class LiveTranslator:
                     if _parses(fol):     # only replace a failure with a real success
                         result[s.id] = fol
                         self._register(fol, known, seen)
+                        _checkpoint(s, fol)
+        if cache_file is not None:
+            cache_file.close()
         return result

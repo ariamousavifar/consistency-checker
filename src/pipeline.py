@@ -17,7 +17,7 @@ from .extraction import (
     LiveTranslator,
     apply_compound_splitting,
 )
-from .normalize import retype_bare_instances
+from .normalize import retype_bare_instances, strip_dangling_guards
 from .chunked_extraction import extract_chunked
 from .gate import run_gate
 from .llm_client import LLMClient, LLMConfig
@@ -125,7 +125,12 @@ def run_pipeline(
 
     vocab = Vocabulary(judge=judge)
     with timer.stage("translation"):
-        llm_fols = translator.translate(statements, vocab)
+        # translation.partial.jsonl = the N8 statement-level checkpoint: rerunning
+        # into the SAME out dir (crash recovery or a provider swap mid-book)
+        # resumes translation instead of starting over. A fresh out dir has no
+        # cache, so default runs are unchanged. LLM_TRANSLATION_CACHE=0 disables.
+        llm_fols = translator.translate(
+            statements, vocab, cache_path=out_dir / "translation.partial.jsonl")
 
     with timer.stage("gate"):
         propositions = []
@@ -158,6 +163,31 @@ def run_pipeline(
                         prop.fol = vocab.apply_pred_aliases(prop.fol, aliases)
                     if const_aliases:
                         prop.fol = vocab.apply_const_aliases(prop.fol, const_aliases)
+        # Curated relational-synonym merge (deterministic, directional): the
+        # translator names one relation off different surface forms (facts off
+        # the verb 'requires', rules off the noun 'prerequisite'), so rules range
+        # over a predicate with zero facts and real cycles silently never form.
+        # Runs AFTER the modifier/const rewrites so it sees final names.
+        rel_aliases, predicate_merges = vocab.finalize_relation_synonym_aliases(
+            [p.fol for p in propositions if p.fol]
+        )
+        if rel_aliases:
+            renamed = {old: new for old, (new, _) in rel_aliases.items()}
+            for prop in propositions:
+                if not prop.fol:
+                    continue
+                new_fol = vocab.apply_relation_synonym_aliases(prop.fol, rel_aliases)
+                if new_fol != prop.fol:
+                    touched = sorted(n for n in renamed if n in prop.fol)
+                    prop.fol = new_fol
+                    prop.gate_reason = (prop.gate_reason + " | " if prop.gate_reason else "") + (
+                        "relational synonym unified: "
+                        + ", ".join(f"{n} -> {renamed[n]}" for n in touched)
+                    )
+        # Guarded-irreflexivity normalization: strip a type guard that nothing in
+        # the document instantiates (it would make the axiom vacuously true and
+        # mask real cycles). Deterministic and razor-targeted; see its docstring.
+        guard_strips = strip_dangling_guards(propositions)
 
     # Deduplicate AFTER vocabulary unification (so predicate-aligned statements
     # that became identical are caught) and BEFORE the solver (so duplicates
@@ -185,6 +215,8 @@ def run_pipeline(
         usage=client.usage() if client is not None else {},
         chunked=(num_chunks > 1),
         num_chunks=num_chunks,
+        predicate_merges=predicate_merges,
+        guard_strips=guard_strips,
     )
 
     with timer.stage("write_outputs"):

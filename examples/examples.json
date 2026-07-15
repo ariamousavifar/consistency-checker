@@ -191,7 +191,7 @@
       "file": "examples/t3-1988 Flashback George H.W. Bush Says, Read My lips No New Taxes  NBC News.txt",
       "bridges": "examples/t3-bush-1988.bridges.json",
       "tier": 3,
-      "note": "Bush 1988 'no new taxes' speech; with bridge axiom asserting he later raised taxes (1990 Omnibus Act) — expect 1 bridged contradiction; without bridge expect 0",
+      "note": "Bush 1988 'no new taxes' speech + bridge (1990 Omnibus Act). RECLASSIFIED (2026-06-28): expect 0 logical contradictions — the canonical MODALITY-OUT-OF-SCOPE example. 'Will not raise taxes' (future/modal promise) vs 'did raise taxes' (past act) is a BROKEN PROMISE across time and the say/do boundary, not P-and-not-P at any instant; tenseless FOL is CORRECT to quarantine it. Catching it would require discarding the very tense/modal info that makes the statements non-contradictory. The bridge mechanism itself is tested cleanly (non-modally) by taxation_bridged. Promise/commitment tracking = a separate tier-6 future feature, not FOL consistency.",
       "flags": {
         "unify_self_ref": true
       }

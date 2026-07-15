@@ -39,6 +39,21 @@ def render_markdown(report: RunReport) -> str:
     lines.append(" | ".join(f"{k}: {v}" for k, v in sorted(counts.items())))
     lines.append("")
 
+    # Deterministic vocabulary normalizations, surfaced so every rewrite of the
+    # emitted FOL is auditable (loyalty-to-text: the merge is a lens, not an
+    # silent alteration of what the author said).
+    if report.predicate_merges or report.guard_strips:
+        lines.append("## Vocabulary normalization (deterministic, audited)")
+        lines.append("")
+        for m in report.predicate_merges:
+            swap = " (arguments swapped: inverse phrasing)" if m.get("args_swapped") else ""
+            lines.append(f"- treated `{m['from']}` and `{m['to']}` as the same relation; "
+                         f"kept `{m['to']}`{swap} — {m.get('reason', '')}")
+        for g in report.guard_strips:
+            lines.append(f"- {g['id']}: stripped dangling type-guard `{g['guard']}` "
+                         f"(`{g['from']}` → `{g['to']}`) — {g.get('reason', '')}")
+        lines.append("")
+
     lines.append("## Statements")
     lines.append("")
     lines.append("| id | type | gate | verdict | conf | statement | FOL |")

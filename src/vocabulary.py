@@ -27,20 +27,48 @@ _IDENT = re.compile(r"[A-Za-z_]\w*$")
 _STOPWORDS = {"a", "an", "the"}
 
 # A code-like constant: a short letter tag glued to digits (a course number,
-# id, etc.) -- 'c6100b', 'c6_5060'. The translator is NON-deterministic about the
-# inner underscore, coining '6.5060' as 'c65060' in one batch and 'c6_5060' in
-# another, which makes them DIFFERENT Z3 constants and silently breaks any chain
-# that links them (the prereq-cycle false negative). Canonicalize by stripping the
-# underscores so all spellings of one code map to one constant.
-_CODE_CONST = re.compile(r"[a-z]{0,3}\d[\da-z_]*$")
+# id, etc.) -- 'c6100b', 'c6_5060'. The translator names ONE code many ways and
+# these become DIFFERENT Z3 constants, silently breaking any chain that links
+# them (the prereq-cycle false negative). Observed spellings of course '6.5060':
+#   c65060   c6_5060   six_5060   six5060
+# All must canonicalize to one entity. VERIFIED by controlled experiment: the
+# model deterministically REUSES an existing 'six_5060' from the vocabulary
+# (correct behaviour -- six_5060 IS 6.5060) while another statement coined the
+# same course 'c65060', so 6.5060's node splits in two and the cycle never
+# closes. The earlier underscore-only fix caught c6_5060 != c65060 but NOT the
+# spelled-out-digit form.
+_NUM_WORDS = {
+    "zero": "0", "one": "1", "two": "2", "three": "3", "four": "4",
+    "five": "5", "six": "6", "seven": "7", "eight": "8", "nine": "9",
+}
+_NUMWORD_PREFIX = re.compile(r"^([a-z]+)(_?\d.*)$")
+_CODE_CONST = re.compile(r"[a-z]{0,3}\d")
 
 
 def _const_key(name: str) -> str:
-    """Morphology-insensitive constant key. For code-like constants, drop inner
-    underscores so 'c6_5060' and 'c65060' canonicalize to the same entity."""
-    if "_" in name and _CODE_CONST.match(name):
-        return name.replace("_", "")
-    return name
+    """Morphology-insensitive constant key. Canonicalizes every spelling of a
+    code-like constant to one VALID identifier: a leading number-word becomes its
+    digit ('six_5060' -> '6_5060'), then the short letter tag and underscores are
+    dropped and a stable 'c' tag prepended so the result is always parseable
+    ('c6_5060', 'c65060', 'six_5060', 'six5060' -> 'c65060'; 'c6_100a' ->
+    'c6100a'). Non-code names ('socrates', 'old_ferry', dates) are unchanged."""
+    n = name.lower()
+    # spelled-out leading digit: six_5060 / six5060 -> 6_5060 / 65060
+    changed = False
+    m = _NUMWORD_PREFIX.match(n)
+    if m and m.group(1) in _NUM_WORDS:
+        n = _NUM_WORDS[m.group(1)] + m.group(2)
+        changed = True
+    # Canonicalize only a GENUINE code with variant spellings: a letter tag on a
+    # digit (or digit-led) AND (a converted number-word, or an inner underscore,
+    # or a 2+-digit run). This leaves lone placeholders 'x0'/'s3' -- one digit,
+    # one spelling, nothing to unify -- untouched.
+    looks_code = bool(_CODE_CONST.match(n) or n[:1].isdigit())
+    if looks_code and (changed or "_" in n or len(re.sub(r"[^0-9]", "", n)) >= 2):
+        core = re.sub(r"[^0-9a-z]", "", n)             # drop underscores/punct
+        core = re.sub(r"^[a-z]{1,3}(?=\d)", "", core)  # drop the letter tag
+        return "c" + core                              # re-tag -> valid identifier
+    return n
 NEG_PREFIXES = ("non", "un", "im", "ir", "dis", "in")
 
 # First-person self-reference constants a first-person document/bridge may use
@@ -74,6 +102,114 @@ def words_of(name: str) -> list[str]:
 # are preserved. This aligns rule-translator and LLM-translator outputs that
 # differ only by such a classifier, which otherwise collapses to "ambiguous".
 _LIGHT_HEADS = {"number", "creature", "thing", "object", "entity", "being", "individual"}
+
+# ---------------------------------------------------------------------------
+# Curated relational-synonym groups (the deterministic predicate merge).
+#
+# The translator names ONE relation off different surface forms -- ground facts
+# off the verb ('6.100B requires 6.100A' -> Require) and rules off the noun
+# ('A is a prerequisite for B' -> Prerequisite). Z3 sees two unrelated
+# predicates, so a transitivity/irreflexivity rule ranges over a predicate with
+# zero facts and a real cycle silently never forms (the rel_prereq_broken false
+# negative). This table merges such synonyms DETERMINISTICALLY -- no LLM, no
+# embeddings -- so the merge can never invent a relation the curator didn't
+# hand-verify. Under-merge bias on purpose: a missed merge just keeps today's
+# behavior; a wrong merge could manufacture a false contradiction.
+#
+# Each entry: content word (surface form or lemma) -> (group, flipped).
+# `flipped` is the argument direction RELATIVE TO the group's base orientation:
+#   prereq group base:  R(x, y) = "x requires y"
+#     Require(b, a)        <- '6.100B requires 6.100A'         (not flipped)
+#     Prerequisite(a, b)   <- 'A is a prerequisite for B'      (FLIPPED: b requires a)
+#   containment group base: R(x, y) = "x is located in y"
+#     LocatedIn(m, b)      <- 'Munich is located in Bavaria'   (not flipped)
+#     Contains(b, m)       <- 'Bavaria contains Munich'        (FLIPPED)
+# Merging rewrites every occurrence of a non-canonical member onto the group's
+# canonical member, swapping the two arguments when their flip flags differ --
+# so 'Prerequisite(a, b)' becomes 'Require(b, a)' and transitivity stays sound.
+# EXTEND by adding words to a group (never antonyms/inverses as the same
+# direction -- encode an inverse with the opposite flip flag, like 'contain').
+_RELATION_SYNONYMS: dict[str, tuple[str, bool]] = {
+    # --- prerequisite/dependency: base orientation "x requires y" ---
+    "require": ("prereq", False), "requir": ("prereq", False), "required": ("prereq", False),
+    "prerequisite": ("prereq", True), "prerequisit": ("prereq", True), "prereq": ("prereq", True),
+    "depend": ("prereq", False),   # DependsOn(x, y): x depends on y == x requires y
+    "need": ("prereq", False),     # Needs(x, y): x needs y == x requires y
+    # --- spatial containment: base orientation "x is located in y" ---
+    "locate": ("containment", False), "located": ("containment", False),
+    "situate": ("containment", False), "situated": ("containment", False),
+    "within": ("containment", False), "inside": ("containment", False),
+    "contain": ("containment", True),  # Contains(x, y): x contains y == y located in x
+}
+
+# Function words dropped when reducing a predicate name to its content word:
+# 'PrerequisiteFor' -> ['prerequisite'], 'LocatedIn' -> ['located'],
+# 'DependsOn' -> ['depend']. A residue of MORE than one content word never
+# matches (PushToRaiseTax stays untouched) -- multi-word names are ideas, not
+# bare relation verbs.
+_RELATION_PARTICLES = {
+    "of", "for", "to", "on", "in", "at", "by", "with", "over", "upon", "from",
+    "is", "are", "was", "were", "a", "an", "the",
+}
+
+
+def _relation_synonym_entry(name: str) -> tuple[str, bool] | None:
+    """Map a canonical predicate name to its curated (group, flipped) entry, or
+    None. Matches only when the name reduces to exactly ONE content word and
+    that word (surface or lemma) is in the table."""
+    ws = [w for w in words_of(name) if w not in _RELATION_PARTICLES]
+    if len(ws) != 1:
+        return None
+    return _RELATION_SYNONYMS.get(ws[0]) or _RELATION_SYNONYMS.get(lemma(ws[0]))
+
+
+def predicate_arities(fols: list[str]) -> dict[str, set[int]]:
+    """Observed arities per predicate across a list of FOL strings (a predicate
+    used inconsistently shows a set with more than one member)."""
+    out: dict[str, set[int]] = {}
+    for fol in fols:
+        try:
+            toks = tokenize(fol)
+        except Exception:
+            continue
+        for i, t in enumerate(toks):
+            if not (_IDENT.match(t) and t not in KEYWORDS
+                    and i + 1 < len(toks) and toks[i + 1] == "("):
+                continue
+            depth, commas, content = 0, 0, False
+            for tj in toks[i + 1:]:
+                if tj == "(":
+                    depth += 1
+                elif tj == ")":
+                    depth -= 1
+                    if depth == 0:
+                        break
+                elif depth == 1:
+                    if tj == ",":
+                        commas += 1
+                    else:
+                        content = True
+            out.setdefault(t, set()).add((commas + 1) if content else 0)
+    return out
+
+
+def _predicate_counts(fols: list[str]) -> dict[str, int]:
+    """Number of STATEMENTS each predicate appears in (not raw token count --
+    a transitivity rule mentions its predicate three times but is one
+    statement; loyalty means keeping the surface form the author used in the
+    most statements, which for a fact-heavy document is the facts' verb)."""
+    counts: dict[str, int] = {}
+    for fol in fols:
+        try:
+            toks = tokenize(fol)
+        except Exception:
+            continue
+        present = {t for i, t in enumerate(toks)
+                   if _IDENT.match(t) and t not in KEYWORDS
+                   and i + 1 < len(toks) and toks[i + 1] == "("}
+        for t in present:
+            counts[t] = counts.get(t, 0) + 1
+    return counts
 
 
 def pred_key(name: str) -> str:
@@ -272,6 +408,103 @@ class Vocabulary:
                 out.append(aliases[t])
             else:
                 out.append(t)
+        return _detokenize(out)
+
+    def finalize_relation_synonym_aliases(
+        self, fols: list[str]
+    ) -> tuple[dict[str, tuple[str, bool]], list[dict]]:
+        """Deterministic, document-scoped RELATIONAL synonym merge (no LLM).
+
+        Run once after every predicate is registered and every FOL is emitted
+        (it needs the observed arities and usage counts). Within each curated
+        _RELATION_SYNONYMS group, merge the distinct binary predicates the
+        document actually used onto ONE canonical member, recording per-member
+        whether the two arguments must be swapped (direction flip).
+
+        SAFETY (under-merge bias -- a wrong merge could manufacture a false
+        contradiction, a missed merge only keeps today's behavior):
+        - curated table only; nothing fuzzy, no embeddings, no antonyms;
+        - a member must reduce to exactly ONE curated content word;
+        - a member must be used with arity EXACTLY 2 everywhere it appears;
+        - negation-mapped predicates never participate;
+        - fires only when a group has >= 2 distinct members in this document.
+
+        LOYALTY: canonical = the member the document uses MOST (the author's
+        dominant surface form; ties broken toward the group's base orientation,
+        then alphabetically), so reports keep speaking the author's language.
+
+        Returns ({old_name: (canonical, args_swapped)}, provenance list) and
+        rewrites the registry so `predicates` reports the merged symbol.
+        Callers rewrite emitted FOL via `apply_relation_synonym_aliases`.
+        """
+        arities = predicate_arities(fols)
+        counts = _predicate_counts(fols)
+        groups: dict[str, list[tuple[str, bool]]] = {}
+        for name in dict.fromkeys(self._pred_by_key.values()):
+            entry = _relation_synonym_entry(name)
+            if entry is None:
+                continue
+            group, flipped = entry
+            if arities.get(name) != {2}:      # strictly binary, used consistently
+                continue
+            groups.setdefault(group, []).append((name, flipped))
+
+        aliases: dict[str, tuple[str, bool]] = {}
+        provenance: list[dict] = []
+        for group, members in groups.items():
+            if len(members) < 2:
+                continue
+            # canonical: most-used surface form; tie -> base orientation, then name
+            members.sort(key=lambda m: (-counts.get(m[0], 0), m[1], m[0]))
+            canon, canon_flip = members[0]
+            for name, flip in members[1:]:
+                swap = flip != canon_flip
+                aliases[name] = (canon, swap)
+                provenance.append({
+                    "from": name, "to": canon, "args_swapped": swap,
+                    "reason": f"curated relational synonym (group '{group}'); "
+                              f"kept the document's dominant form",
+                })
+        if aliases:
+            plain = {old: new for old, (new, _) in aliases.items()}
+            for key, val in list(self._pred_by_key.items()):
+                if val in plain:
+                    self._pred_by_key[key] = plain[val]
+            for key, val in list(self._neg_of.items()):
+                if val in plain:
+                    self._neg_of[key] = plain[val]
+        return aliases, provenance
+
+    def apply_relation_synonym_aliases(
+        self, fol: str, aliases: dict[str, tuple[str, bool]]
+    ) -> str:
+        """Rewrite predicate names through a relational-synonym alias map,
+        swapping the two arguments where the direction flips. Arguments in the
+        EPR fragment are single tokens (constants or bound variables), so the
+        swap is a token-level exchange."""
+        if not aliases:
+            return fol
+        toks = tokenize(fol)
+        out: list[str] = []
+        i = 0
+        while i < len(toks):
+            t = toks[i]
+            nxt = toks[i + 1] if i + 1 < len(toks) else None
+            if _IDENT.match(t) and t not in KEYWORDS and nxt == "(" and t in aliases:
+                new, swap = aliases[t]
+                # collect the two argument tokens: ( a , b )
+                if (i + 5 < len(toks) and toks[i + 2] != ")" and toks[i + 3] == ","
+                        and toks[i + 5] == ")"):
+                    a, b = toks[i + 2], toks[i + 4]
+                    if swap:
+                        a, b = b, a
+                    out.extend([new, "(", a, ",", b, ")"])
+                    i += 6
+                    continue
+                out.append(new)   # unexpected shape: rename only, never reorder
+            else:
+                out.append(t)
+            i += 1
         return _detokenize(out)
 
     def canonical_pred(self, name: str) -> str:

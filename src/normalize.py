@@ -1,7 +1,6 @@
 """Extraction normalization (architecture stage 3 post-processing).
 
-Two deterministic safeguards applied to whatever the extraction judge returns,
-both driven by real live-run failures:
+Deterministic safeguards driven by real live-run failures:
 
 1. parse_statements: tolerate malformed LLM output. Models occasionally return
    a statement as a bare string, wrap the list in a dict, or include null/empty
@@ -16,12 +15,16 @@ both driven by real live-run failures:
    entailment chains to not_entailed. This retype is conservative: it ONLY fires
    when there is no therefore/thus/so/hence/follows marker, so genuine
    conclusions ("therefore Socrates is mortal") keep their derived_claim type.
+
+3. strip_dangling_guards: guarded-irreflexivity normalization (FOL-level, runs
+   after vocabulary unification). See its docstring.
 """
 from __future__ import annotations
 
 import re
 
-from .schema import ExtractedStatement, StatementType
+from .fol_parser import KEYWORDS, tokenize
+from .schema import ExtractedStatement, GateOutcome, StatementType
 
 # Markers that signal a statement is presented as a CONCLUSION, not a premise.
 # If any appears, we never retype the statement to axiom.
@@ -106,6 +109,89 @@ def parse_statements(data) -> list[ExtractedStatement]:
         except Exception:
             continue
     return out
+
+
+# Guarded irreflexivity: `forall v. (P(v) -> not R(v, v))` -- a universal
+# prohibition on a REFLEXIVE relational atom, gated by a single unary guard over
+# the same bound variable. Matched against the whole normalized FOL string (the
+# stable format vocabulary._detokenize emits), so nothing nested or partial can
+# match by accident.
+_GUARDED_IRREFLEXIVITY = re.compile(
+    r"^forall\s+(\w+)\s*\.\s*\(\s*"          # forall v. (
+    r"(\w+)\s*\(\s*\1\s*\)\s*->\s*"          #   P(v) ->
+    r"(not\s+\w+\s*\(\s*\1\s*,\s*\1\s*\))"   #   not R(v, v)
+    r"\s*\)$"                                 # )
+)
+
+
+def _predicate_occurrences(fol: str) -> list[str]:
+    """Every predicate-position identifier in a FOL string (with repeats)."""
+    try:
+        toks = tokenize(fol)
+    except Exception:
+        return []
+    return [t for i, t in enumerate(toks)
+            if re.match(r"[A-Za-z_]\w*$", t) and t not in KEYWORDS
+            and i + 1 < len(toks) and toks[i + 1] == "("]
+
+
+def strip_dangling_guards(propositions) -> list[dict]:
+    """Guarded-irreflexivity normalization (deterministic, document-scoped).
+
+    The translator sometimes over-specifies a structural axiom with a type
+    guard the document never instantiates: 'No person is an ancestor of
+    themselves' emitted as `forall x. (Person(x) -> not Ancestor(x, x))` in a
+    theory with ZERO ground `Person(...)` facts. The guard is then vacuous --
+    `not Ancestor(x, x)` is never derivable -- and a real ancestry cycle goes
+    silently unrefuted (the rel_genealogy_broken false negative).
+
+    This pass strips the guard, yielding the truly universal axiom, ONLY when
+    ALL of the following hold (deliberately razor-targeted -- widening the
+    pattern risks manufacturing contradictions, see the unicorn test):
+      1. the whole formula is exactly `forall v. (P(v) -> not R(v, v))`
+         (single unary guard, consequent a NEGATED REFLEXIVE relational atom);
+      2. the guard predicate P is a dangling type: across every accepted or
+         bridge FOL in the document, P occurs ONLY in this guard position --
+         never as a ground fact, never in any conclusion, never elsewhere.
+    A populated type ('Person' with Person(adam) asserted) never fires; a
+    positive-consequent rule ('all unicorns are immortal') never fires.
+
+    Rewrites prop.fol in place with provenance in gate_reason; returns the
+    provenance list for the run report.
+    """
+    active = [p for p in propositions
+              if p.status == GateOutcome.ACCEPTED and p.fol]
+    # Total predicate-position occurrences across the document.
+    total: dict[str, int] = {}
+    for p in active:
+        for name in _predicate_occurrences(p.fol):
+            total[name] = total.get(name, 0) + 1
+    # Occurrences attributable to the guard position of the exact pattern.
+    guarded: dict[str, int] = {}
+    matches: list[tuple] = []   # (prop, match)
+    for p in active:
+        m = _GUARDED_IRREFLEXIVITY.match(p.fol.strip())
+        if m:
+            guard = m.group(2)
+            guarded[guard] = guarded.get(guard, 0) + 1
+            matches.append((p, m))
+
+    provenance: list[dict] = []
+    for p, m in matches:
+        var, guard, consequent = m.group(1), m.group(2), m.group(3)
+        if total.get(guard, 0) != guarded.get(guard, 0):
+            continue    # the type is instantiated/used elsewhere: a real guard
+        old = p.fol
+        p.fol = f"forall {var}. ({consequent})"
+        p.gate_reason = (p.gate_reason + " | " if p.gate_reason else "") + (
+            f"dangling type-guard '{guard}' stripped (uninstantiated everywhere; "
+            "guarded irreflexivity would be vacuously true and mask real cycles)"
+        )
+        provenance.append({
+            "id": p.id, "guard": guard, "from": old, "to": p.fol,
+            "reason": "guarded irreflexivity with an uninstantiated type guard",
+        })
+    return provenance
 
 
 def retype_bare_instances(statements: list[ExtractedStatement]) -> list[ExtractedStatement]:

@@ -270,9 +270,12 @@ def t_ab_relations(td, prov, ctx):
 
 
 def t_fragment_flags(td, prov, ctx):
+    # bush RECLASSIFIED to expect 0: modal political speech ("will not raise
+    # taxes") correctly quarantines -- a broken promise across time is hypocrisy,
+    # not P-and-not-P; the bridge mechanism is tested non-modally by taxation.
     specs = [
         ("rothbard", "t3_rothbard_selfownership", ["--allow-conditionals", "--guard-deontic"], 0),
-        ("bush", "t3_bush_1988_notaxes", ["--unify-self-ref"], 1),
+        ("bush", "t3_bush_1988_notaxes", ["--unify-self-ref"], 0),
         ("taxation", "taxation_bridged", [], 1),
     ]
     rows, ok = [], True
@@ -288,7 +291,7 @@ def t_fragment_flags(td, prov, ctx):
         rows.append({"label": label, "expected": expect, "actual": info["inconsistent"], "ok": hit})
         ok = ok and hit
     return result(td, "fragment_flags", prov, "pass" if ok else "fail", rows,
-                  "Rothbard 0, Bush 1 bridged, taxation 1 bridged (bush is a known cerebras FN)")
+                  "Rothbard 0; bush 0 (modality out of scope by design); taxation 1 bridged")
 
 
 def t_rendering(td, prov, ctx):

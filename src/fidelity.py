@@ -98,14 +98,27 @@ def _is_code(tok: str) -> bool:
     return bool(_CODE_RE.fullmatch(re.sub(r"[^a-z0-9]", "", tok.lower())))
 
 
+# Number words the translator sometimes uses to spell a code's leading digit
+# ('6.5060' coined as six_5060). Mapped back to the digit so the signature can
+# match the sentence.
+_NUM_WORDS = {
+    "zero": "0", "one": "1", "two": "2", "three": "3", "four": "4",
+    "five": "5", "six": "6", "seven": "7", "eight": "8", "nine": "9",
+}
+
+
 def _code_forms(tok: str) -> set[str]:
-    """Alphanumeric signatures of a code-like constant: the run-together form and,
+    """Alphanumeric signatures of a code-like constant: the run-together form;
     if a lone letter tag precedes the digits ('c6100b'), the de-tagged form
-    ('6100b'). Either may appear in the joined sentence ('6.100B' -> '...6100b...')."""
+    ('6100b'); and if a spelled-out number word leads ('six5060'), the digit
+    form ('65060'). Any may appear in the joined sentence."""
     s = re.sub(r"[^a-z0-9]", "", tok.lower())
     forms = {s}
     if len(s) >= 2 and s[0].isalpha() and s[1].isdigit():
         forms.add(s[1:])
+    m = re.match(r"([a-z]+)(\d.*)$", s)
+    if m and m.group(1) in _NUM_WORDS:
+        forms.add(_NUM_WORDS[m.group(1)] + m.group(2))
     return {f for f in forms if len(f) >= 2}
 
 
