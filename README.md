@@ -261,5 +261,4 @@ speech, Austrian economics, TED transcripts). Next:
    sentence and report "inconsistent under *every* reading" versus "under reading
    2 of 3." A strictly stronger claim than committing to one interpretation.
 
-Version history lives in [CHANGELOG.md](CHANGELOG.md). Deeper design notes,
-measured failure analyses, and open problems are in [HANDOFF.md](HANDOFF.md).
+Version history lives in [CHANGELOG.md](CHANGELOG.md).

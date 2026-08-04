@@ -23,11 +23,11 @@ Documentation and environment only — no behavior change, no source edits.
 2. **`docs/assets/`** now holds the rendered theory-tree graph (PNG + SVG) used by
    the README, taken from a real prerequisite-cycle run. Committed because
    `results/` is gitignored and GitHub cannot render an image it does not have.
-3. **`HANDOFF.md`** added for context transfer between working sessions:
-   architecture tour, the reasoning behind design decisions that look surprising
-   from the outside, measured failure analyses, method lessons (notably: verify a
-   causal claim with a controlled experiment before acting on it), traps that
-   look like bugs but are not, and the open work before the next milestone.
+3. **Working notes kept out of the repository.** A detailed internal handoff
+   document (architecture tour, measured failure analyses, traps that look like
+   bugs but are not, open work) is maintained locally and gitignored. It is
+   development scaffolding, not something a reader of this project needs, so it
+   does not belong in the published tree.
 4. **Environment re-verified on a rebuilt virtualenv.** `requirements.txt`
    specifies lower bounds only, so a fresh install now resolves to major versions
    beyond those the project was developed against — z3 4.x → **5.0.0.0**,
