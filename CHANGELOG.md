@@ -37,6 +37,14 @@ Documentation and environment only — no behavior change, no source edits.
    bumps are confirmed benign rather than merely assumed. The verified set is now
    recorded as a comment in `requirements.txt` so a future breaking bump can be
    isolated by pinning to it.
+5. **`requirements.txt` now bounded on both sides.** Minor and patch updates still
+   flow in; the next major does not. Without a ceiling the drift above happens
+   silently on any fresh clone, and a different *solver* major is not a cosmetic
+   difference for a tool whose output is a proof. The ceilings make such a jump a
+   deliberate, reviewed act instead of something a clone inherits by accident.
+   Verified: the bounds resolve to exactly the tested set and the suite stays
+   green. The file documents how to raise a ceiling (bump, reinstall, run the
+   suite plus one offline pipeline run, record the new verified set).
 
 ---
 

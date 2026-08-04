@@ -1,14 +1,22 @@
-# Lower bounds only, so a fresh install tracks upstream. Because of that, a
-# clone today resolves to MAJOR versions past the ones this project was built
-# on (z3 4.x, openai 1.x, pytest 8.x). Last verified working set, Python 3.12.13:
+# Bounded on both sides: minor and patch updates flow in, the next MAJOR does not.
 #
+# Rationale: these are unpinned-by-default upstreams that ship breaking majors.
+# Without a ceiling, a fresh clone silently resolved three majors past what the
+# project was developed against (z3 4.x -> 5.x, openai 1.x -> 2.x, pytest 8 -> 9).
+# A different SOLVER major is not a cosmetic difference for a tool whose output
+# is a proof, so the ceiling makes such a jump a deliberate, reviewed act rather
+# than something a clone inherits by accident.
+#
+# Last verified working set, Python 3.12.13 (255 tests green, offline pipeline
+# reproduces the expected result):
 #   z3-solver 5.0.0.0   pydantic 2.13.4   openai 2.53.0
 #   python-dotenv 1.2.2 pytest 9.1.1
 #
-# If a future major bump breaks the build, pin to the set above to isolate it.
+# Raising a ceiling: bump it, reinstall, run `python -m pytest -q` plus one
+# offline pipeline run, then record the new verified set above.
 
-z3-solver>=4.12
-pydantic>=2.5
-openai>=1.30
-python-dotenv>=1.0
-pytest>=8.0
+z3-solver>=4.12,<6
+pydantic>=2.5,<3
+openai>=1.30,<3
+python-dotenv>=1.0,<2
+pytest>=8.0,<10
