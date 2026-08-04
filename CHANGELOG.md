@@ -5,6 +5,41 @@ For what the project *is* and how to run it, see [README.md](README.md).
 
 ---
 
+## Unreleased
+
+Documentation and environment only — no behavior change, no source edits.
+
+1. **README rewritten as a project description.** It had become a changelog under
+   a README's filename: eight consecutive "What's new in v0.X" sections occupied
+   the first 370 of 592 lines, so the first thing a visitor read was a bullet
+   about layered entailment rather than a sentence explaining what the tool does.
+   It was also stale — headed v0.8 while the code was v0.8.8. The new README
+   leads with the problem being solved, shows two real worked examples (a direct
+   three-statement contradiction, and a multi-hop prerequisite cycle that no
+   single sentence states), a mermaid architecture diagram that visually
+   separates the LLM stages from the deterministic ones, install/quickstart that
+   foregrounds offline mode, and an explicit account of what the tool refuses and
+   why. Version history moved here, verbatim, losing nothing.
+2. **`docs/assets/`** now holds the rendered theory-tree graph (PNG + SVG) used by
+   the README, taken from a real prerequisite-cycle run. Committed because
+   `results/` is gitignored and GitHub cannot render an image it does not have.
+3. **`HANDOFF.md`** added for context transfer between working sessions:
+   architecture tour, the reasoning behind design decisions that look surprising
+   from the outside, measured failure analyses, method lessons (notably: verify a
+   causal claim with a controlled experiment before acting on it), traps that
+   look like bugs but are not, and the open work before the next milestone.
+4. **Environment re-verified on a rebuilt virtualenv.** `requirements.txt`
+   specifies lower bounds only, so a fresh install now resolves to major versions
+   beyond those the project was developed against — z3 4.x → **5.0.0.0**,
+   openai 1.x → **2.53.0**, pytest 8.x → **9.1.1** (also pydantic 2.13.4,
+   python-dotenv 1.2.2, on Python 3.12.13). The full suite passes unchanged at
+   255 tests, and the offline pipeline reproduces the expected result, so these
+   bumps are confirmed benign rather than merely assumed. The verified set is now
+   recorded as a comment in `requirements.txt` so a future breaking bump can be
+   isolated by pinning to it.
+
+---
+
 ## v0.8.8
 
 Relational false-negative fixes found by a live tier-3 campaign, plus

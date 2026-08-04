@@ -1,3 +1,12 @@
+# Lower bounds only, so a fresh install tracks upstream. Because of that, a
+# clone today resolves to MAJOR versions past the ones this project was built
+# on (z3 4.x, openai 1.x, pytest 8.x). Last verified working set, Python 3.12.13:
+#
+#   z3-solver 5.0.0.0   pydantic 2.13.4   openai 2.53.0
+#   python-dotenv 1.2.2 pytest 9.1.1
+#
+# If a future major bump breaks the build, pin to the set above to isolate it.
+
 z3-solver>=4.12
 pydantic>=2.5
 openai>=1.30
