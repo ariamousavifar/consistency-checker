@@ -118,8 +118,9 @@ flowchart TD
     A[raw text] --> B[cleaning<br/><i>deterministic — paragraphs, offsets</i>]
     B --> C[extraction<br/><b>LLM</b> — which sentences claim what, self-contained]
     C --> D[translation<br/><b>LLM</b> — claim → first-order logic]
+    C --> R[rule translator<br/><i>deterministic fragment</i>]
     D --> E{translation gate}
-    R[rule translator<br/><i>deterministic fragment</i>] --> E
+    R --> E
     E -->|Z3-proved equivalent<br/>or fidelity-checked| F[vocabulary<br/><i>symbol alignment</i>]
     E -->|ambiguous / out of fragment| Q[quarantined<br/><i>with a written reason</i>]
     F --> G[solver — <b>Z3</b><br/><i>consistency, entailment, minimal cores, reductio</i>]
