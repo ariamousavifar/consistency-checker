@@ -1,6 +1,7 @@
 # Internal-Inconsistency Checker
 
-**Finds logical contradictions inside a single document — and shows you the reasoning that produced them.**
+**Finds logical contradictions in a document by translating its claims into formal
+logic and proving inconsistency — including conflicts that span several statements.**
 
 Give it a text file. It extracts every claim, translates each into first-order
 logic, and hands the result to the Z3 theorem prover. What comes back is not a
