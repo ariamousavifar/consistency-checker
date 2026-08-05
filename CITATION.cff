@@ -1,0 +1,42 @@
+cff-version: 1.2.0
+title: >-
+  Internal-Inconsistency Checker: detecting multi-hop logical
+  contradictions in documents via first-order logic and SMT solving
+message: >-
+  If you use this software or its ideas in academic work, please cite it
+  using the metadata below.
+type: software
+authors:
+  - given-names: Aria
+    family-names: Mousavifar
+    email: ariamousavifar@gmail.com
+    affiliation: University of Genoa
+    # orcid: 'https://orcid.org/0000-0000-0000-0000'   # add if you have one
+repository-code: 'https://github.com/ariamousavifar/consistency-checker'
+abstract: >-
+  A pipeline that detects logical inconsistencies within a single document
+  by extracting its claims, translating each into first-order logic, and
+  discharging every logical judgement to the Z3 SMT solver. Unlike
+  sentence-pair entailment approaches, it finds contradictions that no two
+  sentences exhibit in isolation and that emerge only across a chain of
+  inference. Where statements are mutually unsatisfiable it reports a
+  minimal conflicting set together with a constructive derivation of the
+  contradiction; where they are consistent it reconstructs the author's
+  argument as a layered theory tree. A hybrid translation gate pairs a
+  deterministic rule translator with a language model and admits a formula
+  only when the two are proved equivalent or one passes a fidelity check,
+  so no unverified translation reaches the solver. Content outside the
+  supported logical fragment is quarantined with a recorded reason rather
+  than silently discarded.
+keywords:
+  - natural language processing
+  - first-order logic
+  - automated reasoning
+  - satisfiability modulo theories
+  - semantic parsing
+  - consistency checking
+  - argument mining
+  - large language models
+license: MIT   # TODO: confirm — see README; check University of Genoa IP policy
+version: 0.8.8
+date-released: '2026-07-03'

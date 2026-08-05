@@ -187,6 +187,73 @@ plain text only.
 
 ---
 
+## Research context
+
+**The problem.** Detecting whether a document contradicts *itself* is not the same
+problem as recognising textual entailment. A contradiction can be distributed
+across a chain of statements such that no pair of sentences is inconsistent —
+the five-sentence example at the top of this README is the minimal case.
+Pairwise entailment models cannot reach these by construction, because the
+conflict does not exist in any pair; it only appears after inference over the
+whole set.
+
+**The approach and what is claimed.** Claims are extracted and translated into
+first-order logic, and every logical judgement is discharged to an SMT solver
+(Z3). The language model performs only linguistic work — identifying claims and
+proposing formulas — while consistency, entailment, and minimality are decided
+symbolically. Four properties follow from that separation:
+
+1. **Verdicts are proofs, not predictions.** An inconsistency is reported only
+   when a set is provably unsatisfiable, and what is returned is the *minimal*
+   such set, obtained by deletion-based core shrinking.
+2. **Explanations are constructive.** Because an inconsistent set entails
+   everything, a solver cannot show *how* a contradiction arises. A separate
+   forward-chaining step re-derives the two colliding chains, so the output is a
+   derivation rather than a flag.
+3. **Translation is not trusted on the model's word.** Two independent
+   translators — one deterministic, one neural — must either be proved
+   equivalent in Z3 or survive a fidelity check before a formula is admitted.
+4. **Refusal is explicit.** Content outside the supported fragment is
+   quarantined with a stated reason, which makes the system's coverage
+   measurable rather than implicit.
+
+**Decidability.** The base fragment is monadic first-order logic. Relational
+reasoning is admitted within the Bernays–Schönfinkel (EPR) class, and formulas
+that escape it — a universal with an existential in its scope linked by a
+relation — are detected and set aside rather than passed to the solver with no
+guarantee of termination.
+
+**Relation to existing work.** Deterministic semantic parsing into logical form
+has a long history: Attempto Controlled English achieves unambiguous translation
+by constraining the input language; Boxer and ccg2lambda derive logical forms
+compositionally from CCG derivations; UDepLambda does so from Universal
+Dependencies; the English Resource Grammar produces scope-underspecified
+representations via HPSG. These are exact on the fragment they cover and refuse
+outside it. Purely neural approaches invert the trade-off, covering arbitrary
+text without guarantees. This project sits deliberately between the two: neural
+breadth for translation, symbolic rigour for every decision that follows, and an
+arbitration layer between them. The measured cost of that choice is reported
+honestly — the deterministic translator currently covers only a small fraction
+of real sentences, and closing that gap is the primary line of ongoing work.
+
+**Evaluation status.** Validated to date on synthetic multi-hop chains, real
+encyclopaedic prose, chunk-spanning contradictions, and adversarial argumentative
+text. Evaluation against labelled self-contradiction corpora (ContraDoc,
+WikiContradict, and the self-contradiction data of Mündler et al.) is the next
+milestone and requires the scoring harness described in the roadmap. Note that
+recall is bounded by translation coverage rather than by the reasoning layer,
+which is the property the roadmap targets first.
+
+**Reproducibility.** The full test suite (255 tests) runs offline against shipped
+fixtures in roughly three seconds with no API access, and the pipeline itself can
+be run end-to-end in the same way, so published behaviour can be reproduced
+without credentials or cost. Runs are deterministic at fixed seed and
+temperature; where a language model is involved, the provider and model are
+recorded with the results, because identical models on different infrastructure
+have been observed to produce different formulas.
+
+---
+
 ## Reference
 
 **Fragment flags** (opt-in, each widens what reaches the solver):
@@ -262,4 +329,17 @@ speech, Austrian economics, TED transcripts). Next:
    sentence and report "inconsistent under *every* reading" versus "under reading
    2 of 3." A strictly stronger claim than committing to one interpretation.
 
-Version history lives in [CHANGELOG.md](CHANGELOG.md).
+Architecture in detail, with each component marked built / partial / planned:
+[docs/architecture.md](docs/architecture.md). Version history:
+[CHANGELOG.md](CHANGELOG.md).
+
+## Citing
+
+If you use this work academically, see [CITATION.cff](CITATION.cff) — GitHub
+renders it as a "Cite this repository" option with APA and BibTeX output.
+
+## License
+
+**Not yet chosen** — see the note in `CITATION.cff`. Until a license file is
+added, no reuse rights are granted. If you would like to build on this, please
+open an issue.
