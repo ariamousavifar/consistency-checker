@@ -1,5 +1,9 @@
 # Internal-Inconsistency Checker
 
+[![tests](https://github.com/ariamousavifar/consistency-checker/actions/workflows/tests.yml/badge.svg)](https://github.com/ariamousavifar/consistency-checker/actions/workflows/tests.yml)
+[![python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/)
+[![license](https://img.shields.io/badge/license-Apache--2.0-green)](LICENSE)
+
 **Finds logical contradictions in a document by translating its claims into formal
 logic and proving inconsistency — including conflicts that span several statements.**
 

@@ -1,0 +1,50 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # The lower bound declared in pyproject.toml, and the version the project
+        # is developed on. Running both catches accidental use of newer syntax.
+        python-version: ["3.10", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run the test suite
+        # Every test runs offline against shipped fixtures, so no API key or
+        # network access is needed and the run is deterministic.
+        run: python -m pytest
+
+      - name: Run the pipeline end to end (offline)
+        # Guards against the suite passing while the CLI itself is broken --
+        # an import error or a path regression would not otherwise surface.
+        run: |
+          python -m consistency_checker.main \
+            --file examples/sample_essay.txt --offline --out ci-out
+          grep -q "Inconsistent set {s7, s8}" ci-out/report.md \
+            || (echo "expected contradiction not found in report" && exit 1)
+
+      - name: Verify the package installs and the command is available
+        run: |
+          pip install .
+          consistency-checker --help > /dev/null
