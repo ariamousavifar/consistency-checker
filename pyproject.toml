@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "consistency-checker"
 version = "0.8.8"
-description = "Finds where a document contradicts itself — even when no two sentences conflict on their own — and shows the reasoning."
+description = "Finds logical contradictions in a document by translating its claims into formal logic and proving inconsistency — including conflicts that span several statements."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "Apache-2.0"
