@@ -9,3 +9,8 @@ __pycache__/
 
 # internal working notes — development scaffolding, not published
 HANDOFF.md
+
+# python build artifacts
+build/
+dist/
+*.egg-info/
