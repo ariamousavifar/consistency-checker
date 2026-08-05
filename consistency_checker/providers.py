@@ -16,12 +16,22 @@ import os
 import sys
 from pathlib import Path
 
-_REGISTRY_PATH = Path("providers.json")
+# Where the registry lives, in priority order:
+#   1. providers.json in the working directory -- how a clone is used, and the
+#      override point for anyone adding an endpoint without touching the package;
+#   2. the copy shipped inside the package, so an installed CLI works from any
+#      directory (a pip install has no repository root to read from).
+_LOCAL_REGISTRY = Path("providers.json")
+_BUNDLED_REGISTRY = Path(__file__).resolve().parent / "data" / "providers.json"
+
+
+def _registry_path() -> Path:
+    return _LOCAL_REGISTRY if _LOCAL_REGISTRY.exists() else _BUNDLED_REGISTRY
 
 
 def load_registry() -> dict:
     try:
-        return json.loads(_REGISTRY_PATH.read_text(encoding="utf-8"))["providers"]
+        return json.loads(_registry_path().read_text(encoding="utf-8"))["providers"]
     except Exception:
         return {}
 

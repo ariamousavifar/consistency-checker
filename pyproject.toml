@@ -48,6 +48,9 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest>=8.0,<10"]
 
+[project.scripts]
+consistency-checker = "consistency_checker.main:main"
+
 [project.urls]
 Repository = "https://github.com/ariamousavifar/consistency-checker"
 Changelog = "https://github.com/ariamousavifar/consistency-checker/blob/main/CHANGELOG.md"
@@ -55,6 +58,11 @@ Architecture = "https://github.com/ariamousavifar/consistency-checker/blob/main/
 
 [tool.setuptools]
 packages = ["consistency_checker"]
+
+[tool.setuptools.package-data]
+# providers.json ships with the package so the installed CLI can resolve
+# endpoints from any working directory.
+consistency_checker = ["data/*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

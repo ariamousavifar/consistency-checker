@@ -38,7 +38,8 @@ ROOT = Path(__file__).resolve().parent.parent
 PY = sys.executable
 RESULTS = ROOT / "results"
 EXAMPLES = json.loads((ROOT / "examples" / "examples.json").read_text())["examples"]
-PROVIDERS_CFG = json.loads((ROOT / "providers.json").read_text())["providers"]
+from consistency_checker.providers import load_registry
+PROVIDERS_CFG = load_registry()
 
 # Applied to every live run unless a test overrides (matches the giant-test commands).
 DEFAULT_ENV = {"LLM_EXTRACTION_EFFORT": "low", "LLM_TRANSLATION_EFFORT": "medium"}
