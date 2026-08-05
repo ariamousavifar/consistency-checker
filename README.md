@@ -82,11 +82,18 @@ derived, red = the contradiction where the two chains collide:
 
 ## Install & run
 
-Requires Python 3.10+ (tested on 3.12/3.13).
+Requires Python 3.10+ (tested on 3.12).
 
 ```bash
+git clone https://github.com/ariamousavifar/consistency-checker.git
+cd consistency-checker
+
+python3 -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
+
+Run commands **from the project root** — the pipeline resolves `examples/` and
+`providers.json` relative to the working directory.
 
 **Offline mode needs no API key at all** — the shipped fixtures drive the entire
 downstream pipeline, so you can see the whole thing work before configuring
