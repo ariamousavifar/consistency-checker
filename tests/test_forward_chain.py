@@ -4,7 +4,7 @@ a flat unsat core.
 """
 from dataclasses import dataclass
 
-from src.forward_chain import Lit, explain, parse_clause, render_text, serialize
+from consistency_checker.forward_chain import Lit, explain, parse_clause, render_text, serialize
 
 
 @dataclass

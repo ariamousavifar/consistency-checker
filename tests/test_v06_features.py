@@ -5,9 +5,9 @@ from __future__ import annotations
 
 import os
 
-from src.fidelity import fidelity_check
-from src.normalize import parse_statements, retype_bare_instances
-from src.schema import ExtractedStatement, StatementType
+from consistency_checker.fidelity import fidelity_check
+from consistency_checker.normalize import parse_statements, retype_bare_instances
+from consistency_checker.schema import ExtractedStatement, StatementType
 
 
 # ---------- Item 1: extraction robustness (no hard crashes) ----------
@@ -109,7 +109,7 @@ def test_adaptive_threshold_still_rejects_wrong_single_predicate():
 
 def test_provider_resolution_with_flags(monkeypatch):
     monkeypatch.setenv("NIM_API_KEY", "test_key_123")
-    from src.providers import resolve_model_config
+    from consistency_checker.providers import resolve_model_config
     cfg = resolve_model_config("nim", "qwen3.5-122b-a10b")
     assert cfg is not None
     assert cfg["base_url"] == "https://integrate.api.nvidia.com/v1"
@@ -121,14 +121,14 @@ def test_provider_resolution_with_flags(monkeypatch):
 def test_provider_resolution_missing_key_returns_none(monkeypatch):
     monkeypatch.delenv("GROQ_API_KEY", raising=False)
     monkeypatch.delenv("LLM_API_KEY", raising=False)
-    from src.providers import resolve_model_config
+    from consistency_checker.providers import resolve_model_config
     cfg = resolve_model_config("groq", "llama-3.3-70b-versatile")
     assert cfg is None  # no key -> fall back to .env
 
 
 def test_gpt_oss_not_flagged_as_thinking(monkeypatch):
     monkeypatch.setenv("NIM_API_KEY", "k")
-    from src.providers import resolve_model_config
+    from consistency_checker.providers import resolve_model_config
     cfg = resolve_model_config("nim", "openai/gpt-oss-120b")
     assert cfg["thinking"] is False
 
@@ -138,7 +138,7 @@ def test_gpt_oss_not_flagged_as_thinking(monkeypatch):
 def test_llmconfig_overrides_take_priority(monkeypatch):
     monkeypatch.setenv("LLM_BASE_URL", "https://env.example/v1")
     monkeypatch.setenv("LLM_MODEL", "env-model")
-    from src.llm_client import LLMConfig
+    from consistency_checker.llm_client import LLMConfig
     cfg = LLMConfig(overrides={"base_url": "https://nim/v1", "model": "nim-model",
                                "api_key": "k", "thinking": True})
     assert cfg.base_url == "https://nim/v1"
@@ -150,7 +150,7 @@ def test_llmconfig_falls_back_to_env(monkeypatch):
     monkeypatch.setenv("LLM_BASE_URL", "https://env.example/v1")
     monkeypatch.setenv("LLM_MODEL", "env-model")
     monkeypatch.setenv("LLM_API_KEY", "envkey")
-    from src.llm_client import LLMConfig
+    from consistency_checker.llm_client import LLMConfig
     cfg = LLMConfig()
     assert cfg.base_url == "https://env.example/v1"
     assert cfg.model == "env-model"

@@ -1,8 +1,8 @@
 """Deterministic generic-hedge guard + quarantine-shape classifier."""
-from src.gate import run_gate
-from src.linguistics import deontic_cue, hedge_cue, quarantine_shape
-from src.schema import ExtractedStatement, GateOutcome, StatementType
-from src.vocabulary import Vocabulary
+from consistency_checker.gate import run_gate
+from consistency_checker.linguistics import deontic_cue, hedge_cue, quarantine_shape
+from consistency_checker.schema import ExtractedStatement, GateOutcome, StatementType
+from consistency_checker.vocabulary import Vocabulary
 
 
 # --- hedge detection --------------------------------------------------------

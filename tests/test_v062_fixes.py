@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import os
 
-from src.llm_client import LLMClient, LLMConfig
+from consistency_checker.llm_client import LLMClient, LLMConfig
 
 
 def _client_with_fake_raw(responses):
@@ -53,7 +53,7 @@ def test_self_correction_recovers_within_retry_budget():
 
 def test_gemini_config_omits_sampling(monkeypatch):
     monkeypatch.setenv("GOOGLE_API_KEY", "k")
-    from src.providers import resolve_model_config
+    from consistency_checker.providers import resolve_model_config
     g = resolve_model_config("google", "gemini-3.5-flash")
     assert g["omit_sampling"] is True
     cfg = LLMConfig(overrides=g)
@@ -62,14 +62,14 @@ def test_gemini_config_omits_sampling(monkeypatch):
 
 def test_non_gemini_keeps_sampling(monkeypatch):
     monkeypatch.setenv("GROQ_API_KEY", "k")
-    from src.providers import resolve_model_config
+    from consistency_checker.providers import resolve_model_config
     gr = resolve_model_config("groq", "llama-3.3-70b-versatile")
     assert gr.get("omit_sampling", False) is False
 
 
 def test_gemini_model_ids_current(monkeypatch):
     monkeypatch.setenv("GOOGLE_API_KEY", "k")
-    from src.providers import load_registry
+    from consistency_checker.providers import load_registry
     models = load_registry()["google"]["models"]
     # the GA model from the docs must be present; stale 2.0/1.5 ids gone
     assert "gemini-3.5-flash" in models

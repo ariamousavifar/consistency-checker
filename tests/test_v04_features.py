@@ -5,13 +5,13 @@ from __future__ import annotations
 
 import json
 
-from src.extraction import apply_compound_splitting
-from src.lemmatizer import lemma
-from src.pipeline import run_pipeline
-from src.schema import ExtractedStatement, GateOutcome, Proposition, StatementType, Verdict
-from src.solver import verify
-from src.splitter import split_statement
-from src.vocabulary import Vocabulary
+from consistency_checker.extraction import apply_compound_splitting
+from consistency_checker.lemmatizer import lemma
+from consistency_checker.pipeline import run_pipeline
+from consistency_checker.schema import ExtractedStatement, GateOutcome, Proposition, StatementType, Verdict
+from consistency_checker.solver import verify
+from consistency_checker.splitter import split_statement
+from consistency_checker.vocabulary import Vocabulary
 
 
 def _accepted(id, type, fol):

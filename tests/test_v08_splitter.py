@@ -3,7 +3,7 @@
 The atomic copular fact must survive when the extractor leaves it glued to a
 trailing adjunct that is itself outside the FOL fragment.
 """
-from src.splitter import split_statement
+from consistency_checker.splitter import split_statement
 
 
 def test_participial_comma_adjunct_peels_off_fact():

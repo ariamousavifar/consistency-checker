@@ -11,10 +11,10 @@ The chain, phrased the hard way (modifier used inconsistently across sentences):
     Aldous is a laureate.
     Aldous is not a voter.       -> contradiction iff Fellow == FellowOfAcademy
 """
-from src.gate import run_gate
-from src.schema import ExtractedStatement, StatementType
-from src.solver import verify
-from src.vocabulary import Vocabulary
+from consistency_checker.gate import run_gate
+from consistency_checker.schema import ExtractedStatement, StatementType
+from consistency_checker.solver import verify
+from consistency_checker.vocabulary import Vocabulary
 
 
 _CHAIN = [

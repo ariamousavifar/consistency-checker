@@ -2,8 +2,8 @@
 whose FOL is identical (modulo bound-variable names). They must collapse to one
 node so the solver can't manufacture spurious 'X proved from X' derivation edges.
 """
-from src.schema import Proposition, StatementType, GateOutcome
-from src.solver import _alpha_key, mark_duplicate_fols
+from consistency_checker.schema import Proposition, StatementType, GateOutcome
+from consistency_checker.solver import _alpha_key, mark_duplicate_fols
 
 
 def _p(pid, fol, type_=StatementType.DERIVED_CLAIM, status=GateOutcome.ACCEPTED):

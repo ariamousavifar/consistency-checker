@@ -6,8 +6,8 @@ axioms' attributes every theorem directly to the axioms -- a fan. Layered
 entailment instead attributes each theorem to the compact INTERMEDIATE theorem
 that packages the axioms, yielding the chain a1,a2 -> T1 -> T2 -> T3.
 """
-from src.schema import Proposition, StatementType, GateOutcome, Verdict
-from src.solver import verify
+from consistency_checker.schema import Proposition, StatementType, GateOutcome, Verdict
+from consistency_checker.solver import verify
 
 
 def _p(pid, type_, fol):

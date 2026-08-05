@@ -16,8 +16,8 @@ Predicate reading (domain x = a society / political-ethical order):
   UniversalEthic(x)          -- x's ethic applies to every man (is universal)
   ViableEthic(x)             -- x is a viable political ethic for mankind
 """
-from src.schema import Proposition, StatementType, GateOutcome, Verdict
-from src.solver import verify
+from consistency_checker.schema import Proposition, StatementType, GateOutcome, Verdict
+from consistency_checker.solver import verify
 
 
 def _p(pid, type_, fol, text):

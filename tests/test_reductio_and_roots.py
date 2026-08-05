@@ -6,8 +6,8 @@
      a successful reductio ad absurdum (its negation is proven), reported as
      REFUTED -- never as the author contradicting himself.
 """
-from src.schema import Proposition, StatementType, GateOutcome, Verdict
-from src.solver import verify
+from consistency_checker.schema import Proposition, StatementType, GateOutcome, Verdict
+from consistency_checker.solver import verify
 
 
 def _p(pid, type_, fol):

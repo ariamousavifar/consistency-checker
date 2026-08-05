@@ -129,7 +129,7 @@ def usage(out_dir: Path) -> dict:
 def do_run(out_dir: Path, *, file: str | None = None, extra: list[str] | None = None,
            env: dict | None = None, provider: str | None = None, model: str | None = None,
            seed: int | None = None, offline: bool = False, timeout: int = 1800) -> dict:
-    """One `python -m src.main ... --out out_dir` invocation. Append-only: a dir
+    """One `python -m consistency_checker.main ... --out out_dir` invocation. Append-only: a dir
     with _done.json is returned as-is (resume). Returns parsed metrics."""
     out_dir = Path(out_dir)
     done = out_dir / "_done.json"
@@ -139,7 +139,7 @@ def do_run(out_dir: Path, *, file: str | None = None, extra: list[str] | None = 
         return info
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    cmd = [PY, "-m", "src.main", "--out", str(out_dir)]
+    cmd = [PY, "-m", "consistency_checker.main", "--out", str(out_dir)]
     if offline:
         cmd += ["--offline"]
     if file:

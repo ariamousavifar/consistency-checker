@@ -6,7 +6,7 @@ fail the lexical-coverage gate and quarantine a correct conclusion. The
 `known_preds` exemption fixes that while STILL catching a freshly-invented
 predicate the sentence never mentions (a real mistranslation).
 """
-from src.fidelity import fidelity_check
+from consistency_checker.fidelity import fidelity_check
 
 
 # The real Rothbard cases that motivated the fix.

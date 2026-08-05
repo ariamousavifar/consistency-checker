@@ -11,7 +11,7 @@ The fix matches a code-like constant by its alphanumeric signature against the
 sentence's punctuation-stripped text ('6.100B' -> '...6100b...'), while a code
 that is genuinely absent from the sentence still fails.
 """
-from src.fidelity import _code_forms, _is_code, fidelity_check
+from consistency_checker.fidelity import _code_forms, _is_code, fidelity_check
 
 
 def test_code_constants_no_underscore_pass():

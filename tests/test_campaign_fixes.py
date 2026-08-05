@@ -1,8 +1,8 @@
 """Regression tests for the fixes from the v0.9 test campaign (N1-N24)."""
-from src.schema import GateOutcome, Proposition, StatementType, Verdict
-from src.solver import verify
-from src.tree_builder import build_tree_text
-from src.vocabulary import Vocabulary, _const_key
+from consistency_checker.schema import GateOutcome, Proposition, StatementType, Verdict
+from consistency_checker.solver import verify
+from consistency_checker.tree_builder import build_tree_text
+from consistency_checker.vocabulary import Vocabulary, _const_key
 
 
 def _p(pid, fol, type_=StatementType.AXIOM):
@@ -64,7 +64,7 @@ def test_bystander_axiom_and_independent_claim_not_marked_unknown():
 # --- N4: no false pairwise INCOMPATIBLE WITH in the text tree ----------------
 
 def test_text_tree_uses_joint_not_pairwise_conflict():
-    from src.schema import RunReport, ClusterReport
+    from consistency_checker.schema import RunReport, ClusterReport
     props = [
         _p("a1", "forall x. (P(x) -> Q(x))"),
         _p("a2", "P(a)"),

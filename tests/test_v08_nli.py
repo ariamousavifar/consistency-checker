@@ -4,8 +4,8 @@ These tests use stub judges/clients only -- no network. They prove the wiring
 (parsing, caching, fallback) and that the lexical path is untouched when no judge
 is supplied, which is what keeps the rest of the suite deterministic.
 """
-from src.fidelity import fidelity_check
-from src.semantics import LLMJudge, SemanticJudge
+from consistency_checker.fidelity import fidelity_check
+from consistency_checker.semantics import LLMJudge, SemanticJudge
 
 
 class FakeClient:
@@ -90,7 +90,7 @@ def test_fidelity_unchanged_without_judge():
 
 # --- gate.py deterministic modifier-divergence (no LLM) ---------------------
 
-from src.gate import _is_modifier_variant, _modifier_only_divergence
+from consistency_checker.gate import _is_modifier_variant, _modifier_only_divergence
 
 
 def test_modifier_variant_detects_folded_modifier():
@@ -128,9 +128,9 @@ def test_modifier_divergence_resolved_without_judge():
 
 # --- gate.py judge adjudication of divergence -------------------------------
 
-from src.gate import run_gate
-from src.schema import ExtractedStatement, GateOutcome, StatementType
-from src.vocabulary import Vocabulary
+from consistency_checker.gate import run_gate
+from consistency_checker.schema import ExtractedStatement, GateOutcome, StatementType
+from consistency_checker.vocabulary import Vocabulary
 
 
 def _stmt(text):

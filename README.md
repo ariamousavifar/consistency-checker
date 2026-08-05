@@ -21,7 +21,7 @@ no two of which contradict each other, that cannot all be true together.
 ## What it looks like
 
 ```
-$ python -m src.main --file examples/t4_direct_contradiction.txt --offline
+$ python -m consistency_checker.main --file examples/t4_direct_contradiction.txt --offline
 
 id     type               gate         verdict        statement
 --------------------------------------------------------------------------------
@@ -100,8 +100,8 @@ downstream pipeline, so you can see the whole thing work before configuring
 anything:
 
 ```bash
-python -m src.main --file examples/sample_essay.txt --offline
-python -m src.main --tier 1 --offline          # a whole tier of examples
+python -m consistency_checker.main --file examples/sample_essay.txt --offline
+python -m consistency_checker.main --tier 1 --offline          # a whole tier of examples
 python -m pytest -q                            # 255 tests, ~2s, all offline
 ```
 
@@ -110,7 +110,7 @@ For your own documents you need a model. Copy your key into `.env`
 
 ```bash
 LLM_EXTRACTION_EFFORT=low LLM_TRANSLATION_EFFORT=medium \
-python -m src.main --file your_document.txt --provider groq --model openai/gpt-oss-120b --seed 7
+python -m consistency_checker.main --file your_document.txt --provider groq --model openai/gpt-oss-120b --seed 7
 ```
 
 Everything lands in `results/<run>/`: `report.md`, `report.json`, `store.json`,
@@ -296,21 +296,21 @@ text.
 ## Project layout
 
 ```
-src/pipeline.py         stage orchestration — read this first
-src/schema.py           pydantic models (statements, propositions, verdicts, reports)
-src/extraction.py       extraction judge + translator (live and fixture providers)
-src/prompts.py          live-mode prompts
-src/gate.py             hybrid translation gate (equivalence + fidelity routing)
-src/rule_translator.py  deterministic NL→FOL over a controlled fragment
-src/fidelity.py         fidelity check (heuristic; NLI swap-in point)
-src/vocabulary.py       canonical predicate/constant registry + FOL normalization
-src/fol_parser.py       FOL string → Z3, equivalence checking
-src/solver.py           clustering, consistency, entailment, minimal conflict sets
-src/forward_chain.py    constructive refutation — how a contradiction is derived
-src/normalize.py        extraction repair, instance retyping, guard normalization
-src/report.py           Markdown + JSON reports
-src/tree_builder.py     theory tree (ASCII), graph.dot / .svg / .png
-src/main.py             CLI
+consistency_checker/pipeline.py         stage orchestration — read this first
+consistency_checker/schema.py           pydantic models (statements, propositions, verdicts, reports)
+consistency_checker/extraction.py       extraction judge + translator (live and fixture providers)
+consistency_checker/prompts.py          live-mode prompts
+consistency_checker/gate.py             hybrid translation gate (equivalence + fidelity routing)
+consistency_checker/rule_translator.py  deterministic NL→FOL over a controlled fragment
+consistency_checker/fidelity.py         fidelity check (heuristic; NLI swap-in point)
+consistency_checker/vocabulary.py       canonical predicate/constant registry + FOL normalization
+consistency_checker/fol_parser.py       FOL string → Z3, equivalence checking
+consistency_checker/solver.py           clustering, consistency, entailment, minimal conflict sets
+consistency_checker/forward_chain.py    constructive refutation — how a contradiction is derived
+consistency_checker/normalize.py        extraction repair, instance retyping, guard normalization
+consistency_checker/report.py           Markdown + JSON reports
+consistency_checker/tree_builder.py     theory tree (ASCII), graph.dot / .svg / .png
+consistency_checker/main.py             CLI
 tests/                  255 offline tests
 tests/campaign.py       full pre-release test matrix (named, resumable)
 examples/               documents, fixtures, and examples.json manifest

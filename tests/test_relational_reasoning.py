@@ -10,9 +10,9 @@ a cycle in a strict order is a contradiction; a chain entails its closure;
 WITHOUT a transitivity premise nothing of the sort is inferred (the round-robin
 boundary).
 """
-from src.gate import is_epr_safe, max_arity
-from src.schema import Proposition, StatementType, GateOutcome, Verdict
-from src.solver import verify
+from consistency_checker.gate import is_epr_safe, max_arity
+from consistency_checker.schema import Proposition, StatementType, GateOutcome, Verdict
+from consistency_checker.solver import verify
 
 _TRANS = "forall x. (forall y. (forall z. ((Before(x,y) and Before(y,z)) -> Before(x,z))))"
 _IRREFLEX = "forall x. (not Before(x,x))"

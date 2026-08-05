@@ -19,11 +19,11 @@ import json
 
 import pytest
 
-from src.extraction import LiveTranslator
-from src.normalize import strip_dangling_guards
-from src.schema import ExtractedStatement, GateOutcome, Proposition, StatementType
-from src.solver import verify
-from src.vocabulary import Vocabulary, predicate_arities
+from consistency_checker.extraction import LiveTranslator
+from consistency_checker.normalize import strip_dangling_guards
+from consistency_checker.schema import ExtractedStatement, GateOutcome, Proposition, StatementType
+from consistency_checker.solver import verify
+from consistency_checker.vocabulary import Vocabulary, predicate_arities
 
 
 def _prop(pid, fol, ptype=StatementType.AXIOM, status=GateOutcome.ACCEPTED):
@@ -274,25 +274,25 @@ class TestConstantSpellingUnification:
     so the prereq cycle never closes."""
 
     def test_all_spellings_of_one_code_unify(self):
-        from src.vocabulary import _const_key
+        from consistency_checker.vocabulary import _const_key
         forms = ["c65060", "c6_5060", "six_5060", "six5060"]
         keys = {_const_key(f) for f in forms}
         assert len(keys) == 1, keys
         assert keys == {"c65060"}   # a valid, parseable identifier
 
     def test_distinct_codes_stay_distinct(self):
-        from src.vocabulary import _const_key
+        from consistency_checker.vocabulary import _const_key
         assert _const_key("six_5060") != _const_key("six_1060")   # 6.5060 vs 6.1060
         assert _const_key("c6100a") != _const_key("c65060")
 
     def test_non_code_names_untouched(self):
-        from src.vocabulary import _const_key
+        from consistency_checker.vocabulary import _const_key
         for n in ("socrates", "old_ferry", "two", "the_blue", "date_2000"):
             assert _const_key(n) == n
 
     def test_canonical_forms_are_parseable(self):
-        from src.vocabulary import _const_key
-        from src.fol_parser import parse_fol, Env
+        from consistency_checker.vocabulary import _const_key
+        from consistency_checker.fol_parser import parse_fol, Env
         for f in ("six_5060", "six5060", "c6_5060", "65060x"):
             parse_fol(f"P({_const_key(f)})", Env())   # must not raise
 
@@ -324,12 +324,12 @@ class TestFidelityNumberWordCodes:
         '6.5060' as six_5060, and the signature match failed -> a correct
         translation was quarantined and the cycle edge dropped. The number-word
         form must match."""
-        from src.fidelity import fidelity_check
+        from consistency_checker.fidelity import fidelity_check
         res = fidelity_check("Require(six_5060, six_1060)", "6.5060 requires 6.1060.")
         assert res.passed, f"coverage={res.coverage} missing={res.missing}"
 
     def test_letter_tag_form_still_matches(self):
-        from src.fidelity import fidelity_check
+        from consistency_checker.fidelity import fidelity_check
         res = fidelity_check("Require(c65060, c61060)", "6.5060 requires 6.1060.")
         assert res.passed
 

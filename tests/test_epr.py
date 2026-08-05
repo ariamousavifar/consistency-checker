@@ -2,11 +2,11 @@
 shape that leaves the decidable Bernays-Schoenfinkel class -- a relational
 forall/exists role restriction -- is set aside for description logic.
 """
-from src.gate import is_epr_safe, max_arity, run_gate
-from src.schema import ExtractedStatement, GateOutcome, StatementType, Verdict
-from src.solver import verify
-from src.vocabulary import Vocabulary
-from src.schema import Proposition
+from consistency_checker.gate import is_epr_safe, max_arity, run_gate
+from consistency_checker.schema import ExtractedStatement, GateOutcome, StatementType, Verdict
+from consistency_checker.solver import verify
+from consistency_checker.vocabulary import Vocabulary
+from consistency_checker.schema import Proposition
 
 
 def _stmt(text):

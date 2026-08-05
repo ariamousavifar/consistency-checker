@@ -3,15 +3,15 @@ from __future__ import annotations
 
 import z3
 
-from src.fidelity import fidelity_check
-from src.fol_parser import Env, check_equivalence, parse_fol
-from src.gate import run_gate
-from src.pipeline import run_pipeline
-from src.rule_translator import rule_translate
-from src.schema import ExtractedStatement, GateOutcome, StatementType, Verdict
-from src.solver import verify
-from src.verbalizer import verbalize
-from src.vocabulary import Vocabulary
+from consistency_checker.fidelity import fidelity_check
+from consistency_checker.fol_parser import Env, check_equivalence, parse_fol
+from consistency_checker.gate import run_gate
+from consistency_checker.pipeline import run_pipeline
+from consistency_checker.rule_translator import rule_translate
+from consistency_checker.schema import ExtractedStatement, GateOutcome, StatementType, Verdict
+from consistency_checker.solver import verify
+from consistency_checker.verbalizer import verbalize
+from consistency_checker.vocabulary import Vocabulary
 
 
 # ---------- FOL parser ----------
@@ -35,7 +35,7 @@ def test_parser_connectives_and_quantifiers():
 
 def test_parser_rejects_garbage():
     import pytest
-    from src.fol_parser import FOLParseError
+    from consistency_checker.fol_parser import FOLParseError
 
     for bad in ["forall x (P(x))", "P(x", "and P(a)", "Mortal"]:
         with pytest.raises(FOLParseError):
@@ -129,7 +129,7 @@ def test_gate_quarantines_non_propositional():
 
 # ---------- Solver ----------
 
-from src.schema import Proposition
+from consistency_checker.schema import Proposition
 
 
 def _accepted(id, type, fol):
@@ -228,7 +228,7 @@ def test_pipeline_offline_end_to_end(tmp_path):
 # ---------- Theory tree / graph rendering ----------
 
 def test_tree_dot_svg_outputs(tmp_path):
-    from src.tree_builder import build_dot, build_svg, build_tree_text
+    from consistency_checker.tree_builder import build_dot, build_svg, build_tree_text
 
     report = run_pipeline(
         file_path="examples/sample_essay.txt", offline=True,

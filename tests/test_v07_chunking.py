@@ -5,10 +5,10 @@ from __future__ import annotations
 import tempfile
 from pathlib import Path
 
-from src.cleaning import clean
-from src.chunking import chunk_document
-from src.chunked_extraction import extract_chunked
-from src.schema import ExtractedStatement, StatementType
+from consistency_checker.cleaning import clean
+from consistency_checker.chunking import chunk_document
+from consistency_checker.chunked_extraction import extract_chunked
+from consistency_checker.schema import ExtractedStatement, StatementType
 
 
 def _doc(n_paras, words_each=8):
@@ -105,11 +105,11 @@ def test_short_doc_takes_single_pass_no_chunk_files():
 def test_cross_chunk_contradiction_pools_into_one_solver_run():
     """The core guarantee: statements from different chunks reach ONE solver run,
     so a contradiction spanning chunks is found."""
-    from src.vocabulary import Vocabulary
-    from src.rule_translator import rule_translate
-    from src.gate import run_gate
-    from src.solver import verify
-    from src.schema import Verdict
+    from consistency_checker.vocabulary import Vocabulary
+    from consistency_checker.rule_translator import rule_translate
+    from consistency_checker.gate import run_gate
+    from consistency_checker.solver import verify
+    from consistency_checker.schema import Verdict
 
     vocab = Vocabulary()
     stmts = [
@@ -129,7 +129,7 @@ def test_cross_chunk_contradiction_pools_into_one_solver_run():
 
 def test_cerebras_uses_max_completion_tokens(monkeypatch):
     monkeypatch.setenv("CEREBRAS_API_KEY", "k")
-    from src.providers import resolve_model_config
+    from consistency_checker.providers import resolve_model_config
     c = resolve_model_config("cerebras", "gpt-oss-120b")
     assert c["max_tokens_param"] == "max_completion_tokens"
     assert c["model"] == "gpt-oss-120b"  # bare id, no prefix
@@ -137,13 +137,13 @@ def test_cerebras_uses_max_completion_tokens(monkeypatch):
 
 def test_other_providers_use_max_tokens(monkeypatch):
     monkeypatch.setenv("GROQ_API_KEY", "k")
-    from src.providers import resolve_model_config
+    from consistency_checker.providers import resolve_model_config
     g = resolve_model_config("groq", "llama-3.3-70b-versatile")
     assert g["max_tokens_param"] == "max_tokens"
 
 
 def test_empty_response_retries_original_not_correction():
-    from src.llm_client import LLMClient, LLMConfig
+    from consistency_checker.llm_client import LLMClient, LLMConfig
     cfg = LLMConfig(overrides={"base_url": "x", "api_key": "k", "model": "m"})
     client = LLMClient.__new__(LLMClient)
     client.config = cfg

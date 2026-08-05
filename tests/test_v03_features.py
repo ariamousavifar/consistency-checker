@@ -4,22 +4,22 @@ from __future__ import annotations
 
 import json
 
-from src.fidelity import fidelity_check
-from src.fol_parser import parse_fol
-from src.gate import run_gate
-from src.pipeline import run_pipeline
-from src.rule_translator import rule_translate
-from src.schema import (
+from consistency_checker.fidelity import fidelity_check
+from consistency_checker.fol_parser import parse_fol
+from consistency_checker.gate import run_gate
+from consistency_checker.pipeline import run_pipeline
+from consistency_checker.rule_translator import rule_translate
+from consistency_checker.schema import (
     ExtractedStatement,
     GateOutcome,
     Proposition,
     StatementType,
     Verdict,
 )
-from src.screener import screen
-from src.solver import verify
-from src.verbalizer import verbalize
-from src.vocabulary import Vocabulary
+from consistency_checker.screener import screen
+from consistency_checker.solver import verify
+from consistency_checker.verbalizer import verbalize
+from consistency_checker.vocabulary import Vocabulary
 
 
 def _stmt(id, type, text, decon):
@@ -120,7 +120,7 @@ def test_bridge_axioms_close_the_taxation_gap(tmp_path):
 
 
 def test_bridge_nodes_render_in_graphs(tmp_path):
-    from src.tree_builder import build_dot, build_tree_text
+    from consistency_checker.tree_builder import build_dot, build_tree_text
 
     report = run_pipeline(
         file_path="examples/taxation_essay.txt", offline=True,
@@ -242,7 +242,7 @@ def test_report_language_is_neutral(tmp_path):
 
 def test_parser_iff_entailment():
     import z3
-    from src.fol_parser import Env
+    from consistency_checker.fol_parser import Env
 
     env = Env()
     ax, _ = parse_fol("forall x. (Glowing(x) <-> Hot(x))", env)

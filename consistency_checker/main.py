@@ -1,15 +1,15 @@
 """CLI entry point.
 
 Single example, offline (no API key, shipped fixtures):
-    python -m src.main --file examples/sample_essay.txt --offline
-    python -m src.main --file examples/taxation_essay.txt --offline --bridges examples/taxation_essay.bridges.json
+    python -m consistency_checker.main --file examples/sample_essay.txt --offline
+    python -m consistency_checker.main --file examples/taxation_essay.txt --offline --bridges examples/taxation_essay.bridges.json
 
 All examples at once (one timestamped folder, one subfolder each):
-    python -m src.main --all-examples --offline
-    python -m src.main --all-examples --offline --effort 2
+    python -m consistency_checker.main --all-examples --offline
+    python -m consistency_checker.main --all-examples --offline --effort 2
 
 Live mode (needs .env with LLM_API_KEY etc.; Groq or NVIDIA NIM):
-    python -m src.main --file path/to/your.txt
+    python -m consistency_checker.main --file path/to/your.txt
 """
 from __future__ import annotations
 
@@ -219,7 +219,7 @@ def main(argv: list[str] | None = None) -> int:
     load_dotenv()
     _ENV_EPILOG = """\
 environment variables (no CLI flag; set as a PREFIX before the command,
-e.g.  LLM_EXTRACTION_EFFORT=low LLM_TRANSLATION_EFFORT=medium python -m src.main ...):
+e.g.  LLM_EXTRACTION_EFFORT=low LLM_TRANSLATION_EFFORT=medium python -m consistency_checker.main ...):
 
   per-stage reasoning effort (override the model default):
     LLM_EXTRACTION_EFFORT          effort for extraction (e.g. low -- keeps dense chunks under the token cap)

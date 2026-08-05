@@ -1,7 +1,7 @@
 """v0.6.1 tests: rate-limit parsing/detection, throttle config, new providers."""
 from __future__ import annotations
 
-from src.llm_client import LLMConfig, _is_rate_limit, _parse_retry_after
+from consistency_checker.llm_client import LLMConfig, _is_rate_limit, _parse_retry_after
 
 
 def test_parse_retry_after_numeric():
@@ -51,7 +51,7 @@ def test_config_throttle_from_env(monkeypatch):
 def test_new_providers_registered(monkeypatch):
     monkeypatch.setenv("CEREBRAS_API_KEY", "k")
     monkeypatch.setenv("GOOGLE_API_KEY", "k")
-    from src.providers import load_registry, resolve_model_config
+    from consistency_checker.providers import load_registry, resolve_model_config
     reg = load_registry()
     assert {"nim", "groq", "cerebras", "google"} <= set(reg.keys())
     c = resolve_model_config("cerebras", "llama-3.3-70b")

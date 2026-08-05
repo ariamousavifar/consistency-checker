@@ -3,10 +3,10 @@ runs. Both were silent (the tool said 'all clear' when it should have flagged a
 contradiction), so these are the most important guards in the suite."""
 from __future__ import annotations
 
-from src.fidelity import fidelity_check
-from src.schema import GateOutcome, Proposition, StatementType, Verdict
-from src.solver import verify
-from src.vocabulary import Vocabulary, pred_key
+from consistency_checker.fidelity import fidelity_check
+from consistency_checker.schema import GateOutcome, Proposition, StatementType, Verdict
+from consistency_checker.solver import verify
+from consistency_checker.vocabulary import Vocabulary, pred_key
 
 
 def _acc(id, typ, fol, vocab):

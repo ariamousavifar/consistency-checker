@@ -54,7 +54,7 @@ Changelog = "https://github.com/ariamousavifar/consistency-checker/blob/main/CHA
 Architecture = "https://github.com/ariamousavifar/consistency-checker/blob/main/docs/architecture.md"
 
 [tool.setuptools]
-packages = ["src"]
+packages = ["consistency_checker"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

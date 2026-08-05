@@ -55,7 +55,7 @@ deterministic, auditable code. Grey marks components that exist but in a reduced
 form. **The division is the central design claim: the model proposes, Z3
 disposes.** No logical verdict is ever produced by a language model.
 
-The exact runtime order is visible in `src/pipeline.py`, where every stage is
+The exact runtime order is visible in `consistency_checker/pipeline.py`, where every stage is
 timed:
 
 ```

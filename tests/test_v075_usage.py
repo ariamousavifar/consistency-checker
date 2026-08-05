@@ -5,9 +5,9 @@ from __future__ import annotations
 import tempfile
 from pathlib import Path
 
-from src.cleaning import clean
-from src.chunked_extraction import extract_chunked
-from src.schema import ExtractedStatement, StatementType
+from consistency_checker.cleaning import clean
+from consistency_checker.chunked_extraction import extract_chunked
+from consistency_checker.schema import ExtractedStatement, StatementType
 
 
 class _FakeExtractor:
@@ -59,7 +59,7 @@ def test_short_doc_reports_single_chunk():
 
 
 def test_llmclient_usage_accumulates():
-    from src.llm_client import LLMClient, LLMConfig
+    from consistency_checker.llm_client import LLMClient, LLMConfig
 
     class FakeUsage:
         prompt_tokens = 100
@@ -95,7 +95,7 @@ def test_llmclient_usage_accumulates():
 
 
 def test_runreport_has_usage_fields():
-    from src.schema import RunReport
+    from consistency_checker.schema import RunReport
     r = RunReport(source_file="x", mode="m", propositions=[], clusters=[],
                   vocabulary_predicates=[], vocabulary_constants=[])
     assert r.usage == {}

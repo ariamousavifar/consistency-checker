@@ -4,8 +4,8 @@ attempt translates -- without disturbing the statements that already succeeded.
 """
 import json
 
-from src.extraction import LiveTranslator, _parses
-from src.schema import ExtractedStatement
+from consistency_checker.extraction import LiveTranslator, _parses
+from consistency_checker.schema import ExtractedStatement
 
 
 class _Vocab:
