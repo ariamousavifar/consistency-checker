@@ -37,6 +37,6 @@ keywords:
   - consistency checking
   - argument mining
   - large language models
-license: MIT   # TODO: confirm — see README; check University of Genoa IP policy
+license: Apache-2.0
 version: 0.8.8
 date-released: '2026-07-03'

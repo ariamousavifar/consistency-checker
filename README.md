@@ -340,6 +340,9 @@ renders it as a "Cite this repository" option with APA and BibTeX output.
 
 ## License
 
-**Not yet chosen** — see the note in `CITATION.cff`. Until a license file is
-added, no reuse rights are granted. If you would like to build on this, please
-open an issue.
+Licensed under the **Apache License 2.0** — see [LICENSE](LICENSE) and
+[NOTICE](NOTICE). You may use, modify, and redistribute this work, including
+commercially, provided you retain the copyright and license notices and state
+any significant changes. The license also grants patent rights from
+contributors, which is why it is preferred here over MIT for work that may lead
+to publication.
