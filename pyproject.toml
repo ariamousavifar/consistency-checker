@@ -1,0 +1,63 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "consistency-checker"
+version = "0.8.8"
+description = "Detects multi-hop logical contradictions within a document by translating claims to first-order logic and discharging every logical judgement to the Z3 solver."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+authors = [
+    { name = "Aria Mousavifar", email = "ariamousavifar@gmail.com" },
+]
+keywords = [
+    "natural-language-processing",
+    "first-order-logic",
+    "automated-reasoning",
+    "smt-solver",
+    "z3",
+    "semantic-parsing",
+    "consistency-checking",
+    "argument-mining",
+    "large-language-models",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Text Processing :: Linguistic",
+]
+
+# Bounded on both sides -- see requirements.txt for the rationale and the last
+# verified working set.
+dependencies = [
+    "z3-solver>=4.12,<6",
+    "pydantic>=2.5,<3",
+    "openai>=1.30,<3",
+    "python-dotenv>=1.0,<2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0,<10"]
+
+[project.urls]
+Repository = "https://github.com/ariamousavifar/consistency-checker"
+Changelog = "https://github.com/ariamousavifar/consistency-checker/blob/main/CHANGELOG.md"
+Architecture = "https://github.com/ariamousavifar/consistency-checker/blob/main/docs/architecture.md"
+
+[tool.setuptools]
+packages = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# campaign.py drives live API runs and is invoked explicitly
+# (python -m tests.campaign), never collected as a unit test.
+addopts = "-q --ignore=tests/campaign.py"
