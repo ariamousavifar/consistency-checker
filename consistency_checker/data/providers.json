@@ -94,9 +94,9 @@
       ],
       "thinking_models": [],
       "reasoning_effort": {
-        "deepseek/deepseek-v4-flash-0731": "low",
-        "deepseek/deepseek-v4-flash": "low",
-        "deepseek/deepseek-v4-pro": "low",
+        "deepseek/deepseek-v4-flash-0731": "off",
+        "deepseek/deepseek-v4-flash": "off",
+        "deepseek/deepseek-v4-pro": "off",
         "openai/gpt-oss-120b": "low",
         "openai/gpt-5.6-terra": "low",
         "z-ai/glm-5.2": "low",

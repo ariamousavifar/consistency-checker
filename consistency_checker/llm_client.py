@@ -219,7 +219,21 @@ class LLMClient:
         # stays under the token budget while the stage that needs reasoning gets
         # it. Sent via extra_body so _create's fallback can strip it on reject.
         effort = reasoning_effort if reasoning_effort is not None else self.config.reasoning_effort
-        if effort:
+        if effort and str(effort).lower() in ("off", "disabled", "false"):
+            # Turn reasoning OFF entirely (OpenRouter's `reasoning.enabled`).
+            # Distinct from "none", which some endpoints accept as a value of
+            # reasoning_effort itself (Cerebras/GLM) -- hence a separate word.
+            #
+            # Why this matters beyond speed: a reasoning model's hidden tokens
+            # share the completion budget with the answer, and their count is
+            # wildly variable -- measured 1,917 to 6,215 on ONE input. When a
+            # spike plus the answer exceeds max_tokens, the answer is truncated
+            # to nothing and the caller sees an empty response. Disabling
+            # reasoning removes that failure mode at its source. Measured on
+            # deepseek-v4-flash: same output, ~392 completion tokens instead of
+            # 2,110-4,329, and 4-7s instead of 25-61s.
+            kwargs.setdefault("extra_body", {})["reasoning"] = {"enabled": False}
+        elif effort:
             kwargs.setdefault("extra_body", {})["reasoning_effort"] = effort
 
         # Rate-limit-aware retry loop with throttle + exponential backoff that
