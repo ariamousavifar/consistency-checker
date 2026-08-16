@@ -110,12 +110,16 @@ def test_adaptive_threshold_still_rejects_wrong_single_predicate():
 def test_provider_resolution_with_flags(monkeypatch):
     monkeypatch.setenv("NIM_API_KEY", "test_key_123")
     from consistency_checker.providers import resolve_model_config
-    cfg = resolve_model_config("nim", "qwen3.5-122b-a10b")
+    # The behaviour under test is suffix expansion -- a bare model name is
+    # resolved to the fully-qualified id. The model itself is incidental, so use
+    # one currently served by the endpoint; the previous choice was retired
+    # upstream and made this test fail for a reason unrelated to what it checks.
+    cfg = resolve_model_config("nim", "gemma-4-31b-it")
     assert cfg is not None
     assert cfg["base_url"] == "https://integrate.api.nvidia.com/v1"
-    assert cfg["model"] == "qwen/qwen3.5-122b-a10b"  # suffix expanded to full id
+    assert cfg["model"] == "google/gemma-4-31b-it"  # suffix expanded to full id
     assert cfg["api_key"] == "test_key_123"
-    assert cfg["thinking"] is True  # qwen is a thinking model
+    assert cfg["thinking"] is True  # gemma is configured as a thinking model
 
 
 def test_provider_resolution_missing_key_returns_none(monkeypatch):
