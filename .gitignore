@@ -14,3 +14,4 @@ HANDOFF.md
 build/
 dist/
 *.egg-info/
+PROJECT_MEMORY.md
