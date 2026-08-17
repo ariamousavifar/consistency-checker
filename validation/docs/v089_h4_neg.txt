@@ -1,0 +1,5 @@
+Notes on banking
+
+Every savings account is a deposit account. Any deposit account is also a insured account. All insured accounts are reported accounts. All reported accounts are reviewed accounts. All reviewed accounts are interest bearing. unit delta is a savings account.
+
+unit echo is not interest bearing.

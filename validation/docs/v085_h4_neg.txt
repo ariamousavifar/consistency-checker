@@ -1,0 +1,5 @@
+Notes on pharmacy
+
+Any antibiotic is also a prescription drug. Every prescription drug is a regulated substance. All regulated substances are logged items. Any logged item is also a audited stock. All audited stocks are dispensable. unit juliet is a antibiotic.
+
+unit alpha is not dispensable. Labels are printed in duplicate.

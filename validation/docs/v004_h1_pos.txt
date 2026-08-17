@@ -1,0 +1,5 @@
+Notes on library
+
+If something is a reference volume then it is a catalogued book. Every catalogued book is consultable. unit juliet is a reference volume.
+
+unit juliet is not consultable. Catalogue cards are alphabetical.

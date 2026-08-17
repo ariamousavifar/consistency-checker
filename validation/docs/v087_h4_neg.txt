@@ -1,0 +1,5 @@
+Notes on pharmacy
+
+Any antibiotic is also a prescription drug. All prescription drugs are regulated substances. If something is a regulated substance then it is a logged item. All logged items are audited stocks. Every audited stock is dispensable. unit foxtrot counts as a antibiotic.
+
+unit golf is not dispensable.

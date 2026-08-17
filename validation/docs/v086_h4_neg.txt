@@ -1,0 +1,5 @@
+Notes on employment
+
+Every apprentice is a trainee. All trainees are salaried workers. If something is a salaried worker then it is a insured employee. If something is a insured employee then it is a registered staff. Any registered staff is pension eligible. The item unit alpha is a apprentice.
+
+unit bravo is not pension eligible. Timesheets are weekly.

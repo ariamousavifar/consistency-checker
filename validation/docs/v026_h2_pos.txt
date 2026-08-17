@@ -1,0 +1,5 @@
+Notes on chemistry
+
+If something is a alkane then it is a hydrocarbon. Any hydrocarbon is also a organic compound. Any organic compound is combustible. The item unit echo is a alkane.
+
+unit echo fails to be combustible. Reagents are stored by class. Reagents are stored by class.

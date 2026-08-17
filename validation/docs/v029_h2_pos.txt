@@ -1,0 +1,5 @@
+Notes on insurance
+
+If something is a motor policy then it is a vehicle policy. Any vehicle policy is also a active policy. Every active policy is claimable. unit echo is a motor policy.
+
+unit echo is not claimable.

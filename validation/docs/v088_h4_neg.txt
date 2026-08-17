@@ -1,0 +1,5 @@
+Notes on aviation
+
+All turboprops are aircrafts. If something is a aircraft then it is a registered craft. All registered crafts are insured assets. Every insured asset is a audited item. If something is a audited item then it is flightworthy. The item unit delta is a turboprop.
+
+unit echo is not flightworthy. The tower logs every departure.

@@ -1,0 +1,5 @@
+Notes on employment
+
+If something is a apprentice then it is a trainee. Any trainee is also a salaried worker. If something is a salaried worker then it is a insured employee. Every insured employee is pension eligible. unit charlie counts as a apprentice.
+
+It is not the case that unit charlie is pension eligible. The office closes on Sundays.

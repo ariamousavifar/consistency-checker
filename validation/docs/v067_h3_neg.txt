@@ -1,0 +1,5 @@
+Notes on pharmacy
+
+If something is a antibiotic then it is a prescription drug. All prescription drugs are regulated substances. If something is a regulated substance then it is a logged item. All logged items are dispensable. unit foxtrot is a antibiotic.
+
+unit golf is not dispensable.

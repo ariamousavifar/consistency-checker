@@ -1,0 +1,5 @@
+Notes on broadcasting
+
+If something is a shortwave station then it is a licensed station. All licensed stations are regulated services. All regulated services are monitored services. Any monitored service is transmittable. unit foxtrot is a shortwave station.
+
+unit golf is not transmittable. Logs are kept for a year.

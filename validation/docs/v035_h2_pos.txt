@@ -1,0 +1,5 @@
+Notes on municipal
+
+If something is a allotment then it is a public plot. Every public plot is a registered land. If something is a registered land then it is leasable. The item unit golf is a allotment.
+
+It is not the case that unit golf is leasable.

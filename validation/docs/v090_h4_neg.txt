@@ -1,0 +1,5 @@
+Notes on insurance
+
+Every motor policy is a vehicle policy. Every vehicle policy is a active policy. All active policys are underwritten policys. Any underwritten policy is also a reinsured policy. Any reinsured policy is claimable. unit alpha is a motor policy.
+
+unit bravo is not claimable.

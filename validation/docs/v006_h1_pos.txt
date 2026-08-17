@@ -1,0 +1,5 @@
+Notes on aviation
+
+If something is a turboprop then it is a aircraft. Any aircraft is flightworthy. unit juliet counts as a turboprop.
+
+unit juliet is not flightworthy.

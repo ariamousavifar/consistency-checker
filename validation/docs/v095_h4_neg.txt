@@ -1,0 +1,5 @@
+Notes on employment
+
+Any apprentice is also a trainee. If something is a trainee then it is a salaried worker. Any salaried worker is also a insured employee. All insured employees are registered staffs. If something is a registered staff then it is pension eligible. The item unit bravo is a apprentice.
+
+unit charlie is not pension eligible. Timesheets are weekly.

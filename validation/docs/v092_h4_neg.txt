@@ -1,0 +1,5 @@
+Notes on shipping
+
+All reefer containers are sealed containers. Every sealed container is a manifested cargo. If something is a manifested cargo then it is a customs item. Any customs item is also a bonded good. All bonded goods are temperature controlled. unit delta counts as a reefer container.
+
+unit echo is not temperature controlled. The port operates two cranes. The port operates two cranes.

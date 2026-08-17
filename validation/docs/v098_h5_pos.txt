@@ -1,0 +1,5 @@
+Notes on banking
+
+All savings accounts are deposit accounts. If something is a deposit account then it is a insured account. Any insured account is also a reported account. If something is a reported account then it is a reviewed account. Every reviewed account is a flagged account. If something is a flagged account then it is interest bearing. unit india counts as a savings account.
+
+It is not the case that unit india is interest bearing. Statements are issued monthly. Statements are issued monthly.

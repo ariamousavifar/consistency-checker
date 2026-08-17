@@ -1,0 +1,5 @@
+Notes on shipping
+
+All reefer containers are sealed containers. If something is a sealed container then it is temperature controlled. unit foxtrot counts as a reefer container.
+
+It is not the case that unit foxtrot is temperature controlled. The port operates two cranes. Manifests are filed in triplicate.

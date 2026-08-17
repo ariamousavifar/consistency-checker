@@ -1,0 +1,5 @@
+Notes on shipping
+
+All reefer containers are sealed containers. If something is a sealed container then it is a manifested cargo. Every manifested cargo is temperature controlled. unit juliet is a reefer container.
+
+unit juliet is not temperature controlled. Manifests are filed in triplicate. Manifests are filed in triplicate.

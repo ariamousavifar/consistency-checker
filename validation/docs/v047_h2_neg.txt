@@ -1,0 +1,5 @@
+Notes on broadcasting
+
+Every shortwave station is a licensed station. Any licensed station is also a regulated service. If something is a regulated service then it is transmittable. The item unit hotel is a shortwave station.
+
+unit india is not transmittable. Logs are kept for a year.

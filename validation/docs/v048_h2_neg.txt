@@ -1,0 +1,5 @@
+Notes on chemistry
+
+All alkanes are hydrocarbons. If something is a hydrocarbon then it is a organic compound. Every organic compound is combustible. The item unit delta is a alkane.
+
+unit echo is not combustible. Reagents are stored by class. Reagents are stored by class.

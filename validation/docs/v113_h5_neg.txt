@@ -1,0 +1,5 @@
+Notes on chemistry
+
+Any alkane is also a hydrocarbon. Every hydrocarbon is a organic compound. If something is a organic compound then it is a catalogued reagent. If something is a catalogued reagent then it is a controlled reagent. Every controlled reagent is a inventoried chemical. All inventoried chemicals are combustible. unit foxtrot is a alkane.
+
+unit golf is not combustible. Reagents are stored by class.

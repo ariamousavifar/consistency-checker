@@ -1,0 +1,5 @@
+Notes on insurance
+
+If something is a motor policy then it is a vehicle policy. If something is a vehicle policy then it is a active policy. If something is a active policy then it is a underwritten policy. All underwritten policys are claimable. unit bravo counts as a motor policy.
+
+unit charlie is not claimable.

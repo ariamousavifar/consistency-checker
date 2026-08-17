@@ -1,0 +1,5 @@
+Notes on library
+
+If something is a reference volume then it is a catalogued book. If something is a catalogued book then it is a archived work. If something is a archived work then it is consultable. unit alpha is a reference volume.
+
+unit alpha is not consultable.

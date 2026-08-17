@@ -1,0 +1,5 @@
+Notes on broadcasting
+
+If something is a shortwave station then it is a licensed station. If something is a licensed station then it is a regulated service. If something is a regulated service then it is a monitored service. Any monitored service is also a logged service. Every logged service is transmittable. unit echo is a shortwave station.
+
+unit echo is not transmittable.

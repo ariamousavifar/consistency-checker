@@ -1,0 +1,967 @@
+{
+  "seed": 20260816,
+  "generator": "tools/make_validation_set.py",
+  "note": "Held-out validation set. Labels are known by construction, not assigned by inspection. Vocabulary domains are disjoint from examples/, which was the development set.",
+  "documents": [
+    {
+      "id": "v001_h1_pos",
+      "domain": "insurance",
+      "hops": 1,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 6,
+      "gold_minimal_set_size": 4
+    },
+    {
+      "id": "v002_h1_pos",
+      "domain": "employment",
+      "hops": 1,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 4,
+      "gold_minimal_set_size": 4
+    },
+    {
+      "id": "v003_h1_pos",
+      "domain": "shipping",
+      "hops": 1,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 4,
+      "gold_minimal_set_size": 4
+    },
+    {
+      "id": "v004_h1_pos",
+      "domain": "library",
+      "hops": 1,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 5,
+      "gold_minimal_set_size": 4
+    },
+    {
+      "id": "v005_h1_pos",
+      "domain": "municipal",
+      "hops": 1,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 5,
+      "gold_minimal_set_size": 4
+    },
+    {
+      "id": "v006_h1_pos",
+      "domain": "aviation",
+      "hops": 1,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 4,
+      "gold_minimal_set_size": 4
+    },
+    {
+      "id": "v007_h1_pos",
+      "domain": "library",
+      "hops": 1,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 5,
+      "gold_minimal_set_size": 4
+    },
+    {
+      "id": "v008_h1_pos",
+      "domain": "municipal",
+      "hops": 1,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 6,
+      "gold_minimal_set_size": 4
+    },
+    {
+      "id": "v009_h1_pos",
+      "domain": "pharmacy",
+      "hops": 1,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 4,
+      "gold_minimal_set_size": 4
+    },
+    {
+      "id": "v010_h1_pos",
+      "domain": "municipal",
+      "hops": 1,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 6,
+      "gold_minimal_set_size": 4
+    },
+    {
+      "id": "v011_h1_pos",
+      "domain": "shipping",
+      "hops": 1,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 6,
+      "gold_minimal_set_size": 4
+    },
+    {
+      "id": "v012_h1_pos",
+      "domain": "broadcasting",
+      "hops": 1,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 4,
+      "gold_minimal_set_size": 4
+    },
+    {
+      "id": "v013_h1_neg",
+      "domain": "employment",
+      "hops": 1,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 4,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v014_h1_neg",
+      "domain": "library",
+      "hops": 1,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 5,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v015_h1_neg",
+      "domain": "banking",
+      "hops": 1,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 5,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v016_h1_neg",
+      "domain": "banking",
+      "hops": 1,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 4,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v017_h1_neg",
+      "domain": "broadcasting",
+      "hops": 1,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 6,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v018_h1_neg",
+      "domain": "shipping",
+      "hops": 1,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 6,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v019_h1_neg",
+      "domain": "employment",
+      "hops": 1,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 6,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v020_h1_neg",
+      "domain": "chemistry",
+      "hops": 1,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 5,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v021_h1_neg",
+      "domain": "aviation",
+      "hops": 1,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 6,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v022_h1_neg",
+      "domain": "insurance",
+      "hops": 1,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 4,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v023_h1_neg",
+      "domain": "aviation",
+      "hops": 1,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 6,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v024_h1_neg",
+      "domain": "insurance",
+      "hops": 1,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 6,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v025_h2_pos",
+      "domain": "shipping",
+      "hops": 2,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 7,
+      "gold_minimal_set_size": 5
+    },
+    {
+      "id": "v026_h2_pos",
+      "domain": "chemistry",
+      "hops": 2,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 7,
+      "gold_minimal_set_size": 5
+    },
+    {
+      "id": "v027_h2_pos",
+      "domain": "library",
+      "hops": 2,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 6,
+      "gold_minimal_set_size": 5
+    },
+    {
+      "id": "v028_h2_pos",
+      "domain": "banking",
+      "hops": 2,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 5,
+      "gold_minimal_set_size": 5
+    },
+    {
+      "id": "v029_h2_pos",
+      "domain": "insurance",
+      "hops": 2,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 5,
+      "gold_minimal_set_size": 5
+    },
+    {
+      "id": "v030_h2_pos",
+      "domain": "aviation",
+      "hops": 2,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 7,
+      "gold_minimal_set_size": 5
+    },
+    {
+      "id": "v031_h2_pos",
+      "domain": "municipal",
+      "hops": 2,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 5,
+      "gold_minimal_set_size": 5
+    },
+    {
+      "id": "v032_h2_pos",
+      "domain": "library",
+      "hops": 2,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 5,
+      "gold_minimal_set_size": 5
+    },
+    {
+      "id": "v033_h2_pos",
+      "domain": "pharmacy",
+      "hops": 2,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 6,
+      "gold_minimal_set_size": 5
+    },
+    {
+      "id": "v034_h2_pos",
+      "domain": "chemistry",
+      "hops": 2,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 5,
+      "gold_minimal_set_size": 5
+    },
+    {
+      "id": "v035_h2_pos",
+      "domain": "municipal",
+      "hops": 2,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 5,
+      "gold_minimal_set_size": 5
+    },
+    {
+      "id": "v036_h2_pos",
+      "domain": "shipping",
+      "hops": 2,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 7,
+      "gold_minimal_set_size": 5
+    },
+    {
+      "id": "v037_h2_neg",
+      "domain": "library",
+      "hops": 2,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 5,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v038_h2_neg",
+      "domain": "municipal",
+      "hops": 2,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 6,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v039_h2_neg",
+      "domain": "chemistry",
+      "hops": 2,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 6,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v040_h2_neg",
+      "domain": "banking",
+      "hops": 2,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 5,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v041_h2_neg",
+      "domain": "aviation",
+      "hops": 2,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 7,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v042_h2_neg",
+      "domain": "library",
+      "hops": 2,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 5,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v043_h2_neg",
+      "domain": "broadcasting",
+      "hops": 2,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 5,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v044_h2_neg",
+      "domain": "employment",
+      "hops": 2,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 7,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v045_h2_neg",
+      "domain": "aviation",
+      "hops": 2,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 7,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v046_h2_neg",
+      "domain": "employment",
+      "hops": 2,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 6,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v047_h2_neg",
+      "domain": "broadcasting",
+      "hops": 2,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 6,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v048_h2_neg",
+      "domain": "chemistry",
+      "hops": 2,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 7,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v049_h3_pos",
+      "domain": "employment",
+      "hops": 3,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 8,
+      "gold_minimal_set_size": 6
+    },
+    {
+      "id": "v050_h3_pos",
+      "domain": "employment",
+      "hops": 3,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 7,
+      "gold_minimal_set_size": 6
+    },
+    {
+      "id": "v051_h3_pos",
+      "domain": "pharmacy",
+      "hops": 3,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 8,
+      "gold_minimal_set_size": 6
+    },
+    {
+      "id": "v052_h3_pos",
+      "domain": "library",
+      "hops": 3,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 7,
+      "gold_minimal_set_size": 6
+    },
+    {
+      "id": "v053_h3_pos",
+      "domain": "chemistry",
+      "hops": 3,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 6,
+      "gold_minimal_set_size": 6
+    },
+    {
+      "id": "v054_h3_pos",
+      "domain": "shipping",
+      "hops": 3,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 6,
+      "gold_minimal_set_size": 6
+    },
+    {
+      "id": "v055_h3_pos",
+      "domain": "employment",
+      "hops": 3,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 6,
+      "gold_minimal_set_size": 6
+    },
+    {
+      "id": "v056_h3_pos",
+      "domain": "employment",
+      "hops": 3,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 7,
+      "gold_minimal_set_size": 6
+    },
+    {
+      "id": "v057_h3_pos",
+      "domain": "banking",
+      "hops": 3,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 6,
+      "gold_minimal_set_size": 6
+    },
+    {
+      "id": "v058_h3_pos",
+      "domain": "insurance",
+      "hops": 3,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 8,
+      "gold_minimal_set_size": 6
+    },
+    {
+      "id": "v059_h3_pos",
+      "domain": "insurance",
+      "hops": 3,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 8,
+      "gold_minimal_set_size": 6
+    },
+    {
+      "id": "v060_h3_pos",
+      "domain": "banking",
+      "hops": 3,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 8,
+      "gold_minimal_set_size": 6
+    },
+    {
+      "id": "v061_h3_neg",
+      "domain": "insurance",
+      "hops": 3,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 7,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v062_h3_neg",
+      "domain": "municipal",
+      "hops": 3,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 8,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v063_h3_neg",
+      "domain": "insurance",
+      "hops": 3,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 6,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v064_h3_neg",
+      "domain": "municipal",
+      "hops": 3,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 6,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v065_h3_neg",
+      "domain": "shipping",
+      "hops": 3,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 6,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v066_h3_neg",
+      "domain": "banking",
+      "hops": 3,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 7,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v067_h3_neg",
+      "domain": "pharmacy",
+      "hops": 3,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 6,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v068_h3_neg",
+      "domain": "broadcasting",
+      "hops": 3,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 7,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v069_h3_neg",
+      "domain": "insurance",
+      "hops": 3,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 6,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v070_h3_neg",
+      "domain": "shipping",
+      "hops": 3,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 7,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v071_h3_neg",
+      "domain": "aviation",
+      "hops": 3,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 8,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v072_h3_neg",
+      "domain": "broadcasting",
+      "hops": 3,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 8,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v073_h4_pos",
+      "domain": "municipal",
+      "hops": 4,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 7,
+      "gold_minimal_set_size": 7
+    },
+    {
+      "id": "v074_h4_pos",
+      "domain": "broadcasting",
+      "hops": 4,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 7,
+      "gold_minimal_set_size": 7
+    },
+    {
+      "id": "v075_h4_pos",
+      "domain": "shipping",
+      "hops": 4,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 7,
+      "gold_minimal_set_size": 7
+    },
+    {
+      "id": "v076_h4_pos",
+      "domain": "library",
+      "hops": 4,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 7,
+      "gold_minimal_set_size": 7
+    },
+    {
+      "id": "v077_h4_pos",
+      "domain": "employment",
+      "hops": 4,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 7,
+      "gold_minimal_set_size": 7
+    },
+    {
+      "id": "v078_h4_pos",
+      "domain": "employment",
+      "hops": 4,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 9,
+      "gold_minimal_set_size": 7
+    },
+    {
+      "id": "v079_h4_pos",
+      "domain": "banking",
+      "hops": 4,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 9,
+      "gold_minimal_set_size": 7
+    },
+    {
+      "id": "v080_h4_pos",
+      "domain": "insurance",
+      "hops": 4,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 9,
+      "gold_minimal_set_size": 7
+    },
+    {
+      "id": "v081_h4_pos",
+      "domain": "pharmacy",
+      "hops": 4,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 7,
+      "gold_minimal_set_size": 7
+    },
+    {
+      "id": "v082_h4_pos",
+      "domain": "aviation",
+      "hops": 4,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 9,
+      "gold_minimal_set_size": 7
+    },
+    {
+      "id": "v083_h4_pos",
+      "domain": "employment",
+      "hops": 4,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 9,
+      "gold_minimal_set_size": 7
+    },
+    {
+      "id": "v084_h4_pos",
+      "domain": "aviation",
+      "hops": 4,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 8,
+      "gold_minimal_set_size": 7
+    },
+    {
+      "id": "v085_h4_neg",
+      "domain": "pharmacy",
+      "hops": 4,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 8,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v086_h4_neg",
+      "domain": "employment",
+      "hops": 4,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 8,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v087_h4_neg",
+      "domain": "pharmacy",
+      "hops": 4,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 7,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v088_h4_neg",
+      "domain": "aviation",
+      "hops": 4,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 8,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v089_h4_neg",
+      "domain": "banking",
+      "hops": 4,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 7,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v090_h4_neg",
+      "domain": "insurance",
+      "hops": 4,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 7,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v091_h4_neg",
+      "domain": "insurance",
+      "hops": 4,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 8,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v092_h4_neg",
+      "domain": "shipping",
+      "hops": 4,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 9,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v093_h4_neg",
+      "domain": "aviation",
+      "hops": 4,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 7,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v094_h4_neg",
+      "domain": "insurance",
+      "hops": 4,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 8,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v095_h4_neg",
+      "domain": "employment",
+      "hops": 4,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 8,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v096_h4_neg",
+      "domain": "employment",
+      "hops": 4,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 7,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v097_h5_pos",
+      "domain": "chemistry",
+      "hops": 5,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 8,
+      "gold_minimal_set_size": 8
+    },
+    {
+      "id": "v098_h5_pos",
+      "domain": "banking",
+      "hops": 5,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 10,
+      "gold_minimal_set_size": 8
+    },
+    {
+      "id": "v099_h5_pos",
+      "domain": "aviation",
+      "hops": 5,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 10,
+      "gold_minimal_set_size": 8
+    },
+    {
+      "id": "v100_h5_pos",
+      "domain": "library",
+      "hops": 5,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 8,
+      "gold_minimal_set_size": 8
+    },
+    {
+      "id": "v101_h5_pos",
+      "domain": "municipal",
+      "hops": 5,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 9,
+      "gold_minimal_set_size": 8
+    },
+    {
+      "id": "v102_h5_pos",
+      "domain": "municipal",
+      "hops": 5,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 9,
+      "gold_minimal_set_size": 8
+    },
+    {
+      "id": "v103_h5_pos",
+      "domain": "insurance",
+      "hops": 5,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 9,
+      "gold_minimal_set_size": 8
+    },
+    {
+      "id": "v104_h5_pos",
+      "domain": "insurance",
+      "hops": 5,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 10,
+      "gold_minimal_set_size": 8
+    },
+    {
+      "id": "v105_h5_pos",
+      "domain": "shipping",
+      "hops": 5,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 8,
+      "gold_minimal_set_size": 8
+    },
+    {
+      "id": "v106_h5_pos",
+      "domain": "library",
+      "hops": 5,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 10,
+      "gold_minimal_set_size": 8
+    },
+    {
+      "id": "v107_h5_pos",
+      "domain": "insurance",
+      "hops": 5,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 8,
+      "gold_minimal_set_size": 8
+    },
+    {
+      "id": "v108_h5_pos",
+      "domain": "pharmacy",
+      "hops": 5,
+      "expect_inconsistent": 1,
+      "gold_sentence_count": 8,
+      "gold_minimal_set_size": 8
+    },
+    {
+      "id": "v109_h5_neg",
+      "domain": "aviation",
+      "hops": 5,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 8,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v110_h5_neg",
+      "domain": "broadcasting",
+      "hops": 5,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 10,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v111_h5_neg",
+      "domain": "aviation",
+      "hops": 5,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 10,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v112_h5_neg",
+      "domain": "municipal",
+      "hops": 5,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 10,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v113_h5_neg",
+      "domain": "chemistry",
+      "hops": 5,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 9,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v114_h5_neg",
+      "domain": "banking",
+      "hops": 5,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 10,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v115_h5_neg",
+      "domain": "chemistry",
+      "hops": 5,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 9,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v116_h5_neg",
+      "domain": "municipal",
+      "hops": 5,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 9,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v117_h5_neg",
+      "domain": "pharmacy",
+      "hops": 5,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 9,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v118_h5_neg",
+      "domain": "banking",
+      "hops": 5,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 10,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v119_h5_neg",
+      "domain": "banking",
+      "hops": 5,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 10,
+      "gold_minimal_set_size": 0
+    },
+    {
+      "id": "v120_h5_neg",
+      "domain": "pharmacy",
+      "hops": 5,
+      "expect_inconsistent": 0,
+      "gold_sentence_count": 9,
+      "gold_minimal_set_size": 0
+    }
+  ]
+}

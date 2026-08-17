@@ -1,0 +1,5 @@
+Notes on library
+
+All reference volumes are catalogued books. Any catalogued book is also a archived work. All archived works are insured holdings. Any insured holding is also a restricted item. If something is a restricted item then it is a recorded asset. If something is a recorded asset then it is consultable. The item unit echo is a reference volume.
+
+unit echo fails to be consultable.

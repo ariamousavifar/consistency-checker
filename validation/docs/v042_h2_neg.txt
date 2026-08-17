@@ -1,0 +1,5 @@
+Notes on library
+
+All reference volumes are catalogued books. Any catalogued book is also a archived work. Every archived work is consultable. The item unit hotel is a reference volume.
+
+unit india is not consultable.

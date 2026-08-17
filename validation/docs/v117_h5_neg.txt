@@ -1,0 +1,5 @@
+Notes on pharmacy
+
+If something is a antibiotic then it is a prescription drug. If something is a prescription drug then it is a regulated substance. If something is a regulated substance then it is a logged item. All logged items are audited stocks. If something is a audited stock then it is a traced product. Every traced product is dispensable. unit alpha counts as a antibiotic.
+
+unit bravo is not dispensable. The pharmacy opens at eight.

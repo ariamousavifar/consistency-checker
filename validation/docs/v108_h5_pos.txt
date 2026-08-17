@@ -1,0 +1,5 @@
+Notes on pharmacy
+
+Every antibiotic is a prescription drug. Every prescription drug is a regulated substance. Every regulated substance is a logged item. If something is a logged item then it is a audited stock. All audited stocks are traced products. All traced products are dispensable. The item unit delta is a antibiotic.
+
+It is not the case that unit delta is dispensable.

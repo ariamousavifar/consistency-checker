@@ -1,0 +1,5 @@
+Notes on chemistry
+
+If something is a alkane then it is a hydrocarbon. If something is a hydrocarbon then it is a organic compound. Any organic compound is combustible. unit echo counts as a alkane.
+
+unit foxtrot is not combustible. Reagents are stored by class.

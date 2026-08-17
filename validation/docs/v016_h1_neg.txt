@@ -1,0 +1,5 @@
+Notes on banking
+
+Any savings account is also a deposit account. Any deposit account is interest bearing. unit charlie counts as a savings account.
+
+unit delta is not interest bearing.

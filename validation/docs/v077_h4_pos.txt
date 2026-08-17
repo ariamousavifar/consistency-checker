@@ -1,0 +1,5 @@
+Notes on employment
+
+Every apprentice is a trainee. Every trainee is a salaried worker. All salaried workers are insured employees. If something is a insured employee then it is a registered staff. Every registered staff is pension eligible. The item unit delta is a apprentice.
+
+unit delta fails to be pension eligible.

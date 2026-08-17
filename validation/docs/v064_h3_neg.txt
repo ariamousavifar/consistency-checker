@@ -1,0 +1,5 @@
+Notes on municipal
+
+All allotments are public plots. Any public plot is also a registered land. If something is a registered land then it is a surveyed parcel. If something is a surveyed parcel then it is leasable. unit delta is a allotment.
+
+unit echo is not leasable.

@@ -1,0 +1,5 @@
+Notes on chemistry
+
+If something is a alkane then it is a hydrocarbon. Every hydrocarbon is a organic compound. Any organic compound is also a catalogued reagent. Every catalogued reagent is a controlled reagent. Every controlled reagent is a inventoried chemical. Any inventoried chemical is combustible. The item unit alpha is a alkane.
+
+unit alpha fails to be combustible.

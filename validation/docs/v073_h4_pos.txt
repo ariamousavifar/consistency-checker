@@ -1,0 +1,5 @@
+Notes on municipal
+
+If something is a allotment then it is a public plot. Every public plot is a registered land. Every registered land is a surveyed parcel. Every surveyed parcel is a rated property. Every rated property is leasable. The item unit echo is a allotment.
+
+unit echo is not leasable.

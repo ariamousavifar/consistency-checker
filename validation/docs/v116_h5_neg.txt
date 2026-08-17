@@ -1,0 +1,5 @@
+Notes on municipal
+
+All allotments are public plots. If something is a public plot then it is a registered land. Any registered land is also a surveyed parcel. If something is a surveyed parcel then it is a rated property. All rated propertys are recorded holdings. If something is a recorded holding then it is leasable. unit juliet is a allotment.
+
+unit alpha is not leasable. The council meets on Thursdays.

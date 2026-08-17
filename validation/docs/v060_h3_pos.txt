@@ -1,0 +1,5 @@
+Notes on banking
+
+Every savings account is a deposit account. Any deposit account is also a insured account. If something is a insured account then it is a reported account. Every reported account is interest bearing. unit hotel counts as a savings account.
+
+unit hotel is not interest bearing. The branch has two counters. Statements are issued monthly.

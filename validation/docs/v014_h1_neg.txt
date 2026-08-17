@@ -1,0 +1,5 @@
+Notes on library
+
+All reference volumes are catalogued books. Every catalogued book is consultable. unit bravo counts as a reference volume.
+
+unit charlie is not consultable. Catalogue cards are alphabetical.

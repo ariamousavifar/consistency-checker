@@ -1,0 +1,5 @@
+Notes on broadcasting
+
+Any shortwave station is also a licensed station. Any licensed station is transmittable. unit foxtrot is a shortwave station.
+
+unit foxtrot fails to be transmittable.

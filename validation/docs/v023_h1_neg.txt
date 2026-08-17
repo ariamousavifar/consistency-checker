@@ -1,0 +1,5 @@
+Notes on aviation
+
+Every turboprop is a aircraft. Any aircraft is flightworthy. unit charlie counts as a turboprop.
+
+unit delta is not flightworthy. The tower logs every departure. Fuel is measured in litres.

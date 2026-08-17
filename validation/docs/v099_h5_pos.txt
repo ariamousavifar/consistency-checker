@@ -1,0 +1,5 @@
+Notes on aviation
+
+All turboprops are aircrafts. If something is a aircraft then it is a registered craft. If something is a registered craft then it is a insured asset. If something is a insured asset then it is a audited item. If something is a audited item then it is a tracked object. Every tracked object is flightworthy. unit delta counts as a turboprop.
+
+It is not the case that unit delta is flightworthy. Fuel is measured in litres. Fuel is measured in litres.

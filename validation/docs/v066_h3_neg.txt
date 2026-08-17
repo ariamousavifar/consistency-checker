@@ -1,0 +1,5 @@
+Notes on banking
+
+If something is a savings account then it is a deposit account. Any deposit account is also a insured account. Any insured account is also a reported account. All reported accounts are interest bearing. unit india is a savings account.
+
+unit juliet is not interest bearing. The branch has two counters.

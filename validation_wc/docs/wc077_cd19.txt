@@ -1,0 +1,4 @@
+CD19
+
+CD19 is expressed on all normal, mitogen-stimulated, and malignant B cells, excluding plasma cells.
+Contrary to some early doubts, human plasma cells do express CD19, as confirmed by others.

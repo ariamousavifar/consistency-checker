@@ -1,0 +1,5 @@
+Notes on library
+
+If something is a reference volume then it is a catalogued book. Any catalogued book is also a archived work. Any archived work is also a insured holding. Every insured holding is a restricted item. All restricted items are recorded assets. Every recorded asset is consultable. unit india is a reference volume.
+
+unit india is not consultable. The reading room seats forty. The reading room seats forty.

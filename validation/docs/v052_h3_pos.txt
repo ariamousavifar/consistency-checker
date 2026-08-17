@@ -1,0 +1,5 @@
+Notes on library
+
+If something is a reference volume then it is a catalogued book. Every catalogued book is a archived work. All archived works are insured holdings. If something is a insured holding then it is consultable. unit bravo counts as a reference volume.
+
+unit bravo fails to be consultable. The reading room seats forty.

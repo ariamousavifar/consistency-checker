@@ -1,0 +1,5 @@
+Notes on insurance
+
+All motor policys are vehicle policys. Any vehicle policy is also a active policy. Any active policy is also a underwritten policy. If something is a underwritten policy then it is a reinsured policy. All reinsured policys are claimable. The item unit bravo is a motor policy.
+
+unit charlie is not claimable. Adjusters work in pairs.

@@ -1,0 +1,5 @@
+Notes on aviation
+
+Every turboprop is a aircraft. If something is a aircraft then it is a registered craft. All registered crafts are insured assets. If something is a insured asset then it is flightworthy. unit echo is a turboprop.
+
+unit foxtrot is not flightworthy. The tower logs every departure. Fuel is measured in litres.

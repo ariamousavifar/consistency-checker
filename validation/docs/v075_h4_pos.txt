@@ -1,0 +1,5 @@
+Notes on shipping
+
+Every reefer container is a sealed container. Every sealed container is a manifested cargo. Any manifested cargo is also a customs item. If something is a customs item then it is a bonded good. Every bonded good is temperature controlled. unit hotel is a reefer container.
+
+unit hotel is not temperature controlled.

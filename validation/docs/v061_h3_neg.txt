@@ -1,0 +1,5 @@
+Notes on insurance
+
+If something is a motor policy then it is a vehicle policy. All vehicle policys are active policys. Any active policy is also a underwritten policy. All underwritten policys are claimable. The item unit golf is a motor policy.
+
+unit hotel is not claimable. Adjusters work in pairs.

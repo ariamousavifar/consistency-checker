@@ -1,0 +1,5 @@
+Notes on library
+
+If something is a reference volume then it is a catalogued book. Every catalogued book is a archived work. All archived works are consultable. unit foxtrot is a reference volume.
+
+unit golf is not consultable.

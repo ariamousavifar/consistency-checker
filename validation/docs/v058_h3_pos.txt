@@ -1,0 +1,5 @@
+Notes on insurance
+
+Every motor policy is a vehicle policy. If something is a vehicle policy then it is a active policy. All active policys are underwritten policys. Any underwritten policy is claimable. The item unit alpha is a motor policy.
+
+It is not the case that unit alpha is claimable. Adjusters work in pairs. Adjusters work in pairs.

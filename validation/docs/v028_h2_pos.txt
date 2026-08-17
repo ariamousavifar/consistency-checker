@@ -1,0 +1,5 @@
+Notes on banking
+
+Every savings account is a deposit account. Any deposit account is also a insured account. Any insured account is interest bearing. The item unit charlie is a savings account.
+
+It is not the case that unit charlie is interest bearing.

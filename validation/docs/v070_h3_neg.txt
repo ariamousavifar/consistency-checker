@@ -1,0 +1,5 @@
+Notes on shipping
+
+If something is a reefer container then it is a sealed container. Any sealed container is also a manifested cargo. If something is a manifested cargo then it is a customs item. If something is a customs item then it is temperature controlled. unit bravo is a reefer container.
+
+unit charlie is not temperature controlled. The port operates two cranes.

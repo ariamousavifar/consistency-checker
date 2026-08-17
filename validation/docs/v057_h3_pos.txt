@@ -1,0 +1,5 @@
+Notes on banking
+
+Any savings account is also a deposit account. All deposit accounts are insured accounts. Every insured account is a reported account. Any reported account is interest bearing. unit delta is a savings account.
+
+It is not the case that unit delta is interest bearing.

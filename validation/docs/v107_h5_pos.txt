@@ -1,0 +1,5 @@
+Notes on insurance
+
+If something is a motor policy then it is a vehicle policy. If something is a vehicle policy then it is a active policy. Any active policy is also a underwritten policy. Every underwritten policy is a reinsured policy. Every reinsured policy is a audited policy. Every audited policy is claimable. The item unit juliet is a motor policy.
+
+It is not the case that unit juliet is claimable.

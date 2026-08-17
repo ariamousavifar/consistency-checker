@@ -72,6 +72,23 @@
         "zai-glm-4.7": "none"
       }
     },
+    "cerebras_paid": {
+      "label": "Cerebras (PAID — 500 RPM / 500k TPM)",
+      "base_url": "https://api.cerebras.ai/v1",
+      "api_key_env": [
+        "CEREBRAS_PAID_API_KEY"
+      ],
+      "models": [
+        "gpt-oss-120b",
+        "zai-glm-4.7"
+      ],
+      "thinking_models": [],
+      "max_tokens_param": "max_completion_tokens",
+      "reasoning_effort": {
+        "gpt-oss-120b": "low",
+        "zai-glm-4.7": "none"
+      }
+    },
     "openrouter": {
       "label": "OpenRouter",
       "base_url": "https://openrouter.ai/api/v1",

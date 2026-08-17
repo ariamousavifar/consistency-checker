@@ -1,0 +1,5 @@
+Notes on insurance
+
+All motor policys are vehicle policys. If something is a vehicle policy then it is a active policy. Any active policy is also a underwritten policy. Any underwritten policy is also a reinsured policy. If something is a reinsured policy then it is claimable. unit juliet counts as a motor policy.
+
+unit juliet is not claimable. Adjusters work in pairs. Adjusters work in pairs.

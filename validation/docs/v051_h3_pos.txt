@@ -1,0 +1,5 @@
+Notes on pharmacy
+
+Every antibiotic is a prescription drug. All prescription drugs are regulated substances. Every regulated substance is a logged item. If something is a logged item then it is dispensable. unit charlie counts as a antibiotic.
+
+unit charlie fails to be dispensable. The pharmacy opens at eight. Labels are printed in duplicate.

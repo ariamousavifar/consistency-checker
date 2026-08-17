@@ -1,0 +1,5 @@
+Notes on municipal
+
+Any allotment is also a public plot. If something is a public plot then it is a registered land. Every registered land is leasable. The item unit bravo is a allotment.
+
+unit charlie is not leasable. Surveys use metric units.

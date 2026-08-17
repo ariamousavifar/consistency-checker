@@ -1,0 +1,5 @@
+Notes on insurance
+
+All motor policys are vehicle policys. Every vehicle policy is a active policy. If something is a active policy then it is a underwritten policy. All underwritten policys are reinsured policys. Every reinsured policy is a audited policy. All audited policys are claimable. unit hotel counts as a motor policy.
+
+unit hotel is not claimable. Premiums are billed quarterly.

@@ -1,0 +1,5 @@
+Notes on shipping
+
+If something is a reefer container then it is a sealed container. All sealed containers are temperature controlled. unit charlie counts as a reefer container.
+
+unit charlie fails to be temperature controlled.

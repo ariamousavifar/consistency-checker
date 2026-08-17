@@ -1,0 +1,5 @@
+Notes on chemistry
+
+Every alkane is a hydrocarbon. Every hydrocarbon is combustible. The item unit hotel is a alkane.
+
+unit india is not combustible. Reagents are stored by class.

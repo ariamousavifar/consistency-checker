@@ -1,0 +1,5 @@
+Notes on insurance
+
+Every motor policy is a vehicle policy. Every vehicle policy is a active policy. Every active policy is a underwritten policy. Any underwritten policy is also a reinsured policy. Every reinsured policy is claimable. unit charlie is a motor policy.
+
+unit delta is not claimable. Adjusters work in pairs.

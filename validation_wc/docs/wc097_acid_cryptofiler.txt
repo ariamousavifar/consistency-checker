@@ -1,0 +1,3 @@
+Acid Cryptofiler
+
+Acid Cryptofiler is a cryptographic software program designed by the department for "control of information" (Centre d'Electronique de l'Armement) of the French General Directorate of Armament (Direction générale de l'armement). It is an online storage service. The software is now manufactured by ACID Technologies (France).

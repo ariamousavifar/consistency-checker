@@ -1,0 +1,5 @@
+Notes on aviation
+
+If something is a turboprop then it is a aircraft. All aircrafts are registered crafts. If something is a registered craft then it is flightworthy. unit charlie is a turboprop.
+
+unit delta is not flightworthy. Fuel is measured in litres. The tower logs every departure.

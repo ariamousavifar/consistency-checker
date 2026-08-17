@@ -1,0 +1,5 @@
+Notes on shipping
+
+If something is a reefer container then it is a sealed container. If something is a sealed container then it is a manifested cargo. If something is a manifested cargo then it is a customs item. Every customs item is temperature controlled. The item unit india is a reefer container.
+
+unit juliet is not temperature controlled.

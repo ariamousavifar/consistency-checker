@@ -1,0 +1,5 @@
+Notes on shipping
+
+If something is a reefer container then it is a sealed container. All sealed containers are manifested cargos. Any manifested cargo is also a customs item. All customs items are bonded goods. If something is a bonded good then it is a scanned unit. Any scanned unit is temperature controlled. The item unit bravo is a reefer container.
+
+It is not the case that unit bravo is temperature controlled.

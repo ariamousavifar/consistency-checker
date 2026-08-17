@@ -1,0 +1,5 @@
+Notes on banking
+
+All savings accounts are deposit accounts. All deposit accounts are insured accounts. Every insured account is a reported account. If something is a reported account then it is a reviewed account. Every reviewed account is a flagged account. If something is a flagged account then it is interest bearing. unit echo is a savings account.
+
+unit foxtrot is not interest bearing. Statements are issued monthly. The branch has two counters.

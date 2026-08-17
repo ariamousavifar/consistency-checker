@@ -1,0 +1,5 @@
+Notes on banking
+
+All savings accounts are deposit accounts. If something is a deposit account then it is a insured account. All insured accounts are interest bearing. unit juliet is a savings account.
+
+unit alpha is not interest bearing.

@@ -1,0 +1,5 @@
+Notes on shipping
+
+Any reefer container is also a sealed container. All sealed containers are manifested cargos. If something is a manifested cargo then it is temperature controlled. unit delta counts as a reefer container.
+
+unit delta fails to be temperature controlled. The port operates two cranes. Manifests are filed in triplicate.

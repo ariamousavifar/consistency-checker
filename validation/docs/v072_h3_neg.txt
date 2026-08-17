@@ -1,0 +1,5 @@
+Notes on broadcasting
+
+All shortwave stations are licensed stations. All licensed stations are regulated services. All regulated services are monitored services. Any monitored service is transmittable. The item unit alpha is a shortwave station.
+
+unit bravo is not transmittable. Logs are kept for a year. Logs are kept for a year.

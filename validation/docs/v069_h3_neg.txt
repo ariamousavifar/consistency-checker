@@ -1,0 +1,5 @@
+Notes on insurance
+
+All motor policys are vehicle policys. If something is a vehicle policy then it is a active policy. Every active policy is a underwritten policy. Every underwritten policy is claimable. The item unit alpha is a motor policy.
+
+unit bravo is not claimable.

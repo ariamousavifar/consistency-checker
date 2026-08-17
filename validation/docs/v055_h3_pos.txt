@@ -1,0 +1,5 @@
+Notes on employment
+
+All apprentices are trainees. All trainees are salaried workers. All salaried workers are insured employees. If something is a insured employee then it is pension eligible. unit alpha counts as a apprentice.
+
+unit alpha is not pension eligible.

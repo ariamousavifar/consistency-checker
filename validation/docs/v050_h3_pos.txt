@@ -1,0 +1,5 @@
+Notes on employment
+
+If something is a apprentice then it is a trainee. Any trainee is also a salaried worker. Any salaried worker is also a insured employee. Every insured employee is pension eligible. The item unit delta is a apprentice.
+
+It is not the case that unit delta is pension eligible. The office closes on Sundays.

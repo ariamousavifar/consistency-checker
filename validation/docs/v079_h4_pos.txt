@@ -1,0 +1,5 @@
+Notes on banking
+
+Every savings account is a deposit account. Any deposit account is also a insured account. Every insured account is a reported account. Every reported account is a reviewed account. Any reviewed account is interest bearing. The item unit india is a savings account.
+
+It is not the case that unit india is interest bearing. The branch has two counters. Statements are issued monthly.

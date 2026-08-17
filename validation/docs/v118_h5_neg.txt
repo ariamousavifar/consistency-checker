@@ -1,0 +1,5 @@
+Notes on banking
+
+If something is a savings account then it is a deposit account. Every deposit account is a insured account. Any insured account is also a reported account. If something is a reported account then it is a reviewed account. Every reviewed account is a flagged account. Every flagged account is interest bearing. unit bravo counts as a savings account.
+
+unit charlie is not interest bearing. Statements are issued monthly. The branch has two counters.

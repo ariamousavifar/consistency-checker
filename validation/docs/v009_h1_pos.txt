@@ -1,0 +1,5 @@
+Notes on pharmacy
+
+All antibiotics are prescription drugs. If something is a prescription drug then it is dispensable. The item unit alpha is a antibiotic.
+
+unit alpha is not dispensable.

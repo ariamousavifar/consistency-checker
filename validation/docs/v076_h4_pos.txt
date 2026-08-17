@@ -1,0 +1,5 @@
+Notes on library
+
+All reference volumes are catalogued books. Every catalogued book is a archived work. Any archived work is also a insured holding. Any insured holding is also a restricted item. If something is a restricted item then it is consultable. The item unit india is a reference volume.
+
+unit india is not consultable.

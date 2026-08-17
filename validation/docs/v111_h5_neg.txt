@@ -1,0 +1,5 @@
+Notes on aviation
+
+If something is a turboprop then it is a aircraft. Every aircraft is a registered craft. Any registered craft is also a insured asset. If something is a insured asset then it is a audited item. Every audited item is a tracked object. Any tracked object is flightworthy. unit alpha is a turboprop.
+
+unit bravo is not flightworthy. Fuel is measured in litres. The tower logs every departure.
