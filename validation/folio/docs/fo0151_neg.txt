@@ -1,0 +1,9 @@
+Statement
+
+New Vessel Press is a publishing house specializing in translating foreign literature into English.
+All of New Vessel Press's published books are in English.
+Neapolitan Chronicles is a book published by New Vessel Press.
+Neapolitan Chronicles was translated from Italian.
+Palace of Flies is a book published by New Vessel Press.
+
+It is not the case that harry Potter was published by New Vessel Press.

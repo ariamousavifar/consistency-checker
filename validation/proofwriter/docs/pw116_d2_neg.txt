@@ -1,0 +1,5 @@
+Report
+
+Bob is big. Bob is furry. Bob is nice. Bob is rough. Bob is white. Charlie is furry. Charlie is nice. Charlie is quiet. Charlie is red. Charlie is white. Dave is furry. Dave is white. Gary is big. Gary is nice. Gary is quiet. Gary is red. Red people are quiet. All red, nice people are rough. Red people are nice. Red, nice people are white. All big, nice people are red. All rough, big people are furry.
+
+Dave is quiet.

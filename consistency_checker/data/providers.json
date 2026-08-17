@@ -80,13 +80,15 @@
       ],
       "models": [
         "gpt-oss-120b",
-        "zai-glm-4.7"
+        "zai-glm-4.7",
+        "gemma-4-31b"
       ],
       "thinking_models": [],
       "max_tokens_param": "max_completion_tokens",
       "reasoning_effort": {
         "gpt-oss-120b": "low",
-        "zai-glm-4.7": "none"
+        "zai-glm-4.7": "none",
+        "gemma-4-31b": "low"
       }
     },
     "openrouter": {
@@ -97,6 +99,8 @@
         "OPENROUTER_API_KEY"
       ],
       "models": [
+        "qwen/qwen3.8-27b",
+        "qwen/qwen3.7-flash",
         "deepseek/deepseek-v4-flash-0731",
         "deepseek/deepseek-v4-flash",
         "deepseek/deepseek-v4-pro",
@@ -123,7 +127,9 @@
         "openai/gpt-5.6-terra": "off",
         "google/gemini-3.6-flash": "low",
         "qwen/qwen3.8-max": "low",
-        "openai/gpt-oss-120b": "low"
+        "openai/gpt-oss-120b": "low",
+        "qwen/qwen3.8-27b": "off",
+        "qwen/qwen3.7-flash": "off"
       }
     },
     "google": {
@@ -141,7 +147,9 @@
         "gemini-3.5-flash-lite",
         "gemini-3.1-flash-lite",
         "gemini-3.1-pro-preview",
-        "gemini-2.5-flash"
+        "gemini-2.5-flash",
+        "gemma-4-31b-it",
+        "gemma-4-26b-a4b-it"
       ],
       "thinking_models": [],
       "omit_sampling": true

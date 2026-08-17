@@ -1,0 +1,5 @@
+Report
+
+The cat sees the squirrel. The cat visits the lion. The lion is round. The lion likes the squirrel. The lion sees the cat. The lion visits the rabbit. The lion visits the squirrel. The rabbit is big. The rabbit is green. The rabbit sees the cat. The rabbit sees the lion. The rabbit visits the lion. The squirrel likes the rabbit. The squirrel sees the cat. The squirrel visits the lion. If something likes the cat then it visits the rabbit. If something likes the squirrel then the squirrel likes the cat. If the squirrel visits the rabbit then the squirrel sees the rabbit. If something is green and it likes the lion then it is red. If something likes the squirrel and the squirrel sees the cat then the squirrel is kind. If the lion visits the rabbit and the lion likes the squirrel then the lion is big.
+
+The rabbit does not visit the rabbit.

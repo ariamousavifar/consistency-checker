@@ -1,0 +1,5 @@
+Report
+
+Anne is green. Bob is smart. Charlie is white. Dave is rough. All smart people are not white. If someone is red and green then they are white.
+
+Anne is not white.

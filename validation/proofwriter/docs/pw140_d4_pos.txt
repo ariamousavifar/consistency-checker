@@ -1,0 +1,5 @@
+Report
+
+The bear chases the cow. The bear eats the squirrel. The bear is cold. The bear visits the mouse. The bear visits the squirrel. The cow eats the mouse. The cow is cold. The cow visits the bear. The cow visits the squirrel. The mouse chases the cow. The squirrel eats the bear. If something eats the cow then the cow chases the squirrel. If something eats the squirrel and the squirrel eats the mouse then the mouse chases the cow. If something eats the mouse then it visits the cow. If something eats the mouse then it chases the bear. If something visits the bear and it visits the mouse then the bear is blue. If something eats the bear then the bear is cold. If something is blue and it eats the squirrel then it eats the cow. If the mouse chases the cow and the cow chases the squirrel then the mouse visits the bear. If something chases the bear then the bear is blue.
+
+The cow does not chase the squirrel.

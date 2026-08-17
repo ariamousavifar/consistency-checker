@@ -1,0 +1,9 @@
+Statement
+
+There are four seasons in a year: Spring, Summer, Fall, and Winter.
+All students who want to have a long vacation have summer as their favorite season.
+Emma's favorite season is summer.
+Mia's favorite season is not the same as Emma's. 
+James wants to have a long vacation.
+
+It is not the case that mia's favorite season is spring.

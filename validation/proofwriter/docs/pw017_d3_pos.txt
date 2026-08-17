@@ -1,0 +1,5 @@
+Report
+
+The bear chases the squirrel. The bear is blue. The bear is not kind. The bear is young. The bear sees the squirrel. The squirrel chases the bear. The squirrel visits the bear. If someone is young and they visit the squirrel then the squirrel sees the bear. If someone visits the bear and they are blue then the bear visits the squirrel. If someone chases the squirrel then they visit the bear. If someone sees the bear and the bear is round then they visit the bear. If the squirrel is blue and the squirrel sees the bear then the squirrel visits the bear. If someone visits the bear then they are round. If the bear does not visit the squirrel then the squirrel is not nice. If someone chases the bear and they do not see the bear then they do not see the squirrel.
+
+The squirrel does not see the bear.

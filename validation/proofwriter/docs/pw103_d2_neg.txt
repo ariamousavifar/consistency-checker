@@ -1,0 +1,5 @@
+Report
+
+Charlie is not white. Dave is cold. Fiona is blue. Rough, furry things are white. All cold, white things are furry. All blue things are furry. White, cold things are not red. All blue things are rough. If Fiona is furry then Fiona is cold.
+
+Dave is white.

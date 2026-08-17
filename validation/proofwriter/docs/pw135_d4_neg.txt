@@ -1,0 +1,5 @@
+Report
+
+The bald eagle is big. The bald eagle is rough. The bald eagle sees the lion. The cat chases the lion. The cat is red. The cat is rough. The cat sees the bald eagle. The cow does not eat the bald eagle. The cow is not young. The lion eats the cow. The lion is rough. If something sees the bald eagle and the bald eagle chases the cat then it is red. If something is big and rough then it chases the cat. If something chases the cow and the cow chases the cat then it is rough. If something chases the cow then it eats the bald eagle. If something chases the cat then it sees the bald eagle. If something is red then it chases the cow. If something is round and it chases the lion then it does not eat the lion. If the cow chases the lion then the lion does not chase the bald eagle.
+
+The lion chase the cow.

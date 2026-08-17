@@ -1,0 +1,5 @@
+Report
+
+The bald eagle needs the lion. The bald eagle visits the lion. The lion is not cold. The lion does not like the tiger. The lion visits the tiger. The squirrel is kind. The squirrel is young. The squirrel likes the tiger. The squirrel does not need the lion. The squirrel visits the bald eagle. The tiger is cold. The tiger visits the bald eagle. If something visits the bald eagle then it is big. If something is big then it needs the squirrel. If something visits the squirrel and it visits the lion then it needs the squirrel. If something needs the squirrel then it is green. If something is young then it needs the tiger. Green things are young. If something is big and it visits the lion then the lion needs the squirrel. If the squirrel is big and the squirrel does not like the tiger then the tiger is not big.
+
+The lion does not need the tiger.

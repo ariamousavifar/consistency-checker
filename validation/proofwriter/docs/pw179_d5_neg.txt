@@ -1,0 +1,5 @@
+Report
+
+Anne is nice. Bob is big. Bob is blue. Bob is cold. Charlie is big. Charlie is cold. Charlie is nice. Charlie is young. Fiona is furry. Fiona is young. If someone is furry and nice then they are cold. If Bob is blue and Bob is big then Bob is cold. All blue, cold people are big. If someone is nice then they are smart. All smart, big people are nice. All smart people are blue. Blue, smart people are furry. Furry, cold people are smart. Cold people are big.
+
+Fiona is not blue.

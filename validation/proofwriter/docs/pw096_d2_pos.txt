@@ -1,0 +1,5 @@
+Report
+
+Bob is big. Bob is cold. Bob is kind. Charlie is cold. Charlie is kind. Charlie is red. Charlie is white. Erin is white. Gary is red. Gary is smart. If Erin is cold and Erin is white then Erin is kind. Blue, red things are big. If something is smart then it is white. White things are smart. All red, big things are white. Smart, cold things are red. White, big things are smart. All smart, kind things are blue.
+
+Charlie is not blue.

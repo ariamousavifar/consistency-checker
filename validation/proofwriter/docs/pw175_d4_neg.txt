@@ -1,0 +1,5 @@
+Report
+
+Anne is young. Dave is furry. Gary is red. Blue people are white. If someone is young then they are blue. All blue people are young. If someone is young and furry then they are rough. If someone is red and rough then they are big. All furry people are blue. If someone is white then they are young. All white, furry people are red.
+
+Gary is blue.

@@ -1,0 +1,10 @@
+Statement
+
+Billings is a city in the state of Montana in U.S.
+The state of Montana includes the cities of Butte, Helena, and Missoula.
+White Sulphur Springs and Butte are cities in the same state in U.S.
+The city of St Pierre is not in the state of Montana.
+Any city in Butte is not in St Pierre.
+A city can only be in one state in U.S.  except for Bristol, Texarkana, Texhoma and Union City.
+
+It is not the case that montana is home to the city of Missoula.

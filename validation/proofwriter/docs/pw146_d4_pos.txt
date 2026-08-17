@@ -1,0 +1,5 @@
+Report
+
+The bald eagle chases the cat. The bald eagle is not green. The cat eats the lion. The cat is not cold. The cat is not green. The cat is red. The dog does not chase the lion. The dog is red. The lion chases the dog. The lion is not red. If someone is blue then they like the lion. If someone likes the bald eagle then they like the cat. If someone chases the dog then they eat the dog. If someone eats the dog then they like the bald eagle. If someone chases the cat then they eat the bald eagle. If someone is green and rough then they chase the lion. If someone eats the lion then they do not eat the cat. If someone likes the cat and the cat is not green then the cat is blue.
+
+The cat is not blue.

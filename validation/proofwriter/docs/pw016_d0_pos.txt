@@ -1,0 +1,5 @@
+Report
+
+Anne is big. Anne is blue. Anne is quiet. Anne is white. Bob is big. Bob is blue. Bob is cold. Bob is furry. Bob is quiet. Bob is white. Charlie is big. Charlie is quiet. Charlie is white. Dave is quiet. Dave is not white. Furry things are blue. If Anne is blue and Anne is furry then Anne is white. Furry, blue things are nice. If something is quiet and not furry then it is big. If Dave is furry and Dave is quiet then Dave is nice. If Anne is white and Anne is not blue then Anne is big.
+
+Charlie is not big.

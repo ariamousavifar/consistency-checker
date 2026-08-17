@@ -1,0 +1,5 @@
+Report
+
+Bob is big. Bob is green. Bob is red. Bob is smart. Charlie is big. Charlie is cold. Charlie is round. Charlie is smart. Gary is cold. Harry is green. Nice things are cold. Cold things are green. If Gary is round then Gary is red. If something is big and round then it is nice. Smart, red things are round. If Charlie is nice and Charlie is cold then Charlie is smart.
+
+Bob is not cold.

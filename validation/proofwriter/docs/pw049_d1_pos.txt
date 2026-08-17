@@ -1,0 +1,5 @@
+Report
+
+Dave is big. Dave is cold. Dave is quiet. Dave is round. Dave is not smart. Erin is not big. Erin is not cold. Erin is quiet. Erin is round. Erin is white. Fiona is big. Fiona is blue. Fiona is cold. Fiona is quiet. Harry is quiet. If something is white and not blue then it is cold. Big things are cold. If Harry is round and Harry is cold then Harry is not big. Cold things are not smart. If something is round and not white then it is big. If Erin is blue and Erin is round then Erin is quiet.
+
+Fiona is smart.

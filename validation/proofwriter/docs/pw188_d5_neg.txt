@@ -1,0 +1,5 @@
+Report
+
+Anne is red. Bob is big. Bob is green. Bob is red. Charlie is furry. Dave is big. Dave is blue. If something is big then it is smart. If something is blue then it is green. All furry things are big. Smart things are blue. If something is green then it is furry. Green things are smart. All green things are quiet.
+
+Anne is blue.

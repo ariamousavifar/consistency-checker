@@ -1,0 +1,5 @@
+Report
+
+The bald eagle is cold. The bald eagle is green. The bald eagle is kind. The bald eagle is red. The bald eagle is rough. Rough people are kind. If someone is green and cold then they are rough. If someone is rough and kind then they are cold. If the bald eagle is kind and the bald eagle is rough then the bald eagle is green. If the bald eagle is kind and the bald eagle is green then the bald eagle is rough. Rough, green people are kind. If someone is kind and rough then they are red. Kind people are green.
+
+The bald eagle is not green.

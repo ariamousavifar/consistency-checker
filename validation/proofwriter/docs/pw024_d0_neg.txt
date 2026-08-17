@@ -1,0 +1,5 @@
+Report
+
+Dave is green. Erin is furry. Erin is green. Fiona is kind. Fiona is rough. Fiona is round. Harry is green. Harry is kind. Harry is rough. Harry is round. All kind, green things are furry. If Dave is green then Dave is kind. If Dave is kind and Dave is furry then Dave is rough. If Fiona is rough and Fiona is round then Fiona is quiet. All kind things are quiet. Furry, quiet things are round.
+
+Erin is not blue.

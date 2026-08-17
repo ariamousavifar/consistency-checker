@@ -1,0 +1,5 @@
+Report
+
+Anne is quiet. Anne is rough. Erin is nice. Erin is rough. Erin is round. Fiona is big. Fiona is furry. Fiona is nice. Fiona is quiet. Fiona is red. Fiona is rough. Fiona is round. Harry is red. Harry is rough. All nice, big people are quiet. Quiet people are round. Rough, big people are furry. Big people are rough. If someone is furry then they are nice. If someone is rough then they are big. If Harry is round then Harry is big.
+
+Harry is not quiet.

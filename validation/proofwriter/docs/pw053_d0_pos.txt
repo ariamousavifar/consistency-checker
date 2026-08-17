@@ -1,0 +1,5 @@
+Report
+
+The bald eagle sees the mouse. The cat sees the rabbit. The mouse sees the cat. The rabbit is big. If someone sees the rabbit and the rabbit is cold then they need the rabbit. If someone needs the bald eagle then the bald eagle needs the rabbit. If someone visits the cat and they are not cold then the cat visits the bald eagle. If the cat needs the bald eagle then the cat visits the bald eagle. If someone is big and not rough then they visit the bald eagle. If the rabbit is not red and the rabbit is not rough then the rabbit visits the mouse. If someone is rough and they need the mouse then they see the cat. If the mouse is rough and the mouse does not need the cat then the cat does not need the bald eagle.
+
+The rabbit is not big.

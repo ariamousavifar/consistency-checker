@@ -1,0 +1,5 @@
+Report
+
+Bob is green. Charlie is blue. Dave is nice. Dave is red. Dave is rough. Gary is green. Gary is red. If Charlie is rough and Charlie is blue then Charlie is red. If someone is red then they are blue. All green, rough people are smart. Red, kind people are rough. All blue people are green. If someone is rough and blue then they are red. All nice, smart people are red. Smart, rough people are red.
+
+Charlie is not green.

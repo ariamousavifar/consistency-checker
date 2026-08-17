@@ -1,0 +1,8 @@
+Statement
+
+Books contain tons of knowledge.
+When a person reads a book, that person gains knowledge. 
+If a person gains knowledge, they become smarter.
+Harry read the book “Walden” by Henry Thoreau.
+
+It is not the case that walden contains knowledge.

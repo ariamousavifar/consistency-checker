@@ -1,0 +1,9 @@
+Statement
+
+Barutin Cove is a cove named after the Bulgarian settlement of Barutin.
+Barutin Cove is on the southwest coast of Snow Island.
+Snow Island, Greenwich Island, and Deception Island are located in the South Shetland Islands.
+Antarctica is located on the South Shetland Islands. 
+If place A is located in place B and place B is located in place C, then place A is located in place C.
+
+It is not the case that there is at least one cove in Antarctica named after a place in Bulgaria.

@@ -1,0 +1,5 @@
+Report
+
+Anne is green. Dave is white. Harry is young. If Anne is green then Anne is kind. If Harry is kind and Harry is young then Harry is green. If someone is kind then they are young. Young people are rough. If Dave is round then Dave is white. If Dave is rough and Dave is nice then Dave is kind.
+
+Dave is not rough.

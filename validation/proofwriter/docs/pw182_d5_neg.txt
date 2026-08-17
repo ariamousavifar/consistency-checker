@@ -1,0 +1,5 @@
+Report
+
+Anne is cold. Anne is kind. Bob is quiet. Bob is red. Dave is big. Dave is green. Fiona is big. If something is big then it is smart. Smart things are red. If something is cold and big then it is quiet. Smart things are big. Red things are kind. If something is kind and red then it is smart. All kind, quiet things are red. If something is big then it is smart.
+
+Anne is not smart.

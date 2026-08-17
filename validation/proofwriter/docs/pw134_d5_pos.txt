@@ -1,0 +1,5 @@
+Report
+
+Anne is furry. Dave is big. Dave is cold. Erin is blue. Erin is furry. Erin is not young. Harry is not nice. All young people are white. If someone is furry and nice then they are white. If Anne is nice and Anne is white then Anne is cold. All big people are blue. All furry people are big. White people are big. Blue people are nice. If Dave is big then Dave is not young. If someone is big and not blue then they are cold.
+
+Anne is not cold.

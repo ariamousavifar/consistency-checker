@@ -1,0 +1,9 @@
+Statement
+
+Machine Learning algorithms can be categorized as supervised learning, unsupervised learning, and reinforcement learning.
+Unsupervised learning algorithms do not require labeled data.
+The state-of-the-art text summarization model is trained with machine learning algorithms.
+Reinforcement learning is not used to train the state-of-the-art text summarization model.
+The Machine Learning algorithm for training text summarization models requires labeled data.
+
+It is not the case that supervised learning is used to train the state-of-the-art text summarization model.

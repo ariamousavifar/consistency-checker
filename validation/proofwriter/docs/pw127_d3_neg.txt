@@ -1,0 +1,5 @@
+Report
+
+Anne is red. Bob is rough. Gary is not rough. If Gary is not rough then Gary is kind. If something is big and not red then it is blue. All blue, rough things are white. Young things are white. If Anne is white then Anne is kind. All kind things are young.
+
+Anne is not young.

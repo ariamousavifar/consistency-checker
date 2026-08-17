@@ -1,0 +1,5 @@
+Report
+
+Anne is big. Bob is blue. Harry is round. All blue, kind things are green. All big things are round. If something is round then it is kind. If something is kind then it is cold. If Harry is green then Harry is cold. If something is cold then it is big.
+
+Bob is big.

@@ -1,0 +1,6 @@
+Statement
+
+All squares are four-sided.
+All four-sided things are shapes.
+
+It is not the case that all squares are shapes.

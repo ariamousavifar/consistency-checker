@@ -1,0 +1,6 @@
+Statement
+
+All humans are mortal.
+All Greeks are humans.
+
+It is not the case that some Greeks are mortal.

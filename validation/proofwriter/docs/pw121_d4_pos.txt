@@ -1,0 +1,5 @@
+Report
+
+The cow is not blue. The cow is green. The cow visits the mouse. The lion does not eat the mouse. The lion sees the cow. The lion visits the mouse. The mouse is blue. The mouse is red. The squirrel is red. The squirrel visits the mouse. If something eats the squirrel then the squirrel visits the cow. If the cow eats the mouse and the cow eats the squirrel then the squirrel visits the cow. If something is red and big then it eats the lion. If something visits the cow then it does not visit the squirrel. If something sees the mouse then the mouse eats the squirrel. If something sees the lion then it sees the mouse. If something is red and it visits the lion then it does not eat the cow. If something is blue then it sees the lion.
+
+The squirrel does not visit the cow.

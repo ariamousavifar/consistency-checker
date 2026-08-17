@@ -1,0 +1,10 @@
+Statement
+
+"Stranger Things" is a popular Netflix show.
+If a Netflix show is popular, Karen will binge-watch it.
+If and only if Karen binge-watches a Netflix show, she will download it.
+Karen does not download "Black Mirror."
+"Black Mirror" is a Netflix show.
+If Karen binge-watches a Netflix show, she will share it with Lisa.
+
+It is not the case that karen will share "Stranger Things" with Lisa.

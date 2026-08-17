@@ -1,0 +1,5 @@
+Report
+
+Anne is cold. Anne is quiet. Bob is green. Bob is round. Erin is furry. Erin is quiet. Fiona is furry. All furry people are quiet. If someone is furry and green then they are blue. All cold people are blue. If someone is quiet and furry then they are cold. All furry, blue people are not green. If Erin is round then Erin is not nice. If Erin is green and Erin is blue then Erin is nice. If someone is quiet and not green then they are round.
+
+Fiona is green.

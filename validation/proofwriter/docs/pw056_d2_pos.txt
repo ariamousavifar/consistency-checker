@@ -1,0 +1,5 @@
+Report
+
+The dog is cold. The dog visits the mouse. The mouse sees the dog. The mouse sees the rabbit. The mouse does not visit the dog. The rabbit is young. The rabbit sees the squirrel. The rabbit visits the dog. The rabbit visits the mouse. The rabbit visits the squirrel. The squirrel is round. The squirrel needs the dog. The squirrel does not need the rabbit. The squirrel does not see the dog. The squirrel sees the rabbit. The squirrel visits the dog. If something visits the squirrel then it sees the dog. If the squirrel visits the dog and the dog visits the mouse then the dog needs the mouse. If the rabbit is young and the rabbit is red then the rabbit does not see the dog. If something visits the dog and it sees the dog then the dog visits the squirrel. If something is rough and it sees the squirrel then it is round. If something is rough then it visits the rabbit. If something sees the dog and it visits the mouse then the mouse is not round. If the mouse sees the dog then the mouse does not visit the dog.
+
+The mouse is round.

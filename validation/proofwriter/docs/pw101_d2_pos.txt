@@ -1,0 +1,5 @@
+Report
+
+The cat is red. The cat is not rough. The cat does not like the squirrel. The cat does not see the squirrel. The dog is not young. The dog needs the cat. The mouse is round. The mouse likes the cat. The mouse needs the cat. The mouse sees the cat. The squirrel is young. The squirrel needs the mouse. If something sees the dog then it is red. If something is red and it needs the squirrel then the squirrel likes the mouse. If something is young and it sees the dog then the dog needs the mouse. If something needs the mouse then it is rough. If the cat likes the mouse then the mouse sees the squirrel. If something needs the cat and it needs the mouse then it likes the cat. If something is rough then it sees the dog. If something is rough and not red then it likes the squirrel.
+
+The squirrel does not see the dog.

@@ -1,0 +1,11 @@
+Statement
+
+If a man is taller than another man, the taller one can block the other's shooting.
+Michael is a man who is taller than everyone else in his class.
+If person x is taller than person y, and person y is taller than person z, then x is taller than z
+Peter is a man who is taller than Michael.
+Michael can block any shooting from a person as long as the person does not jump when shooting.
+Michael cannot block Windy's shooting.
+Every shooter who can jump when shooting is a great shooter.
+
+It is not the case that windy is a great shooter.

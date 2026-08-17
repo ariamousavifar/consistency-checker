@@ -1,0 +1,5 @@
+Report
+
+Anne is cold. Anne is kind. Anne is rough. Anne is white. Fiona is green. Fiona is kind. Fiona is nice. Fiona is rough. Fiona is not white. Harry is kind. Harry is not nice. Harry is rough. All cold, furry things are white. If something is green and furry then it is white. If something is kind and not nice then it is cold. If something is cold then it is furry. If something is cold then it is kind. If something is cold and green then it is not kind. If Anne is kind and Anne is furry then Anne is white. All nice, white things are green.
+
+Anne is not green.

@@ -1,0 +1,5 @@
+Report
+
+The bald eagle eats the squirrel. The bald eagle is blue. The bald eagle does not see the squirrel. The bear eats the squirrel. The bear is big. The bear is kind. The bear needs the bald eagle. The squirrel eats the bear. The squirrel is blue. The squirrel is not red. If something is big then it sees the squirrel. If something needs the bald eagle then it needs the bear. If the bald eagle needs the squirrel and the bear does not eat the bald eagle then the bald eagle sees the bear. If the bald eagle needs the squirrel and the bald eagle is not big then the squirrel needs the bald eagle. If something needs the bear and the bear eats the squirrel then the squirrel needs the bald eagle. If the bear needs the squirrel and the squirrel is red then the squirrel is not kind. If the squirrel is blue and the squirrel eats the bald eagle then the squirrel eats the bear. If something needs the bear then the bear eats the squirrel.
+
+The bald eagle eat the bear.

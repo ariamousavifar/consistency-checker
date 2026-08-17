@@ -1,0 +1,5 @@
+Report
+
+The cat chases the squirrel. The cat is not young. The cat sees the squirrel. The squirrel chases the cat. The squirrel is young. The squirrel needs the cat. The squirrel sees the cat. If something is young and it does not see the cat then the cat chases the squirrel. If something chases the squirrel then the squirrel is not rough. If something is young and it chases the squirrel then the squirrel is blue. If something is rough and it sees the squirrel then the squirrel needs the cat. If something sees the cat then the cat is kind. If something is rough then it does not see the squirrel. If something sees the cat and the cat needs the squirrel then it is red. If something is blue then it does not need the cat.
+
+The squirrel is rough.

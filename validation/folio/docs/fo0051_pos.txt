@@ -1,0 +1,9 @@
+Statement
+
+No digital media are analog.
+Every printed text is analog media.
+All streaming services are digital media.
+If an object is a hardcover book, then it is printed text.
+If 1984 is a streaming service, then 1984 is a hardcover book.
+
+It is not the case that 1984 is not a streaming service.

@@ -1,0 +1,5 @@
+Report
+
+Bob is kind. Charlie is quiet. Charlie is rough. Fiona is kind. Fiona is rough. Fiona is white. Gary is nice. If Gary is red and Gary is white then Gary is quiet. All white things are rough. If something is rough then it is red. If something is nice then it is white. All smart things are white. Rough, quiet things are not kind. If something is quiet and not smart then it is kind. Smart things are quiet. If something is smart and not rough then it is quiet.
+
+Gary is kind.

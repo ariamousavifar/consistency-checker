@@ -1,0 +1,5 @@
+Report
+
+The bald eagle chases the cat. The bald eagle likes the dog. The cat is green. The cat is red. The cat likes the lion. The dog chases the cat. The dog is red. The dog sees the bald eagle. The dog sees the lion. The lion is green. The lion is rough. The lion sees the cat. If someone is cold then they like the bald eagle. If someone sees the cat and they like the bald eagle then the cat is rough. If someone sees the bald eagle then the bald eagle likes the dog. All rough people are nice. If someone sees the lion then they are green. If the bald eagle is red then the bald eagle is nice. All nice people are cold. If someone chases the dog and the dog likes the cat then they see the bald eagle. If someone is rough then they like the dog.
+
+The cat does not like the dog.

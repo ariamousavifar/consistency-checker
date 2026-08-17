@@ -1,0 +1,5 @@
+Report
+
+Anne is young. Bob is big. Bob is young. Dave is kind. Fiona is cold. Fiona is not red. Fiona is smart. If someone is kind then they are cold. Big people are cold. Big people are cold. If someone is cold then they are young. If Dave is not cold and Dave is not big then Dave is quiet. If someone is big and not young then they are quiet. Red people are quiet. Young people are not quiet.
+
+Fiona is quiet.

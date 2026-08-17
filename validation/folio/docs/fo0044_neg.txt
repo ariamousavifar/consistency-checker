@@ -1,0 +1,11 @@
+Statement
+
+If someone is ranked highly by the Women's Tennis Association, then they are one of the most active players in major tennis. 
+Everyone who lost to Iga Świątek at Roland Garros 2022 is ranked highly by the Women's Tennis Association.
+All female tennis players at Roland Garros 2022 lost to Iga Świątek.
+All tennis players at Roland Garros 2022 are either female or male.
+All male tennis players at Roland Garros in 2022 lost to Rafael Nadal.
+If Coco Gauff is ranked highly by the Women's Tennis Association or lost to Rafael Nadal, then Coco Gauff is not a male tennis player at Roland Garros 2022.
+Coco Gauff is at Roland Garros 2022.
+
+It is not the case that coco Gauff has lost to Rafael Nadal.

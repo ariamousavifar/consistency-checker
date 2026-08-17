@@ -1,0 +1,8 @@
+Statement
+
+Some mammals have teeth.
+Platypuses have no teeth.
+Platypuses are mammals. 
+Humans have teeth.
+
+It is not the case that platypuses are mammals with no teeth.

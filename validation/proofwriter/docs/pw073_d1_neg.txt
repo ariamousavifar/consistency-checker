@@ -1,0 +1,5 @@
+Report
+
+The bear is red. The cow is not green. The lion is green. The mouse chases the cow. The mouse likes the bear. The mouse visits the bear. The mouse visits the lion. If someone chases the bear then the bear likes the cow. If the cow visits the mouse then the cow is cold. If someone is green and they visit the mouse then the mouse visits the lion. If someone chases the cow then the cow visits the mouse. If someone likes the bear and the bear is red then they visit the lion. If someone is cold then they visit the lion. If someone likes the cow and they chase the bear then the cow does not visit the lion. If someone likes the cow then the cow is big.
+
+The lion does not visit the lion.

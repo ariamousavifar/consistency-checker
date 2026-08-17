@@ -1,0 +1,5 @@
+Report
+
+Charlie is green. Dave is quiet. Dave is red. Dave is not white. Erin is not big. Erin is not cold. Erin is green. Harry is big. Harry is cold. Harry is green. If someone is red then they are not white. If Charlie is quiet then Charlie is blue. If someone is quiet and red then they are blue. All white people are cold. All green people are quiet. All blue, green people are red. If someone is red and not white then they are big.
+
+Harry is not blue.

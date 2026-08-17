@@ -1,0 +1,5 @@
+Report
+
+Anne is blue. Anne is furry. Charlie is quiet. Charlie is not round. Charlie is white. Dave is round. Harry is cold. If someone is white then they are quiet. If Dave is round and Dave is quiet then Dave is nice. Cold people are white. If Anne is quiet and Anne is round then Anne is not blue. If someone is round then they are cold. All nice people are not furry. If Harry is cold then Harry is round. If Anne is quiet then Anne is nice. If Harry is cold and Harry is round then Harry is not furry.
+
+Dave is furry.

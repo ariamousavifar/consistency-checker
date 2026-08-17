@@ -1,0 +1,10 @@
+Statement
+
+If something is a deadly disease, then it comes with a low survival rate. 
+Severe cancers are deadly diseases.
+Bile duct cancer is a severe form cancer. 
+All Cholangiocarcinoma is bile duct cancer.
+Mild flu comes with a low survival rate.
+Colorectal cancer is not both a bile duct cancer and with a low survival rate.
+
+It is not the case that colorectal cancer is a kind of severe cancer.

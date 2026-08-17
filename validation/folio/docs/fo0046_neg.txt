@@ -1,0 +1,6 @@
+Statement
+
+All cats are mammals.
+Some pets are not mammals.
+
+It is not the case that no pets are cats.

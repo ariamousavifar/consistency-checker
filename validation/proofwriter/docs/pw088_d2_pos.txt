@@ -1,0 +1,5 @@
+Report
+
+The bald eagle eats the mouse. The dog chases the bald eagle. The mouse is red. If something visits the bald eagle then it eats the dog. If something eats the mouse then the mouse chases the dog. If something chases the dog and the dog chases the bald eagle then it visits the bald eagle. If something is green and it eats the mouse then it visits the dog. If the bald eagle chases the mouse and the bald eagle is young then the mouse eats the dog. If something eats the mouse then it is nice. If something eats the dog and it chases the mouse then the dog chases the bald eagle. If something chases the dog then the dog is green.
+
+The mouse does not visit the bald eagle.

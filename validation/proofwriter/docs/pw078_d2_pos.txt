@@ -1,0 +1,5 @@
+Report
+
+The dog is cold. The dog is green. The dog is not rough. The dog does not need the squirrel. The lion visits the dog. The squirrel is not green. The squirrel is not young. If something sees the squirrel then the squirrel needs the dog. If something visits the squirrel and the squirrel is young then it visits the dog. If something needs the lion and it sees the lion then it is not round. If something needs the dog then it needs the lion. If something visits the dog then it sees the squirrel. If something is rough then it does not visit the squirrel.
+
+The squirrel does not need the dog.

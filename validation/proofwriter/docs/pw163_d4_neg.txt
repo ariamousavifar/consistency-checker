@@ -1,0 +1,5 @@
+Report
+
+Charlie is kind. Charlie is smart. Dave is kind. Dave is quiet. Dave is red. Fiona is kind. Fiona is nice. Fiona is smart. Harry is kind. Harry is nice. Harry is quiet. Harry is red. Harry is rough. Harry is smart. Harry is young. Quiet, nice things are rough. Young, quiet things are nice. Young, nice things are rough. Nice, red things are young. All rough things are young. All smart things are quiet.
+
+Dave is not young.

@@ -65,6 +65,8 @@ def run_one(doc: dict, docs_dir: Path, out_root: Path, args) -> dict:
            "--seed", str(args.seed)]
     if args.allow_relations:
         cmd.append("--allow-relations")
+    if args.allow_conditionals:
+        cmd.append("--allow-conditionals")
     env = dict(os.environ)
     env.update({"LLM_EXTRACTION_EFFORT": args.effort,
                 "LLM_TRANSLATION_EFFORT": args.effort,
@@ -112,6 +114,7 @@ def main(argv=None) -> int:
     ap.add_argument("--effort", default="off")
     ap.add_argument("--max-tokens", type=int, default=8192)
     ap.add_argument("--allow-relations", action="store_true")
+    ap.add_argument("--allow-conditionals", action="store_true")
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--timeout", type=int, default=600)
     ap.add_argument("--limit", type=int, default=0)
@@ -177,6 +180,7 @@ def main(argv=None) -> int:
     metrics = {
         "set": sd.name, "provider": a.provider, "model": a.model,
         "reasoning": a.effort, "seed": a.seed, "allow_relations": a.allow_relations,
+        "allow_conditionals": a.allow_conditionals,
         "n_documents": len(docs), "n_scored": scored, "n_errors": errors,
         "confusion": {"tp": tp, "fp": fp, "fn": fn, "tn": tn},
         "recall": {"value": rec_p, "ci95": [rec_lo, rec_hi], "n": tp + fn},

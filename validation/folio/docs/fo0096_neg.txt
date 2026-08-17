@@ -1,0 +1,10 @@
+Statement
+
+All business organizations are legal entities.
+All companies are business organizations.
+All private companies are companies.
+All legal entities are created under law. 
+All legal entities have legal obligations.
+If the Harvard Weekly Book Club is created under law, then it is not a private company.
+
+It is not the case that the Harvard Weekly Book club has legal obligations.

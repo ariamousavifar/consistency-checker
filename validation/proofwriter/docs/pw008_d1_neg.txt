@@ -1,0 +1,5 @@
+Report
+
+The bald eagle eats the mouse. The bald eagle needs the dog. The cow eats the mouse. The cow is red. The cow is round. The dog eats the cow. The mouse likes the dog. If something likes the cow and it likes the mouse then it likes the dog. If something is red and round then it is nice. If the cow is cold and the cow is big then the cow likes the dog. If something is red and nice then it eats the mouse. If something eats the bald eagle then the bald eagle eats the cow. If something is nice and it needs the dog then it is round. If something is nice and it needs the bald eagle then the bald eagle needs the dog. If something is nice and red then it eats the bald eagle.
+
+The mouse is not round.

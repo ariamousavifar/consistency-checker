@@ -1,0 +1,9 @@
+Statement
+
+All growth stocks are bought to earn profits from rapid price appreciation.
+If the stock price is bought to earn profits from rapid price appreciation, then it is not suitable for a retirement fund.
+Some stocks are growth stocks.
+All mature stocks are suitable for a retirement fund.
+KO is a mature stock.
+
+It is not the case that if KO is a growth stock or bought to earn profits from rapid price appreciation, then KO is neither a stock nor is its price volatile.

@@ -1,0 +1,7 @@
+Statement
+
+If George likes music, he wants to compose.
+If George has access to a program, he can compose.
+If George can compose and wants to compose, he will compose.
+
+It is not the case that if George will not compose, George can not compose.

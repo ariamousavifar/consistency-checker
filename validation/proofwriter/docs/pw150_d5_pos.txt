@@ -1,0 +1,5 @@
+Report
+
+Anne is kind. Anne is round. Dave is blue. Dave is cold. Dave is furry. Dave is green. Dave is quiet. Erin is green. Fiona is furry. Fiona is round. If Fiona is quiet and Fiona is kind then Fiona is green. All green people are blue. Quiet, round people are cold. Kind people are green. If someone is quiet then they are blue. If someone is cold then they are furry. All blue, kind people are quiet.
+
+Anne is not furry.

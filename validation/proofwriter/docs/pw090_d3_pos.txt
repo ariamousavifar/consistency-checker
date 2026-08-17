@@ -1,0 +1,5 @@
+Report
+
+The bald eagle is cold. The bald eagle likes the cat. The bald eagle sees the bear. The bald eagle sees the cat. The bear eats the bald eagle. The bear is big. The bear is green. The bear is red. The bear is round. The bear likes the bald eagle. The bear likes the cat. The bear sees the bald eagle. The bear sees the cat. The cat eats the bald eagle. The cat eats the bear. The cat likes the bald eagle. If someone likes the bald eagle then they see the bald eagle. If someone eats the bald eagle and they are red then the bald eagle is big. If someone likes the bald eagle and the bald eagle eats the cat then the cat sees the bear. If someone eats the cat then the cat is cold. If the bald eagle sees the cat then the cat eats the bear. If someone is red then they see the cat. If the bear sees the cat then the bear sees the bald eagle. If someone is big then they eat the cat.
+
+The cat does not see the bear.

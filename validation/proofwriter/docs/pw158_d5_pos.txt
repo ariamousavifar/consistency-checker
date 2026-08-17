@@ -1,0 +1,5 @@
+Report
+
+Bob is kind. Bob is nice. Bob is white. Charlie is kind. Charlie is white. Erin is red. Erin is rough. Harry is blue. Harry is kind. Harry is red. Blue people are nice. All white people are red. If someone is white and blue then they are nice. All rough people are red. If someone is smart then they are blue. If someone is kind then they are red. If someone is nice then they are rough. If someone is red then they are smart. If someone is red and rough then they are nice.
+
+Charlie is not rough.

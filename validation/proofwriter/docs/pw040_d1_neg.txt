@@ -1,0 +1,5 @@
+Report
+
+Anne is furry. Anne is kind. Anne is not nice. Anne is quiet. Charlie is green. Erin is furry. Erin is nice. Erin is round. Fiona is furry. Fiona is kind. Fiona is not nice. Fiona is round. If someone is green then they are not round. If Charlie is round then Charlie is kind. If Erin is green then Erin is quiet. If Charlie is not round then Charlie is smart. If someone is round and not quiet then they are furry. If someone is smart then they are furry.
+
+Charlie is kind.

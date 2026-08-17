@@ -1,0 +1,10 @@
+Statement
+
+All Romance languages are Indo-European languages.
+Romance languages are a language family.
+All languages within a language family are related to each other.
+French and Spanish are both Romance languages.
+German is related to Spanish.
+Basque is not related to any other language.
+
+It is not the case that german is a Romance language.

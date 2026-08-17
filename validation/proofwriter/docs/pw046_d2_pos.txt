@@ -1,0 +1,5 @@
+Report
+
+Bob is green. Erin is green. Fiona is furry. Harry is rough. All green things are furry. Green, furry things are cold. Cold, kind things are white. If Erin is smart then Erin is green. Smart things are kind. White things are green. If Bob is cold then Bob is smart. Furry, kind things are rough.
+
+Bob is not cold.

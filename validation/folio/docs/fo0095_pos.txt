@@ -1,0 +1,14 @@
+Statement
+
+Pets are allowed in some managed buildings.
+A deposit is required to rent an apartment in a managed building.
+The security deposit can be either equal to the monthly rent at a managed building or more.
+Fluffy is Tom's cat.
+Cats are pets.
+The Olive Garden is a managed building.
+The monthly rent at the Olive Garden is $2000.
+$2000 is more than $1500.
+Tom will rent an apartment in a managed building if he is allowed to move in with Fluffy, and the security deposit is no more than $1500.
+If a managed building allows pets, then people are allowed to move in with a pet.
+
+It is not the case that the security deposit at the Olive Garden is either $2000 or more.

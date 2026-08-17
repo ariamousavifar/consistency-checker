@@ -1,0 +1,10 @@
+Statement
+
+All hydrocarbons are organic compounds .
+All alkanes are hydrocarbons
+All organic compounds are chemical compounds.
+All organic compounds contain carbon.
+No chemical compounds contain only one element.
+The mixture either both is a chemical compound and contains only one element, or neither.
+
+It is not the case that if the mixture contains only one element or contains carbon, then the mixture is neither a chemical compound nor an alkane.

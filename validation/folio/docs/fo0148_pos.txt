@@ -1,0 +1,10 @@
+Statement
+
+Everyone who can register to vote in the United States can participate in the 2024 United States presidential election.
+If someone has United States citizenship, then they can register to vote in the United States.
+A person either has United States citizenship or Taiwanese citizenship.
+No Russian Federation officials hold Taiwanese citizenship. 
+Vladimir neither holds Taiwanese citizenship nor is he a manager at Gazprom. 
+Ekaterina she can register to vote in the United States, or she is a Russian federation official.
+
+It is not the case that ekaterina can participate in the 2024 United States presidential election or Vladimir is a manager at Gazprom.

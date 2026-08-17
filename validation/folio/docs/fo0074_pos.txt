@@ -1,0 +1,9 @@
+Statement
+
+All vehicle registration plates in Istanbul begin with the number 34.
+Plates that do not begin with the number 34 are not from Istanbul. 
+Joe's vehicle registration plate is from Istanbul. 
+Tom's license plate begins with the number 35. 
+If a license plate begins with the number 35, then it does not begin with the number 34.
+
+It is not the case that joe's license plate begins with the number 34.

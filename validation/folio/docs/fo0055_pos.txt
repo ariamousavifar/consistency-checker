@@ -1,0 +1,8 @@
+Statement
+
+Robert Lewandowski is a striker.
+Strikers are soccer players.
+Robert Lewandowski left Bayern Munchen.
+If a player leaves a team they no longer play for that team.
+
+It is not the case that robert Lewandowski is a soccer player.

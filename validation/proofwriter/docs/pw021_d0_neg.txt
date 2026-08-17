@@ -1,0 +1,5 @@
+Report
+
+The cat is round. The cat needs the rabbit. The cat visits the tiger. The rabbit needs the cat. The rabbit needs the tiger. The tiger is nice. The tiger is red. If something is red then it visits the rabbit. If the rabbit is kind then the rabbit likes the tiger. If something is red then it is round. If something needs the tiger then it needs the cat. If something needs the tiger then it is round. If the rabbit is round then the rabbit is kind.
+
+The tiger does not like the rabbit.

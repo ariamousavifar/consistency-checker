@@ -1,0 +1,5 @@
+Report
+
+Dave is cold. Dave is rough. Dave is round. Dave is smart. Dave is white. Erin is kind. Gary is cold. Gary is kind. Gary is quiet. Gary is rough. Gary is round. Gary is smart. Gary is white. Harry is cold. Harry is smart. If someone is rough then they are round. If Harry is cold and Harry is round then Harry is kind. All smart people are rough.
+
+Harry is not kind.

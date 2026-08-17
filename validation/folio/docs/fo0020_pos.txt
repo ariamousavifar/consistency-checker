@@ -1,0 +1,10 @@
+Statement
+
+All rabbits that can be spotted near the campus are cute. 
+Some turtles can be spotted near the campus. 
+The only animals that can be spotted near the campus are rabbits and squirrels.
+If something is skittish, then it is not calm.
+All the squirrels that can be spotted near the campus are skittish.
+Rockie can be spotted near the campus, and it is calm.
+
+It is not the case that if Rockie is not both a turtle and a squirrel, then Rockie is either cute or skittish.

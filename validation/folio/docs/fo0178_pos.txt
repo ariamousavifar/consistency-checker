@@ -1,0 +1,7 @@
+Statement
+
+The summer Olympic games is a sporting event. 
+The last summer Olympic games was in Tokyo.
+The United States won the most medals in Tokyo.
+
+It is not the case that the United States won the most medals in the last summer Olympic games.

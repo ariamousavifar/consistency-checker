@@ -1,0 +1,5 @@
+Report
+
+The cow is nice. The cow likes the rabbit. The cow needs the dog. The cow needs the rabbit. The cow visits the dog. The cow visits the rabbit. The dog likes the rabbit. The dog needs the rabbit. The rabbit is nice. The rabbit likes the cow. The rabbit needs the dog. The rabbit visits the cow. If something is round and young then it visits the dog. If the rabbit needs the cow and the rabbit is young then the rabbit needs the dog. If something is round then it is young. If the rabbit is nice and the rabbit visits the cow then the cow visits the dog. If something is nice then it visits the rabbit. If something likes the dog then it needs the dog.
+
+The dog visit the rabbit.

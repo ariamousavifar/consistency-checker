@@ -1,0 +1,5 @@
+Report
+
+Anne is nice. Anne is quiet. Anne is rough. Anne is round. Bob is not furry. Bob is kind. Bob is quiet. Bob is rough. Charlie is not big. Dave is rough. If something is furry then it is kind. If Bob is nice and Bob is furry then Bob is round. All round things are furry.
+
+Dave is kind.

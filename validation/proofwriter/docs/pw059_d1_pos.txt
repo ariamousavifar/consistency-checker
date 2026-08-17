@@ -1,0 +1,5 @@
+Report
+
+Anne is not blue. Anne is cold. Anne is kind. Anne is quiet. Anne is rough. Anne is round. Anne is not young. Bob is blue. Bob is cold. Bob is quiet. Bob is rough. Bob is young. Harry is not blue. Harry is not cold. Harry is kind. Harry is young. All quiet, blue people are kind.
+
+Bob is not kind.

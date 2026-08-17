@@ -1,0 +1,9 @@
+Statement
+
+Ailton Silva, born in 1995, is commonly known as Ailton.
+Ailton is a football player who was loaned out to Braga.
+Ailton Silva is a Brazilian footballer who plays for Náutico.
+Náutico is a football club along with Braga.
+Fluminense is a football club.
+
+It is not the case that ailton Silva played for Fluminense.

@@ -1,0 +1,5 @@
+Report
+
+The bald eagle is green. The bald eagle is rough. The cow is not blue. The cow is not green. The cow is rough. The cow sees the dog. The dog is green. The dog likes the cow. The dog needs the bald eagle. The lion is rough. If someone sees the dog then they see the cow. If someone sees the cow then the cow does not see the bald eagle. If someone sees the bald eagle and they like the dog then the dog likes the cow. If the cow is kind then the cow likes the dog. If the bald eagle sees the cow then the cow does not see the lion. If the lion is kind then the lion likes the bald eagle. If someone likes the lion then they need the cow. If someone is rough and they do not see the bald eagle then the bald eagle needs the dog.
+
+The bald eagle does not need the dog.

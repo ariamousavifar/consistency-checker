@@ -1,0 +1,9 @@
+Statement
+
+If a restaurant is listed in Yelp’s recommendations, then the restaurant has not received many negative reviews.
+All restaurants with a rating greater than four are listed in Yelp’s recommendations.
+Some restaurants that do not provide take-out service receive many negative reviews.
+All restaurants that are popular among local residents have ratings greater than four.
+The Hamden Plaza Subway store has a rating greater than four, or it is popular among local residents.
+
+It is not the case that the Hamden Plaza Subway store provides take-out service or does not receive many negative reviews.

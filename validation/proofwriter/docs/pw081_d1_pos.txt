@@ -1,0 +1,5 @@
+Report
+
+The bald eagle sees the rabbit. The bald eagle visits the rabbit. The bear is red. The bear needs the bald eagle. The bear sees the rabbit. The bear visits the rabbit. The rabbit is big. The rabbit needs the bear. The rabbit sees the bald eagle. The rabbit visits the bald eagle. If the bald eagle is big and the bald eagle sees the rabbit then the rabbit sees the bear. If the bear visits the rabbit and the bear needs the rabbit then the bear is kind. If the bald eagle needs the bear then the bear visits the rabbit. If someone needs the rabbit then they see the bear. If someone sees the bald eagle and they visit the bear then the bald eagle sees the bear. If someone needs the bear and the bear sees the rabbit then the bear is big. If someone is kind and they visit the bald eagle then the bald eagle is big. All big people are kind.
+
+The bear is not big.

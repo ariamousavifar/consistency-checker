@@ -1,0 +1,5 @@
+Report
+
+Bob is big. Bob is blue. Bob is furry. Bob is kind. Bob is rough. Bob is young. Harry is young. All smart people are kind. If someone is young and furry then they are smart. All blue people are rough. If Bob is kind and Bob is young then Bob is furry. All furry, young people are kind. If Harry is big and Harry is furry then Harry is blue. Big, furry people are smart. If someone is big and furry then they are blue.
+
+Harry is furry.

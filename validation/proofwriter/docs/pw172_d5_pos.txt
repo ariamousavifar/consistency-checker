@@ -1,0 +1,5 @@
+Report
+
+The bald eagle does not eat the lion. The bald eagle does not eat the squirrel. The bald eagle is rough. The lion eats the bald eagle. The lion eats the squirrel. The lion likes the mouse. The lion needs the squirrel. The mouse likes the squirrel. The mouse needs the lion. The squirrel eats the lion. The squirrel is rough. If someone is nice then they like the mouse. If the squirrel needs the lion and the squirrel is nice then the squirrel does not eat the mouse. If the squirrel likes the mouse then the squirrel needs the bald eagle. If someone likes the mouse and the mouse needs the squirrel then the mouse does not like the bald eagle. If the squirrel eats the lion then the squirrel is nice. If the squirrel does not need the bald eagle then the squirrel is round. If someone needs the bald eagle then they are round. If someone eats the mouse and the mouse is nice then the mouse does not need the bald eagle. If someone is round and rough then they eat the mouse.
+
+The squirrel does not eat the mouse.

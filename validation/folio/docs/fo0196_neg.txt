@@ -1,0 +1,11 @@
+Statement
+
+Jane does not like any animals that bark.
+All dogs are animals that bark.
+Jane likes all animals that jump.
+If an animal has legs, then it jumps.
+If an animal is terricolous, then it has legs. 
+KiKi is an animal.
+If KiKi neither jumps nor has legs, then KiKi is terricolous or has legs.
+
+It is not the case that kiKi is terricolous.

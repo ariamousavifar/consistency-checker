@@ -1,0 +1,5 @@
+Report
+
+The bald eagle is green. The bald eagle likes the squirrel. The bald eagle likes the tiger. The bear is nice. The bear is round. The bear likes the bald eagle. The bear likes the tiger. The squirrel is young. The squirrel likes the bear. The squirrel needs the bald eagle. The squirrel sees the tiger. The tiger is cold. The tiger likes the bear. The tiger likes the squirrel. The tiger needs the bear. The tiger sees the bear. If something needs the bald eagle and the bald eagle likes the bear then the bald eagle needs the tiger. If something needs the squirrel then it needs the tiger. If something is green then it needs the squirrel. If something needs the bear and it needs the bald eagle then the bear likes the bald eagle. If something likes the bald eagle then it is young. If something likes the bear and it sees the bald eagle then it needs the bear. Round things are green. If something sees the squirrel and the squirrel likes the bear then it is cold. If something needs the bear and the bear is green then it is round.
+
+The squirrel need the squirrel.

@@ -1,0 +1,5 @@
+Report
+
+The bald eagle chases the mouse. The bald eagle eats the tiger. The bald eagle is not cold. The mouse does not eat the tiger. The mouse is not cold. The tiger chases the mouse. The tiger eats the mouse. The tiger is rough. The tiger is round. The tiger sees the bald eagle. If someone eats the tiger then the tiger eats the bald eagle. If the bald eagle does not eat the tiger then the tiger eats the bald eagle. If someone sees the tiger then the tiger is rough. If the tiger chases the mouse and the tiger eats the bald eagle then the tiger sees the mouse. If the bald eagle chases the tiger then the tiger eats the mouse. If someone is green and they eat the mouse then they are round. If the bald eagle is green and the bald eagle eats the mouse then the bald eagle chases the tiger. If someone sees the mouse and they are cold then they are rough.
+
+The bald eagle does not eat the tiger.

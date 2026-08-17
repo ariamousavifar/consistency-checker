@@ -1,0 +1,9 @@
+Statement
+
+All Brown Swiss cattle are cows.
+Some pets are Brown Swiss Cattle.
+All cows are domesticated animals.
+Alligators are not domesticated animals.
+Ted is an alligator.
+
+It is not the case that if Ted is a Brown Swiss cattle, then Ted is not a pet.

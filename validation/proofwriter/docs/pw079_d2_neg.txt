@@ -1,0 +1,5 @@
+Report
+
+Anne is green. Anne is quiet. Anne is young. Charlie is big. Charlie is blue. Charlie is quiet. Dave is red. Dave is young. Harry is kind. Harry is young. If someone is green then they are quiet. Big people are green. If someone is kind and young then they are big.
+
+Dave is green.

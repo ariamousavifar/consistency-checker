@@ -1,0 +1,5 @@
+Report
+
+Bob is big. Bob is blue. Bob is cold. Bob is quiet. Bob is rough. Bob is smart. Bob is white. Dave is rough. Fiona is blue. Harry is big. Harry is cold. If someone is blue then they are cold. If someone is big then they are white. If Bob is rough and Bob is blue then Bob is big. All blue, smart people are big. If someone is blue and rough then they are quiet. All smart people are blue. Cold people are rough. If someone is quiet then they are big.
+
+Harry is not quiet.

@@ -1,0 +1,5 @@
+Report
+
+The dog is blue. The dog is kind. The dog needs the tiger. The dog sees the tiger. The mouse does not eat the tiger. The mouse is green. The mouse needs the dog. The mouse does not need the tiger. The mouse sees the dog. The tiger eats the mouse. The tiger needs the mouse. The tiger does not see the mouse. If someone sees the tiger then they are green.
+
+The dog is not green.

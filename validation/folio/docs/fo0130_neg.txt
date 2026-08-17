@@ -1,0 +1,10 @@
+Statement
+
+All people who make wedding plans are people who are engaged.
+All people who invite others to come to their ceremony make wedding plans.
+Anyone who has a well-attended wedding invites others to come to their ceremony.
+Some people that have well-attended weddings have larger families.
+If John is engaged, then John does not invite friends to their ceremony and make wedding plans.
+If John has a larger family, then either John has a well-attended wedding or invites friends to their ceremony.
+
+It is not the case that john is engaged.

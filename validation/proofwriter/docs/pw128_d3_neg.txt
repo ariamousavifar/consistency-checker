@@ -1,0 +1,5 @@
+Report
+
+Anne is red. Anne is round. Dave is smart. Dave is not white. Erin is nice. Erin is not smart. Fiona is smart. Red people are furry. If someone is round then they are red. Furry people are white. All red, smart people are white. All red people are round. If someone is furry and not white then they are not nice.
+
+Dave is not furry.

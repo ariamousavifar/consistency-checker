@@ -1,0 +1,5 @@
+Report
+
+The bear chases the cow. The bear chases the dog. The bear eats the dog. The bear is kind. The cow chases the bear. The cow chases the dog. The cow does not eat the dog. The cow is green. The cow is kind. The cow is nice. The cow is not young. The cow needs the bear. The dog eats the cow. The dog is not cold. The dog is nice. The dog does not need the cow. If someone needs the cow and they are nice then the cow eats the dog. If the cow is nice then the cow needs the dog. If someone is green and they eat the dog then the dog does not eat the cow. If someone eats the cow then they need the dog. If someone needs the bear then the bear is kind. If someone chases the cow then they do not need the cow. If someone needs the dog then the dog does not chase the bear. If someone needs the dog then they need the bear.
+
+The dog does not need the bear.

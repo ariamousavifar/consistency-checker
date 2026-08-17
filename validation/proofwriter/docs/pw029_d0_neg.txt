@@ -1,0 +1,5 @@
+Report
+
+Anne is not round. Anne is young. Dave is blue. Dave is cold. Dave is quiet. Dave is not red. Dave is round. Dave is not white. Dave is young. Gary is blue. Gary is not cold. Gary is white. Gary is young. Harry is red. Harry is young. Red, cold things are not round. All cold, blue things are quiet. Red things are not quiet. White things are red. All quiet things are blue. If something is white and cold then it is blue. Quiet, red things are not young. If something is round and not quiet then it is not young.
+
+Harry is not round.

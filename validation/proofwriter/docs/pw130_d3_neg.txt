@@ -1,0 +1,5 @@
+Report
+
+Anne is blue. Anne is quiet. Anne is round. Anne is not smart. Anne is young. Erin is furry. Erin is not quiet. Erin is smart. Fiona is blue. Fiona is quiet. Fiona is round. Fiona is smart. Smart people are blue. If Erin is not round then Erin is smart. If Erin is blue then Erin is green. All furry, smart people are green. If someone is blue and not smart then they are green. Green people are furry. All round, green people are furry. If someone is green and not furry then they are young.
+
+Fiona is not green.

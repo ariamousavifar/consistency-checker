@@ -1,0 +1,5 @@
+Report
+
+The bear likes the lion. The bear visits the lion. The cow is red. The cow likes the bear. The cow visits the bear. The lion is blue. The lion needs the cow. If someone is blue and they visit the bear then the bear needs the cow. If someone is blue then they visit the bear. If someone needs the lion and the lion likes the cow then the lion visits the cow. If someone is red then they need the bear. If someone needs the cow and they need the lion then the cow is round. If someone likes the lion then the lion is blue.
+
+The lion is not blue.

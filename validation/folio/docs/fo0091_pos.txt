@@ -1,0 +1,8 @@
+Statement
+
+A natural language processing task can be categorized as either a language generation task or a language understanding task.
+If the output of a natural language processing task is a text sequence, then it is a language generation task.
+Machine translation is a natural language processing task.
+The output of machine translation is a text sequence.
+
+It is not the case that machine translation is a language generation task.

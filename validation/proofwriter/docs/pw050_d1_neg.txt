@@ -1,0 +1,5 @@
+Report
+
+The cat is nice. The cat likes the dog. The cat visits the squirrel. The cow likes the cat. The cow sees the cat. The cow sees the dog. The dog likes the cat. The dog sees the squirrel. The dog visits the cat. The squirrel is green. The squirrel likes the dog. The squirrel visits the cat. All nice things are young. If something sees the dog then it is nice. If something likes the squirrel then the squirrel is big. If something visits the squirrel then it is young. If something sees the cat and it sees the squirrel then it visits the dog. If something is young then it likes the cow.
+
+The squirrel is not nice.

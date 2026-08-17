@@ -341,6 +341,9 @@ speech, Austrian economics, TED transcripts). Next:
    sentence and report "inconsistent under *every* reading" versus "under reading
    2 of 3." A strictly stronger claim than committing to one interpretation.
 
+**[Quantitative evaluation](docs/evaluation.md)** — results on three held-out
+datasets with confidence intervals, model comparison, and an ablation.
+
 Architecture in detail, with each component marked built / partial / planned:
 [docs/architecture.md](docs/architecture.md). Version history:
 [CHANGELOG.md](CHANGELOG.md).

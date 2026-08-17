@@ -1,0 +1,5 @@
+Report
+
+The bear does not eat the lion. The bear likes the lion. The lion is big. The lion visits the mouse. The lion visits the squirrel. The mouse eats the squirrel. The mouse likes the bear. The mouse likes the lion. The mouse visits the squirrel. The squirrel is not cold. The squirrel is nice. If something eats the squirrel then the squirrel eats the mouse. If something visits the bear and it is green then it is nice. If something is green and blue then it visits the bear. If something likes the lion and it is blue then the lion is nice. If something eats the mouse then it likes the lion. If the bear is not green then the bear likes the lion. If something visits the bear then the bear likes the lion. If something likes the lion and the lion is blue then the lion likes the mouse. If something is nice then it is blue.
+
+The lion is not blue.

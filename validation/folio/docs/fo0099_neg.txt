@@ -1,0 +1,10 @@
+Statement
+
+Animals are either invertebrates or vertebrates.
+All animals with backbones reproduce by male-and-female mating. 
+All vertebrate animals have a backbone.
+All bees do not reproduce by male-and-female mating.
+All queen bees are bees.
+Harry is a bee.
+
+It is not the case that harry is a queen bee.

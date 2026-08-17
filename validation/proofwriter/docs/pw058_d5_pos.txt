@@ -1,0 +1,5 @@
+Report
+
+The bald eagle chases the cat. The bald eagle does not chase the mouse. The bald eagle is young. The cat does not chase the bald eagle. The cat does not eat the bald eagle. The cat is rough. The cat is young. The cat sees the bald eagle. The lion chases the bald eagle. The lion chases the cat. The lion eats the bald eagle. The lion eats the cat. The mouse chases the bald eagle. The mouse chases the lion. The mouse eats the bald eagle. The mouse is young. If something is kind then it is round. If something chases the bald eagle then it is round. If something is round then it sees the bald eagle. If something chases the cat and the cat chases the bald eagle then it eats the bald eagle. If something chases the cat then the cat sees the lion. If something sees the cat then it chases the bald eagle. If the bald eagle is young and the bald eagle chases the lion then the bald eagle sees the lion. If the mouse eats the cat and the mouse eats the bald eagle then the bald eagle eats the cat. If something sees the bald eagle and it chases the cat then the bald eagle sees the cat.
+
+The bald eagle is not round.

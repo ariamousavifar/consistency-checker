@@ -1,0 +1,5 @@
+Report
+
+The bear sees the rabbit. The rabbit sees the bear. If something chases the rabbit and the rabbit sees the bear then it is nice. All round things are nice. If something chases the rabbit then it chases the bear. If something visits the bear then the bear visits the rabbit. If the rabbit is nice then the rabbit chases the bear. If something chases the rabbit then it visits the bear. If something sees the bear then it chases the rabbit. If something is green and it visits the bear then the bear sees the rabbit.
+
+The rabbit does not chase the bear.

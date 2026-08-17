@@ -1,0 +1,5 @@
+Report
+
+The cow chases the lion. The cow chases the squirrel. The cow is round. The cow likes the dog. The dog likes the cow. The dog likes the lion. The lion chases the cow. The lion chases the squirrel. The lion is cold. The lion is green. The lion likes the dog. The squirrel is cold. The squirrel is young. The squirrel needs the lion. If the cow needs the squirrel then the cow chases the squirrel. If something chases the cow then it needs the squirrel. If something is round then it likes the squirrel. If something is big then it is green. If something is big and it chases the dog then the dog chases the cow. If something chases the lion and it likes the squirrel then the squirrel is green. If something is green then it chases the cow. If the dog is green then the dog is round. If something needs the squirrel then it likes the squirrel.
+
+The dog like the squirrel.

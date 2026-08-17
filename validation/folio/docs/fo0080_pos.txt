@@ -1,0 +1,9 @@
+Statement
+
+No baked sweets are spicy.
+All cupcakes are baked sweets.
+All mala hotpots are spicy.
+All products from Baked by Melissa are cupcakes.
+Dried Thai chilies are spicy or mala hotpots or not baked sweets.
+
+It is not the case that dried Thai chilies are not products of Baked by Melissa.

@@ -1,0 +1,11 @@
+Statement
+
+Symphony No. 9 is a music piece.
+Composers write music pieces.
+Beethoven wrote Symphony No. 9.
+Vienna Music Society premiered Symphony No. 9.
+Vienna Music Society is an orchestra.
+Beethoven leads the Vienna Music Society.
+Orchestras are led by conductors.
+
+It is not the case that beethoven is a composer.

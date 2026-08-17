@@ -1,0 +1,5 @@
+Report
+
+The bald eagle eats the dog. The bald eagle is not young. The cow does not chase the bald eagle. The cow chases the tiger. The cow does not eat the dog. The cow is cold. The cow is young. The cow does not need the dog. The dog needs the bald eagle. The tiger chases the cow. The tiger chases the dog. The tiger does not eat the cow. The tiger is red. The tiger is young. The tiger needs the bald eagle. The tiger needs the cow. If the tiger does not chase the cow then the tiger chases the bald eagle. If something needs the tiger then it chases the tiger. If something is young then it needs the cow. If the dog chases the tiger then the tiger is cold. If something eats the dog then the dog needs the tiger. If the cow eats the tiger and the cow chases the bald eagle then the bald eagle needs the dog.
+
+The tiger is not cold.

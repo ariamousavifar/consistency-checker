@@ -1,0 +1,729 @@
+{
+  "source": "ibm-research/Wikipedia_contradict_benchmark",
+  "licence": "MIT",
+  "adaptation": "merged_context used verbatim as a single document; labels unchanged",
+  "measures": "RECALL only -- the benchmark contains no contradiction-free documents",
+  "documents": [
+    {
+      "id": "wc045_list_of_most_visited_palaces_and_monumen",
+      "expect_inconsistent": 1,
+      "contradict_type": "Implicit (reasoning required)",
+      "same_passage": "Different",
+      "article": "List of most visited palaces and monuments",
+      "url": "https://en.wikipedia.org/wiki/List_of_most_visited_palaces_and_monuments",
+      "chars": 940
+    },
+    {
+      "id": "wc079_chartreuse_liqueur",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "Chartreuse (liqueur)",
+      "url": "https://en.wikipedia.org/wiki/Chartreuse_(liqueur)",
+      "chars": 318
+    },
+    {
+      "id": "wc078_chartreuse_liqueur",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "Chartreuse (liqueur)",
+      "url": "https://en.wikipedia.org/wiki/Chartreuse_(liqueur)",
+      "chars": 318
+    },
+    {
+      "id": "wc158_2020_russian_constitutional_referendum",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Same",
+      "article": "2020 Russian constitutional referendum",
+      "url": "https://en.wikipedia.org/wiki/2020_Russian_constitutional_referendum",
+      "chars": 550
+    },
+    {
+      "id": "wc157_2020_russian_constitutional_referendum",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Same",
+      "article": "2020 Russian constitutional referendum",
+      "url": "https://en.wikipedia.org/wiki/2020_Russian_constitutional_referendum",
+      "chars": 550
+    },
+    {
+      "id": "wc165_branch_theory",
+      "expect_inconsistent": 1,
+      "contradict_type": "Implicit (reasoning required)",
+      "same_passage": "Same",
+      "article": "Branch theory",
+      "url": "https://en.wikipedia.org/wiki/Branch_theory",
+      "chars": 723
+    },
+    {
+      "id": "wc164_branch_theory",
+      "expect_inconsistent": 1,
+      "contradict_type": "Implicit (reasoning required)",
+      "same_passage": "Same",
+      "article": "Branch theory",
+      "url": "https://en.wikipedia.org/wiki/Branch_theory",
+      "chars": 723
+    },
+    {
+      "id": "wc178_brinsley",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Same",
+      "article": "Brinsley",
+      "url": "https://en.wikipedia.org/wiki/Brinsley",
+      "chars": 199
+    },
+    {
+      "id": "wc179_brinsley",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Same",
+      "article": "Brinsley",
+      "url": "https://en.wikipedia.org/wiki/Brinsley",
+      "chars": 199
+    },
+    {
+      "id": "wc177_brinsley",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Same",
+      "article": "Brinsley",
+      "url": "https://en.wikipedia.org/wiki/Brinsley",
+      "chars": 199
+    },
+    {
+      "id": "wc210_aztec_mastiff_bat",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Same",
+      "article": "Aztec mastiff bat",
+      "url": "https://en.wikipedia.org/wiki/Aztec_mastiff_bat",
+      "chars": 241
+    },
+    {
+      "id": "wc211_aztec_mastiff_bat",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Same",
+      "article": "Aztec mastiff bat",
+      "url": "https://en.wikipedia.org/wiki/Aztec_mastiff_bat",
+      "chars": 241
+    },
+    {
+      "id": "wc212_aztec_mastiff_bat",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Same",
+      "article": "Aztec mastiff bat",
+      "url": "https://en.wikipedia.org/wiki/Aztec_mastiff_bat",
+      "chars": 241
+    },
+    {
+      "id": "wc213_aztec_mastiff_bat",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Same",
+      "article": "Aztec mastiff bat",
+      "url": "https://en.wikipedia.org/wiki/Aztec_mastiff_bat",
+      "chars": 241
+    },
+    {
+      "id": "wc214_aztec_mastiff_bat",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Same",
+      "article": "Aztec mastiff bat",
+      "url": "https://en.wikipedia.org/wiki/Aztec_mastiff_bat",
+      "chars": 241
+    },
+    {
+      "id": "wc215_aztec_mastiff_bat",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Same",
+      "article": "Aztec mastiff bat",
+      "url": "https://en.wikipedia.org/wiki/Aztec_mastiff_bat",
+      "chars": 241
+    },
+    {
+      "id": "wc216_aztec_mastiff_bat",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Same",
+      "article": "Aztec mastiff bat",
+      "url": "https://en.wikipedia.org/wiki/Aztec_mastiff_bat",
+      "chars": 241
+    },
+    {
+      "id": "wc209_aztec_mastiff_bat",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Same",
+      "article": "Aztec mastiff bat",
+      "url": "https://en.wikipedia.org/wiki/Aztec_mastiff_bat",
+      "chars": 241
+    },
+    {
+      "id": "wc245_amanieu_d_albret",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "Amanieu d'Albret",
+      "url": "https://en.wikipedia.org/wiki/Amanieu_d'Albret",
+      "chars": 182
+    },
+    {
+      "id": "wc244_amanieu_d_albret",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "Amanieu d'Albret",
+      "url": "https://en.wikipedia.org/wiki/Amanieu_d'Albret",
+      "chars": 182
+    },
+    {
+      "id": "wc237_battle_of_mart_n_garc_a",
+      "expect_inconsistent": 1,
+      "contradict_type": "Implicit (reasoning required)",
+      "same_passage": "Different",
+      "article": "Battle of Mart\u00edn Garc\u00eda",
+      "url": "https://en.wikipedia.org/wiki/Battle_of_Mart\u00edn_Garc\u00eda",
+      "chars": 810
+    },
+    {
+      "id": "wc013_liu_zhi_roc",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "Liu Zhi (ROC)",
+      "url": "https://en.wikipedia.org/wiki/Liu_Zhi_(ROC)",
+      "chars": 373
+    },
+    {
+      "id": "wc112_battle_of_panjwaii",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "Battle of Panjwaii",
+      "url": "https://en.wikipedia.org/wiki/Battle_of_Panjwaii",
+      "chars": 289
+    },
+    {
+      "id": "wc056_alpha_v_beta_5",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Same",
+      "article": "Alpha-v beta-5",
+      "url": "https://en.wikipedia.org/wiki/Alpha-v_beta-5",
+      "chars": 150
+    },
+    {
+      "id": "wc030_ndat_yalla_mbodj",
+      "expect_inconsistent": 1,
+      "contradict_type": "Implicit (reasoning required)",
+      "same_passage": "Different",
+      "article": "Ndat\u00e9 Yalla Mbodj",
+      "url": "https://en.wikipedia.org/wiki/Ndat\u00e9_Yalla_Mbodj",
+      "chars": 1267
+    },
+    {
+      "id": "wc085_charles_d_oyly",
+      "expect_inconsistent": 1,
+      "contradict_type": "Implicit (reasoning required)",
+      "same_passage": "Different",
+      "article": "Charles D'Oyly",
+      "url": "https://en.wikipedia.org/wiki/Charles_D'Oyly",
+      "chars": 808
+    },
+    {
+      "id": "wc252_angerm_nde",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "Angerm\u00fcnde",
+      "url": "https://en.wikipedia.org/wiki/Angerm\u00fcnde",
+      "chars": 240
+    },
+    {
+      "id": "wc208_ayapana_triplinervis",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "Ayapana triplinervis",
+      "url": "https://en.wikipedia.org/wiki/Ayapana_triplinervis",
+      "chars": 150
+    },
+    {
+      "id": "wc167_brandon_given_name",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Same",
+      "article": "Brandon (given name)",
+      "url": "https://en.wikipedia.org/wiki/Brandon_(given_name)",
+      "chars": 263
+    },
+    {
+      "id": "wc001_nymphaea_nouchali_var_caerulea",
+      "expect_inconsistent": 1,
+      "contradict_type": "Implicit (reasoning required)",
+      "same_passage": "Different",
+      "article": "Nymphaea nouchali var. caerulea",
+      "url": "https://en.wikipedia.org/wiki/Nymphaea_nouchali_var._caerulea",
+      "chars": 244
+    },
+    {
+      "id": "wc102_muhammad_iii_of_alamut",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "Muhammad III of Alamut",
+      "url": "https://en.wikipedia.org/wiki/Muhammad_III_of_Alamut",
+      "chars": 246
+    },
+    {
+      "id": "wc005_knickerbocker_ice_company",
+      "expect_inconsistent": 1,
+      "contradict_type": "Implicit (reasoning required)",
+      "same_passage": "Same",
+      "article": "Knickerbocker Ice Company",
+      "url": "https://en.wikipedia.org/wiki/Knickerbocker_Ice_Company",
+      "chars": 1364
+    },
+    {
+      "id": "wc089_mari_fitzduff",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "Mari Fitzduff",
+      "url": "https://en.wikipedia.org/wiki/Mari_Fitzduff",
+      "chars": 722
+    },
+    {
+      "id": "wc148_burning_mouth_syndrome",
+      "expect_inconsistent": 1,
+      "contradict_type": "Implicit (reasoning required)",
+      "same_passage": "Same",
+      "article": "Burning mouth syndrome",
+      "url": "https://en.wikipedia.org/wiki/Burning_mouth_syndrome",
+      "chars": 529
+    },
+    {
+      "id": "wc120_ibn_arabi",
+      "expect_inconsistent": 1,
+      "contradict_type": "Implicit (reasoning required)",
+      "same_passage": "Different",
+      "article": "Ibn Arabi",
+      "url": "https://en.wikipedia.org/wiki/Ibn_Arabi",
+      "chars": 361
+    },
+    {
+      "id": "wc217_canarium_luzonicum",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "Canarium luzonicum",
+      "url": "https://en.wikipedia.org/wiki/Canarium_luzonicum",
+      "chars": 393
+    },
+    {
+      "id": "wc067_cesar_barone",
+      "expect_inconsistent": 1,
+      "contradict_type": "Implicit (reasoning required)",
+      "same_passage": "Different",
+      "article": "Cesar Barone",
+      "url": "https://en.wikipedia.org/wiki/Cesar_Barone",
+      "chars": 365
+    },
+    {
+      "id": "wc031_ndat_yalla_mbodj",
+      "expect_inconsistent": 1,
+      "contradict_type": "Implicit (reasoning required)",
+      "same_passage": "Different",
+      "article": "Ndat\u00e9 Yalla Mbodj",
+      "url": "https://en.wikipedia.org/wiki/Ndat\u00e9_Yalla_Mbodj",
+      "chars": 1267
+    },
+    {
+      "id": "wc188_blasphemy_law_in_the_united_states",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "Blasphemy law in the United States",
+      "url": "https://en.wikipedia.org/wiki/Blasphemy_law_in_the_United_States",
+      "chars": 809
+    },
+    {
+      "id": "wc073_boeing_saab_t_7_red_hawk",
+      "expect_inconsistent": 1,
+      "contradict_type": "Implicit (reasoning required)",
+      "same_passage": "Different",
+      "article": "Boeing\u2013Saab T-7 Red Hawk",
+      "url": "https://en.wikipedia.org/wiki/Boeing\u2013Saab_T-7_Red_Hawk",
+      "chars": 309
+    },
+    {
+      "id": "wc235_battle_of_mart_n_garc_a",
+      "expect_inconsistent": 1,
+      "contradict_type": "Implicit (reasoning required)",
+      "same_passage": "Different",
+      "article": "Battle of Mart\u00edn Garc\u00eda",
+      "url": "https://en.wikipedia.org/wiki/Battle_of_Mart\u00edn_Garc\u00eda",
+      "chars": 810
+    },
+    {
+      "id": "wc116_another_suitcase_in_another_hall",
+      "expect_inconsistent": 1,
+      "contradict_type": "Implicit (reasoning required)",
+      "same_passage": "Different",
+      "article": "Another Suitcase in Another Hall",
+      "url": "https://en.wikipedia.org/wiki/Another_Suitcase_in_Another_Hall",
+      "chars": 783
+    },
+    {
+      "id": "wc182_british_rail_class_153",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Same",
+      "article": "British Rail Class 153",
+      "url": "https://en.wikipedia.org/wiki/British_Rail_Class_153",
+      "chars": 397
+    },
+    {
+      "id": "wc175_bribery_of_senior_wehrmacht_officers",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "Bribery of senior Wehrmacht officers",
+      "url": "https://en.wikipedia.org/wiki/Bribery_of_senior_Wehrmacht_officers",
+      "chars": 1849
+    },
+    {
+      "id": "wc251_alpha_wave",
+      "expect_inconsistent": 1,
+      "contradict_type": "Implicit (reasoning required)",
+      "same_passage": "Same",
+      "article": "Alpha wave",
+      "url": "https://en.wikipedia.org/wiki/Alpha_wave",
+      "chars": 131
+    },
+    {
+      "id": "wc156_october_2010_north_american_storm_comple",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "October 2010 North American storm complex",
+      "url": "https://en.wikipedia.org/wiki/October_2010_North_American_storm_complex",
+      "chars": 491
+    },
+    {
+      "id": "wc190_bloodless_surgery",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "Bloodless surgery",
+      "url": "https://en.wikipedia.org/wiki/Bloodless_surgery",
+      "chars": 394
+    },
+    {
+      "id": "wc093_battle_of_fort_ben_mael",
+      "expect_inconsistent": 1,
+      "contradict_type": "Implicit (reasoning required)",
+      "same_passage": "Different",
+      "article": "Battle of Fort \u00c9ben-\u00c9mael",
+      "url": "https://en.wikipedia.org/wiki/Battle_of_Fort_\u00c9ben-\u00c9mael",
+      "chars": 1520
+    },
+    {
+      "id": "wc105_bandra_terminus_lucknow_weekly_superfast",
+      "expect_inconsistent": 1,
+      "contradict_type": "Implicit (reasoning required)",
+      "same_passage": "Different",
+      "article": "Bandra Terminus\u2013Lucknow Weekly Superfast Express",
+      "url": "https://en.wikipedia.org/wiki/Bandra_Terminus\u2013Lucknow_Weekly_Superfast_Express",
+      "chars": 304
+    },
+    {
+      "id": "wc124_argentovaria",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "Argentovaria",
+      "url": "https://en.wikipedia.org/wiki/Argentovaria",
+      "chars": 455
+    },
+    {
+      "id": "wc174_bremen",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "Bremen",
+      "url": "https://en.wikipedia.org/wiki/Bremen",
+      "chars": 398
+    },
+    {
+      "id": "wc239_battle_of_mart_n_garc_a",
+      "expect_inconsistent": 1,
+      "contradict_type": "Implicit (reasoning required)",
+      "same_passage": "Different",
+      "article": "Battle of Mart\u00edn Garc\u00eda",
+      "url": "https://en.wikipedia.org/wiki/Battle_of_Mart\u00edn_Garc\u00eda",
+      "chars": 810
+    },
+    {
+      "id": "wc204_attempts_to_ban_football_games",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Same",
+      "article": "Attempts to ban football games",
+      "url": "https://en.wikipedia.org/wiki/Attempts_to_ban_football_games",
+      "chars": 243
+    },
+    {
+      "id": "wc180_british_rail_class_153",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Same",
+      "article": "British Rail Class 153",
+      "url": "https://en.wikipedia.org/wiki/British_Rail_Class_153",
+      "chars": 397
+    },
+    {
+      "id": "wc132_a_best",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Same",
+      "article": "A Best",
+      "url": "https://en.wikipedia.org/wiki/A_Best",
+      "chars": 635
+    },
+    {
+      "id": "wc004_charles_d_oyly",
+      "expect_inconsistent": 1,
+      "contradict_type": "Implicit (reasoning required)",
+      "same_passage": "Different",
+      "article": "Charles D'Oyly",
+      "url": "https://en.wikipedia.org/wiki/Charles_D'Oyly",
+      "chars": 240
+    },
+    {
+      "id": "wc169_brandon_given_name",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Same",
+      "article": "Brandon (given name)",
+      "url": "https://en.wikipedia.org/wiki/Brandon_(given_name)",
+      "chars": 263
+    },
+    {
+      "id": "wc147_margery_de_burgh",
+      "expect_inconsistent": 1,
+      "contradict_type": "Implicit (reasoning required)",
+      "same_passage": "Same",
+      "article": "Margery de Burgh",
+      "url": "https://en.wikipedia.org/wiki/Margery_de_Burgh",
+      "chars": 205
+    },
+    {
+      "id": "wc194_b_s_zoku",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "B\u014ds\u014dzoku",
+      "url": "https://en.wikipedia.org/wiki/B\u014ds\u014dzoku",
+      "chars": 324
+    },
+    {
+      "id": "wc123_architecture_of_lebanon",
+      "expect_inconsistent": 1,
+      "contradict_type": "Implicit (reasoning required)",
+      "same_passage": "Different",
+      "article": "Architecture of Lebanon",
+      "url": "https://en.wikipedia.org/wiki/Architecture_of_Lebanon",
+      "chars": 262
+    },
+    {
+      "id": "wc153_1961_all_ireland_senior_camogie_champion",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "1961 All-Ireland Senior Camogie Championship final",
+      "url": "https://en.wikipedia.org/wiki/1961_All-Ireland_Senior_Camogie_Championship_final",
+      "chars": 595
+    },
+    {
+      "id": "wc028_ndat_yalla_mbodj",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "Ndat\u00e9 Yalla Mbodj",
+      "url": "https://en.wikipedia.org/wiki/Ndat\u00e9_Yalla_Mbodj",
+      "chars": 768
+    },
+    {
+      "id": "wc185_ger_browne",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "Ger Browne",
+      "url": "https://en.wikipedia.org/wiki/Ger_Browne",
+      "chars": 377
+    },
+    {
+      "id": "wc115_angolan_kwanza",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "Angolan kwanza",
+      "url": "https://en.wikipedia.org/wiki/Angolan_kwanza",
+      "chars": 206
+    },
+    {
+      "id": "wc065_marina_baker",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "Marina Baker",
+      "url": "https://en.wikipedia.org/wiki/Marina_Baker",
+      "chars": 99
+    },
+    {
+      "id": "wc010_imidazoline_receptor",
+      "expect_inconsistent": 1,
+      "contradict_type": "Implicit (reasoning required)",
+      "same_passage": "Different",
+      "article": "Imidazoline receptor",
+      "url": "https://en.wikipedia.org/wiki/Imidazoline_receptor",
+      "chars": 467
+    },
+    {
+      "id": "wc027_two_penny_blue",
+      "expect_inconsistent": 1,
+      "contradict_type": "Implicit (reasoning required)",
+      "same_passage": "Different",
+      "article": "Two penny blue",
+      "url": "https://en.wikipedia.org/wiki/Two_penny_blue",
+      "chars": 483
+    },
+    {
+      "id": "wc221_carandiru_massacre",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "Carandiru massacre",
+      "url": "https://en.wikipedia.org/wiki/Carandiru_massacre",
+      "chars": 407
+    },
+    {
+      "id": "wc248_all_pakistan_federation_of_united_trade_",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "All Pakistan Federation of United Trade Unions",
+      "url": "https://en.wikipedia.org/wiki/All_Pakistan_Federation_of_United_Trade_Unions",
+      "chars": 347
+    },
+    {
+      "id": "wc083_dinigeer_yilamujiang",
+      "expect_inconsistent": 1,
+      "contradict_type": "Implicit (reasoning required)",
+      "same_passage": "Different",
+      "article": "Dinigeer Yilamujiang",
+      "url": "https://en.wikipedia.org/wiki/Dinigeer_Yilamujiang",
+      "chars": 464
+    },
+    {
+      "id": "wc049_hms_royal_george_1756",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "HMS Royal George (1756)",
+      "url": "https://en.wikipedia.org/wiki/HMS_Royal_George_(1756)",
+      "chars": 195
+    },
+    {
+      "id": "wc059_antherina",
+      "expect_inconsistent": 1,
+      "contradict_type": "Implicit (reasoning required)",
+      "same_passage": "Different",
+      "article": "Antherina",
+      "url": "https://en.wikipedia.org/wiki/Antherina",
+      "chars": 347
+    },
+    {
+      "id": "wc205_attempts_to_ban_football_games",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Same",
+      "article": "Attempts to ban football games",
+      "url": "https://en.wikipedia.org/wiki/Attempts_to_ban_football_games",
+      "chars": 243
+    },
+    {
+      "id": "wc226_castle_donington",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "Castle Donington",
+      "url": "https://en.wikipedia.org/wiki/Castle_Donington",
+      "chars": 438
+    },
+    {
+      "id": "wc063_back_to_back_house",
+      "expect_inconsistent": 1,
+      "contradict_type": "Implicit (reasoning required)",
+      "same_passage": "Different",
+      "article": "Back-to-back house",
+      "url": "https://en.wikipedia.org/wiki/Back-to-back_house",
+      "chars": 418
+    },
+    {
+      "id": "wc051_john_henry_seadlund",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "John Henry Seadlund",
+      "url": "https://en.wikipedia.org/wiki/John_Henry_Seadlund",
+      "chars": 632
+    },
+    {
+      "id": "wc081_convenience_store",
+      "expect_inconsistent": 1,
+      "contradict_type": "Implicit (reasoning required)",
+      "same_passage": "Different",
+      "article": "Convenience store",
+      "url": "https://en.wikipedia.org/wiki/Convenience_store",
+      "chars": 294
+    },
+    {
+      "id": "wc222_carandiru_massacre",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "Carandiru massacre",
+      "url": "https://en.wikipedia.org/wiki/Carandiru_massacre",
+      "chars": 407
+    },
+    {
+      "id": "wc196_list_of_association_football_stadiums_by",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "List of association football stadiums by country",
+      "url": "https://en.wikipedia.org/wiki/List_of_association_football_stadiums_by_country",
+      "chars": 140
+    },
+    {
+      "id": "wc087_emperor_discography",
+      "expect_inconsistent": 1,
+      "contradict_type": "Explicit",
+      "same_passage": "Different",
+      "article": "Emperor discography",
+      "url": "https://en.wikipedia.org/wiki/Emperor_discography",
+      "chars": 201
+    }
+  ],
+  "note": "stratified subsample: all logical_candidate + 60 random others"
+}

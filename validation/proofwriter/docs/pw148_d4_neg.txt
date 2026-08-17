@@ -1,0 +1,5 @@
+Report
+
+The bear likes the rabbit. The rabbit likes the bear. The tiger visits the rabbit. If the rabbit visits the bear and the rabbit likes the bear then the rabbit chases the bear. If something is nice and it visits the tiger then it visits the rabbit. If something visits the bear then it likes the rabbit. If the bear visits the rabbit then the rabbit visits the bear. If something chases the rabbit and it is green then the rabbit visits the bear. If something likes the tiger then it visits the bear. If something likes the bear then the bear likes the tiger. If something visits the bear and it visits the rabbit then it likes the tiger.
+
+The rabbit like the rabbit.

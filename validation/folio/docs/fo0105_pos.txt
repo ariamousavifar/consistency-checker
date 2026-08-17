@@ -1,0 +1,10 @@
+Statement
+
+It costs $205 to take the GRE test, which is cheaper than $300.
+ETS provides financial aid to those GRE applicants who prove economic hardship.
+Those living in single-parent families or having few resources available to them can prove economic hardship.
+Tom lives in a single-parent family.
+Tom's dad has been out of work, and Tom has few resources available to them. 
+Tom is applying to take the GRE test.
+
+It is not the case that eTS provides financial aid to Tom.

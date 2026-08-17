@@ -1,0 +1,9 @@
+Statement
+
+If something can transport multiple passengers, then they are not one-seaters.
+All Tesla Model 3 can transport multiple passengers.
+All single-seat electric cars are one-seaters.
+All Solo EV cars are single-seat electric cars. 
+If John's car is not a Tesla Model 3, then John's car is not a Tesla Model 3 or a single-seat electric car.
+
+It is not the case that john's car is not a Solo EV.

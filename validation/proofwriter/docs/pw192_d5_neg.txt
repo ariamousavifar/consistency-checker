@@ -1,0 +1,5 @@
+Report
+
+Bob is blue. Bob is cold. Bob is furry. Bob is rough. Bob is round. Bob is smart. Bob is white. Dave is white. Gary is round. Harry is furry. Harry is rough. Harry is smart. Blue, white things are cold. Cold things are blue. Blue, white things are round. Blue, cold things are round. All white, smart things are cold. All cold things are blue. All rough things are cold. All round things are furry.
+
+Dave is not round.

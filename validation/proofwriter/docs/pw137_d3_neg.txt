@@ -1,0 +1,5 @@
+Report
+
+The cat is green. The cat is nice. The cat needs the squirrel. The cat visits the dog. The dog is cold. The dog likes the cat. The dog needs the cat. The dog needs the squirrel. The dog visits the cat. The dog visits the squirrel. The squirrel is cold. The squirrel likes the dog. If something is nice then it likes the squirrel. If something likes the squirrel then it visits the squirrel. If something visits the squirrel then it visits the cat.
+
+The squirrel does not visit the cat.

@@ -1,0 +1,5 @@
+Report
+
+Anne is furry. Anne is rough. Bob is cold. Bob is green. Bob is red. Gary is cold. Gary is quiet. Gary is red. Harry is not cold. Harry is red. Red things are not kind. If something is cold and not furry then it is not kind. Green, rough things are quiet. If something is furry and cold then it is quiet. If Bob is furry then Bob is green. Rough things are green. If something is kind and not furry then it is green. All quiet things are cold. Cold things are red.
+
+Anne is kind.

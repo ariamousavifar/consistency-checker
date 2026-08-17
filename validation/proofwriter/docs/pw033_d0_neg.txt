@@ -1,0 +1,5 @@
+Report
+
+The dog is green. The dog is kind. The dog is nice. The dog is red. The dog likes the tiger. The dog needs the tiger. The dog visits the tiger. The tiger is red. The tiger is young. The tiger likes the dog. The tiger needs the dog. The tiger visits the dog. If someone is red then they like the dog. If someone likes the dog then they need the tiger. If someone visits the tiger then the tiger is nice.
+
+The dog is young.

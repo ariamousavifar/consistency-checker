@@ -1,0 +1,5 @@
+Report
+
+The bear chases the dog. The bear is nice. The bear visits the rabbit. The dog chases the bear. The dog is big. The dog needs the mouse. The dog visits the bear. The dog visits the mouse. The mouse chases the dog. The mouse needs the bear. The mouse visits the bear. The mouse visits the dog. The rabbit chases the bear. The rabbit chases the dog. The rabbit chases the mouse. The rabbit is big. If something visits the rabbit and the rabbit needs the dog then the dog is nice. If something chases the dog then it is young. If the mouse needs the rabbit then the rabbit needs the dog.
+
+The bear does not visit the bear.

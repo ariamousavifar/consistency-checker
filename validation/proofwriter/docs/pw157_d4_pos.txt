@@ -1,0 +1,5 @@
+Report
+
+Anne is big. Anne is cold. Anne is furry. Anne is white. Erin is cold. Fiona is round. Gary is smart. All smart things are furry. Big, blue things are round. If Gary is cold then Gary is smart. All blue, furry things are big. If Gary is furry then Gary is blue. Round things are cold. Cold, white things are furry. Round things are blue.
+
+Gary is not round.

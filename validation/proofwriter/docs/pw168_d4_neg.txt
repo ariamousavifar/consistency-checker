@@ -1,0 +1,5 @@
+Report
+
+Anne is big. Anne is furry. Anne is rough. Anne is round. Anne is young. Charlie is big. Charlie is cold. Dave is furry. Dave is young. Harry is furry. Harry is nice. Harry is young. All round things are cold. Cold, furry things are rough. If something is furry and rough then it is round. If Charlie is round and Charlie is furry then Charlie is nice. All round, nice things are rough. Big, cold things are furry. Furry, round things are cold. Nice, round things are young.
+
+Harry is not cold.

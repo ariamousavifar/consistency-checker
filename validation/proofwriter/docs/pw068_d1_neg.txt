@@ -1,0 +1,5 @@
+Report
+
+The cow eats the squirrel. The squirrel does not visit the cow. If the cow chases the squirrel then the cow does not eat the squirrel. If something chases the cow then it is green. If something eats the squirrel then the squirrel chases the cow. If something eats the squirrel then it is red. If something eats the cow then the cow chases the squirrel. If something visits the squirrel then it is kind.
+
+The squirrel is red.

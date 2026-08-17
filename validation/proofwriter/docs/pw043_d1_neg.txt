@@ -1,0 +1,5 @@
+Report
+
+The bald eagle chases the squirrel. The bald eagle eats the dog. The bear eats the bald eagle. The bear eats the dog. The dog chases the bald eagle. The dog chases the bear. The dog chases the squirrel. The dog eats the squirrel. The dog is big. The dog is blue. The dog is green. The squirrel is green. If someone likes the squirrel then they chase the dog. If someone eats the bald eagle then they are red. If someone is green and they eat the bear then they like the squirrel. If someone eats the dog then the dog eats the bald eagle. If someone eats the bear then the bear is big. If someone eats the squirrel and they chase the bear then the bear chases the bald eagle. If someone is red and green then they eat the bear. If someone likes the bear and they eat the bear then the bear eats the bald eagle.
+
+The bald eagle does not like the squirrel.

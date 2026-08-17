@@ -1,0 +1,5 @@
+Report
+
+The cat eats the cow. The cat is big. The cat is red. The cat is young. The cat needs the cow. The cat visits the cow. The cow eats the cat. The cow is big. The cow is green. The cow is young. The cow needs the cat. The cow visits the cat. If the cow is big then the cow is round. If something visits the cow then it needs the cow. If something is round and it eats the cat then it visits the cow.
+
+The cow does not visit the cow.

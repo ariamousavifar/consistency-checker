@@ -1,0 +1,5 @@
+Report
+
+The cow sees the squirrel. The squirrel is young. If someone needs the squirrel then they need the cow. If someone sees the cow then the cow needs the squirrel. If someone is young then they see the cow.
+
+The cow does not see the squirrel.

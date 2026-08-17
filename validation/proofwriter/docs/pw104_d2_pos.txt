@@ -1,0 +1,5 @@
+Report
+
+The bald eagle does not eat the cow. The bald eagle is rough. The bald eagle likes the cow. The bald eagle needs the cow. The bald eagle needs the lion. The cow eats the bald eagle. The cow eats the lion. The cow is blue. The cow is rough. The cow is round. The cow likes the lion. The lion eats the cow. The lion is blue. The lion is round. The lion needs the bald eagle. The lion needs the cow. If the lion needs the cow and the lion is not red then the cow needs the lion. If someone eats the cow and they are not round then the cow does not eat the bald eagle. If someone eats the bald eagle and the bald eagle is round then the bald eagle is not green. If someone eats the bald eagle then they eat the lion. If someone is green then they eat the bald eagle. If someone eats the lion and the lion eats the cow then the lion is green. If the bald eagle does not eat the lion then the bald eagle needs the cow. If the bald eagle needs the cow then the bald eagle needs the lion.
+
+The lion does not eat the bald eagle.

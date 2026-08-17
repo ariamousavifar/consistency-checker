@@ -1,0 +1,10 @@
+Statement
+
+Some show airing at 8 pm on Monday gives out roses on TV.
+If a show gives out roses on TV, then the show is an episode of The Bachelor.
+The Bachelor portrays the lives of real people.
+All shows portraying the lives of real people are reality TV shows.
+Breaking Bad is a show.
+Breaking Bad is not a reality TV show.
+
+It is not the case that if roses are given out during Breaking Bad, then it is on Monday at 8 pm.

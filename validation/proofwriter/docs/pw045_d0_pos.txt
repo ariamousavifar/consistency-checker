@@ -1,0 +1,5 @@
+Report
+
+Anne is blue. Anne is nice. Bob is blue. Erin is rough. Gary is blue. Gary is nice. Gary is young. White things are round. All rough, round things are cold. Blue things are white. Round things are rough. Round things are cold. If something is cold then it is young. If something is blue and young then it is cold. If something is nice then it is round.
+
+Bob is not blue.

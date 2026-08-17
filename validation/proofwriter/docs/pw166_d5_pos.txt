@@ -1,0 +1,5 @@
+Report
+
+Anne is rough. Bob is blue. Bob is furry. Bob is rough. Bob is white. Erin is quiet. Gary is quiet. If Erin is red and Erin is rough then Erin is blue. Furry things are green. Red things are rough. All green, white things are quiet. Furry, white things are blue. Quiet things are furry. All green, quiet things are red.
+
+Erin is not blue.

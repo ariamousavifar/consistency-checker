@@ -1,0 +1,5 @@
+Report
+
+Bob is red. Charlie is round. Erin is nice. If something is red and not green then it is not round. If Bob is white then Bob is red. All smart, green things are nice. If something is nice and kind then it is red. White things are smart. If something is red and round then it is smart. All nice things are not kind. All nice things are white.
+
+Bob is not white.

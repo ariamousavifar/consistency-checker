@@ -1,0 +1,994 @@
+{
+  "source": "tasksource/folio",
+  "split": "validation",
+  "adaptation": "premises + negated conclusion; label True -> inconsistent, Uncertain -> consistent; False excluded",
+  "documents": [
+    {
+      "id": "fo0001_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 380,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0002_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 380,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0004_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 426,
+      "n_premises": 7
+    },
+    {
+      "id": "fo0005_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 426,
+      "n_premises": 7
+    },
+    {
+      "id": "fo0006_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 426,
+      "n_premises": 7
+    },
+    {
+      "id": "fo0007_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 198,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0008_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 198,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0009_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 198,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0010_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 0,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0012_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 0,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0013_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 20,
+      "n_premises": 4
+    },
+    {
+      "id": "fo0014_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 20,
+      "n_premises": 4
+    },
+    {
+      "id": "fo0016_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 282,
+      "n_premises": 2
+    },
+    {
+      "id": "fo0017_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 471,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0018_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 471,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0019_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 471,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0020_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 471,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0022_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 184,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0024_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 184,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0025_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 232,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0026_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 232,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0027_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 232,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0028_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 452,
+      "n_premises": 7
+    },
+    {
+      "id": "fo0029_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 452,
+      "n_premises": 7
+    },
+    {
+      "id": "fo0031_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 340,
+      "n_premises": 8
+    },
+    {
+      "id": "fo0032_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 340,
+      "n_premises": 8
+    },
+    {
+      "id": "fo0034_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 96,
+      "n_premises": 4
+    },
+    {
+      "id": "fo0035_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 96,
+      "n_premises": 4
+    },
+    {
+      "id": "fo0037_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 219,
+      "n_premises": 7
+    },
+    {
+      "id": "fo0038_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 219,
+      "n_premises": 7
+    },
+    {
+      "id": "fo0040_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 350,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0041_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 350,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0043_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 385,
+      "n_premises": 7
+    },
+    {
+      "id": "fo0044_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 385,
+      "n_premises": 7
+    },
+    {
+      "id": "fo0046_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 256,
+      "n_premises": 2
+    },
+    {
+      "id": "fo0047_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 159,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0048_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 159,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0049_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 343,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0051_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 343,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0053_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 213,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0054_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 213,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0055_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 79,
+      "n_premises": 4
+    },
+    {
+      "id": "fo0057_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 79,
+      "n_premises": 4
+    },
+    {
+      "id": "fo0059_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 2,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0060_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 2,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0061_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 192,
+      "n_premises": 4
+    },
+    {
+      "id": "fo0062_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 192,
+      "n_premises": 4
+    },
+    {
+      "id": "fo0063_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 442,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0065_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 442,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0066_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 234,
+      "n_premises": 4
+    },
+    {
+      "id": "fo0067_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 234,
+      "n_premises": 4
+    },
+    {
+      "id": "fo0068_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 234,
+      "n_premises": 4
+    },
+    {
+      "id": "fo0069_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 120,
+      "n_premises": 4
+    },
+    {
+      "id": "fo0071_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 322,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0073_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 322,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0074_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 83,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0076_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 368,
+      "n_premises": 7
+    },
+    {
+      "id": "fo0077_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 368,
+      "n_premises": 7
+    },
+    {
+      "id": "fo0080_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 319,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0081_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 319,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0082_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 319,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0085_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 306,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0086_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 306,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0087_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 245,
+      "n_premises": 8
+    },
+    {
+      "id": "fo0088_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 58,
+      "n_premises": 4
+    },
+    {
+      "id": "fo0089_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 58,
+      "n_premises": 4
+    },
+    {
+      "id": "fo0090_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 58,
+      "n_premises": 4
+    },
+    {
+      "id": "fo0091_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 191,
+      "n_premises": 4
+    },
+    {
+      "id": "fo0094_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 166,
+      "n_premises": 10
+    },
+    {
+      "id": "fo0095_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 166,
+      "n_premises": 10
+    },
+    {
+      "id": "fo0096_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 352,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0098_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 352,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0099_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 472,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0100_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 472,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0102_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 379,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0104_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 379,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0105_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 197,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0106_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 197,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0108_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 361,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0110_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 361,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0111_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 262,
+      "n_premises": 2
+    },
+    {
+      "id": "fo0112_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 124,
+      "n_premises": 4
+    },
+    {
+      "id": "fo0113_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 124,
+      "n_premises": 4
+    },
+    {
+      "id": "fo0116_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 183,
+      "n_premises": 7
+    },
+    {
+      "id": "fo0117_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 183,
+      "n_premises": 7
+    },
+    {
+      "id": "fo0118_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 151,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0119_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 151,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0121_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 295,
+      "n_premises": 2
+    },
+    {
+      "id": "fo0122_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 315,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0124_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 315,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0125_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 467,
+      "n_premises": 8
+    },
+    {
+      "id": "fo0126_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 467,
+      "n_premises": 8
+    },
+    {
+      "id": "fo0129_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 330,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0130_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 330,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0131_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 330,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0132_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 26,
+      "n_premises": 4
+    },
+    {
+      "id": "fo0133_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 26,
+      "n_premises": 4
+    },
+    {
+      "id": "fo0134_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 26,
+      "n_premises": 4
+    },
+    {
+      "id": "fo0135_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 203,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0136_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 203,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0138_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 131,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0140_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 460,
+      "n_premises": 7
+    },
+    {
+      "id": "fo0142_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 460,
+      "n_premises": 7
+    },
+    {
+      "id": "fo0143_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 46,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0144_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 46,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0145_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 483,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0146_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 483,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0147_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 483,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0148_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 483,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0150_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 80,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0151_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 80,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0152_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 80,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0153_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 363,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0155_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 363,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0156_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 258,
+      "n_premises": 2
+    },
+    {
+      "id": "fo0158_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 435,
+      "n_premises": 7
+    },
+    {
+      "id": "fo0159_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 435,
+      "n_premises": 7
+    },
+    {
+      "id": "fo0160_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 435,
+      "n_premises": 7
+    },
+    {
+      "id": "fo0161_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 217,
+      "n_premises": 3
+    },
+    {
+      "id": "fo0162_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 217,
+      "n_premises": 3
+    },
+    {
+      "id": "fo0164_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 318,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0166_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 318,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0167_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 107,
+      "n_premises": 2
+    },
+    {
+      "id": "fo0168_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 107,
+      "n_premises": 2
+    },
+    {
+      "id": "fo0170_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 386,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0171_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 386,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0173_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 355,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0175_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 355,
+      "n_premises": 6
+    },
+    {
+      "id": "fo0176_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 51,
+      "n_premises": 3
+    },
+    {
+      "id": "fo0178_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 51,
+      "n_premises": 3
+    },
+    {
+      "id": "fo0182_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 441,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0183_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 441,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0185_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 64,
+      "n_premises": 8
+    },
+    {
+      "id": "fo0187_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 64,
+      "n_premises": 8
+    },
+    {
+      "id": "fo0188_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 456,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0189_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 456,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0195_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 140,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0196_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 459,
+      "n_premises": 7
+    },
+    {
+      "id": "fo0198_pos",
+      "expect_inconsistent": 1,
+      "folio_label": "True",
+      "story_id": 459,
+      "n_premises": 7
+    },
+    {
+      "id": "fo0202_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 101,
+      "n_premises": 5
+    },
+    {
+      "id": "fo0203_neg",
+      "expect_inconsistent": 0,
+      "folio_label": "Uncertain",
+      "story_id": 101,
+      "n_premises": 5
+    }
+  ]
+}

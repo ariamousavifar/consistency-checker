@@ -1,0 +1,5 @@
+Report
+
+The bald eagle eats the cow. The bald eagle is rough. The bald eagle is young. The bald eagle likes the cow. The bald eagle likes the dog. The bald eagle sees the cow. The bald eagle sees the dog. The cow eats the bald eagle. The cow likes the bald eagle. The cow sees the dog. The dog eats the bald eagle. The dog is big. The dog is cold. The dog is young. The dog likes the cow. The dog sees the cow. If something eats the dog then it likes the cow. If something sees the bald eagle then the bald eagle eats the dog. If something sees the bald eagle then the bald eagle eats the cow. Big things are young. If something likes the cow then it eats the cow. If something eats the cow and it is big then the cow sees the bald eagle. If something likes the bald eagle then the bald eagle is kind. If something likes the bald eagle then it is rough.
+
+The bald eagle does not eat the dog.

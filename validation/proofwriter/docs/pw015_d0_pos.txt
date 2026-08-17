@@ -1,0 +1,5 @@
+Report
+
+The dog likes the rabbit. The lion visits the rabbit. The mouse sees the lion. The rabbit is kind. The rabbit is red. The rabbit sees the lion. The rabbit visits the lion. If something likes the lion then it is nice. If something visits the mouse and the mouse visits the lion then the lion likes the rabbit. If something visits the dog and it is cold then it is round. If something visits the dog then the dog sees the mouse. If something likes the dog and it visits the mouse then it sees the lion. If the rabbit is kind then the rabbit sees the lion.
+
+The mouse does not see the lion.

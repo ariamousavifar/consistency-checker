@@ -1,0 +1,11 @@
+Statement
+
+All employees who schedule a meeting with their customers will go to the company building today. 
+Everyone who has lunch in the company building schedules meetings with their customers. 
+Employees have lunch either in the company building or at home.
+If an employee has lunch at home, they are working remotely from home.
+All employees who are in other countries work remotely from home. 
+No managers work remotely from home. 
+James will appear in the company today if and only if he is a manager.
+
+It is not the case that james does not have lunch in the company.
