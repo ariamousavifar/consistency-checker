@@ -9,19 +9,19 @@ For what the project *is* and how to run it, see [README.md](README.md).
 
 ### Evaluation: a baseline, a stress set, and a corrected report
 
-No behaviour change and no source edits — this is measurement infrastructure and
+No behaviour change and no source edits. This is measurement infrastructure and
 the report built from it.
 
-1. **`tools/baselines.py` — a reference point for the recall numbers.** A recall
+1. **`tools/baselines.py`, a reference point for the recall numbers.** A recall
    figure floats without something to compare it against. The baseline
    implemented here is sentence-pair entailment (NLI): every pair of statements
    judged independently, flagging the document if any pair conflicts. Each
-   judgement sees only its two sentences — that isolation is the whole point, so
+   judgement sees only its two sentences. That isolation is the whole point, so
    pairs are never batched into one prompt, which would let the model reason
    across them and stop it being a pairwise method. Scored by the same rule and
    the same labels as the pipeline, so the numbers are directly comparable.
 
-2. **`tools/make_stress_set.py` — pushing depth past what public corpora reach.**
+2. **`tools/make_stress_set.py`, pushing depth past what public corpora reach.**
    ProofWriter tops out at 5 inference steps. This generates documents at 5, 10,
    15 and 20 steps, crossed with 0, 40 and 100 irrelevant statements, so depth
    and document length vary independently. Distractors reuse the same predicate
@@ -33,7 +33,7 @@ the report built from it.
    The first version of this generator was wrong, and the fix is worth recording:
    names were drawn from 12 entity types × 20 tags, so two distinct objects could
    share a surface form ("consignment oscar" and "shipment oscar"), which the
-   translator then collapsed into one — manufacturing contradictions that were
+   translator then collapsed into one, manufacturing contradictions that were
    artefacts of the test rather than the system. Names are now globally unique.
    Correcting it moved the measured false-positive rate from 18.8% to 10.4%.
    Only the corrected set is committed; the superseded one is ignored.
@@ -64,13 +64,13 @@ the report built from it.
 
 ## Earlier unreleased work
 
-Documentation and environment only — no behavior change, no source edits.
+Documentation and environment only. No behavior change, no source edits.
 
 1. **README rewritten as a project description.** It had become a changelog under
    a README's filename: eight consecutive "What's new in v0.X" sections occupied
    the first 370 of 592 lines, so the first thing a visitor read was a bullet
    about layered entailment rather than a sentence explaining what the tool does.
-   It was also stale — headed v0.8 while the code was v0.8.8. The new README
+   It was also stale, headed v0.8 while the code was v0.8.8. The new README
    leads with the problem being solved, shows two real worked examples (a direct
    three-statement contradiction, and a multi-hop prerequisite cycle that no
    single sentence states), a mermaid architecture diagram that visually
@@ -87,7 +87,7 @@ Documentation and environment only — no behavior change, no source edits.
    does not belong in the published tree.
 4. **Environment re-verified on a rebuilt virtualenv.** `requirements.txt`
    specifies lower bounds only, so a fresh install now resolves to major versions
-   beyond those the project was developed against — z3 4.x → **5.0.0.0**,
+   beyond those the project was developed against: z3 4.x → **5.0.0.0**,
    openai 1.x → **2.53.0**, pytest 8.x → **9.1.1** (also pydantic 2.13.4,
    python-dotenv 1.2.2, on Python 3.12.13). The full suite passes unchanged at
    255 tests, and the offline pipeline reproduces the expected result, so these
@@ -111,8 +111,8 @@ Relational false-negative fixes found by a live tier-3 campaign, plus
 statement-level translation resume. All deterministic; 255 tests pass.
 
 1. **Directional relational-synonym merge** (`vocabulary.py`). The translator
-   named one relation off different surface forms — ground facts off the verb
-   (`Require`), universal rules off the noun (`Prerequisite`) — so a transitivity
+   named one relation off different surface forms (ground facts off the verb
+   (`Require`), universal rules off the noun, `Prerequisite`), so a transitivity
    rule ranged over a predicate with zero facts and a real prerequisite cycle
    silently never closed. A curated table now merges such synonyms *with argument
    direction*: "X requires Y" == "Y is a prerequisite for X", so `Prerequisite(a,b)`
@@ -121,21 +121,21 @@ statement-level translation resume. All deterministic; 255 tests pass.
 2. **Guarded-irreflexivity normalization** (`normalize.py`). `forall x. (Person(x)
    -> not Ancestor(x,x))` in a document with zero `Person(...)` facts is vacuously
    true, so a 14-generation ancestry cycle went unrefuted. The dangling guard is
-   now stripped — but *only* for that exact shape with a provably uninstantiated
+   now stripped, but *only* for that exact shape with a provably uninstantiated
    guard. Deliberately narrow: a general "strip guards" rule would manufacture
    contradictions ("all unicorns are immortal"), and a negative test locks that in.
 3. **Constant-spelling unification** (`vocabulary._const_key`). One course number
-   was coined four ways — `c65060`, `c6_5060`, `six_5060`, `six5060` — splitting a
+   was coined four ways (`c65060`, `c6_5060`, `six_5060`, `six5060`), splitting a
    cycle node across distinct Z3 constants. All spellings now canonicalize to one
    valid identifier (number-word prefixes map to digits). Companion fix in
    `fidelity.py` so spelled-out forms match the source sentence.
 4. **Statement-level translation resume** (`extraction.py`). Each parsed
    translation is checkpointed to `translation.partial.jsonl` (content-hash keyed,
    parsed-only, torn-line tolerant). Re-running into the same `--out` directory
-   resumes instead of re-translating — so a rate-limit lockout hours into a
+   resumes instead of re-translating, so a rate-limit lockout hours into a
    book-length run loses nothing, and a provider swap mid-run is possible.
    Disable with `LLM_TRANSLATION_CACHE=0`.
-5. **Campaign test harness** (`tests/campaign.py`) — the full pre-release matrix as
+5. **Campaign test harness** (`tests/campaign.py`), the full pre-release matrix as
    named, resumable tests. **Run outputs moved to `results/`**, keeping the repo
    root clean.
 6. **`t3_bush_1988_notaxes` reclassified to expect 0 contradictions.** A broken
@@ -164,20 +164,20 @@ right way matters as much as finding inconsistency.
 1. **Theory trees, not fans (layered entailment).** The solver used to test each
    claim only against the axioms, so the support graph was a flat star: every
    theorem hung directly off the axioms with no theorem→theorem edges. It now grows
-   a `proven` set — each established theorem becomes available as a premise for
-   later ones — and attributes a claim's support to the *deepest* (most compressed)
+   a `proven` set, so each established theorem becomes available as a premise for
+   later ones, and attributes a claim's support to the *deepest* (most compressed)
    intermediate theorem. `square→quadrilateral` is shown following from the theorem
    `square→parallelogram` plus one axiom, not flatly from three axioms. Genuine
    multi-level derivation trees now render in `graph.png`/`theory_tree.txt`.
 2. **Asserted-premise roots.** A foundational premise the author states without
    deriving (which the extractor often types `derived_claim`, not `axiom`) is
    promoted to a root of the argument so the claims that follow from it actually
-   derive — instead of the branch collapsing to `not_entailed` for want of an axiom
+   derive, instead of the branch collapsing to `not_entailed` for want of an axiom
    label.
 3. **Reductio ad absurdum.** Hypothetical suppositions are no longer discarded:
    they are translated and carried to the solver as *assumptions*, kept out of the
    asserted-theory consistency base. A supposition that contradicts the established
-   theory is a successful reductio — its negation is proven — reported with the new
+   theory is a successful reductio, because its negation is proven, reported with the new
    `refuted` verdict (`RA` mark, a dedicated report section, a `REDUCTIO` console
    line). The author's deliberate "assume the opposite" move is never misreported
    as the author contradicting himself. Verdicts are now six-valued.
@@ -191,13 +191,13 @@ right way matters as much as finding inconsistency.
 ### Getting dense real prose into logic
 
 5. **Conditional & deontic translation (`--allow-conditionals`).** An opt-in
-   relaxed prompt stops nulling if/then/either-or structure — it emits `->`/`or`
-   directly — and reifies normative claims ("entitled to", "must", "ought") into
+   relaxed prompt stops nulling if/then/either-or structure, emitting `->`/`or`
+   directly, and reifies normative claims ("entitled to", "must", "ought") into
    modality-named predicates so a norm never silently clashes with a plain fact.
    This is what lets a conditional argument (the spine of any real essay) reach the
    solver. Off by default; the base prompt is byte-identical to v0.7.
 6. **Is/ought guard (`--guard-deontic`).** Optionally quarantine prescriptive
-   statements so norms stay out of the descriptive axiom set — the control knob for
+   statements so norms stay out of the descriptive axiom set, the control knob for
    is/ought false positives once deontic content is admitted.
 7. **Self-reference unification (`--unify-self-ref`).** Merge first-person
    constants (author/speaker/I/…) to one entity so a bridge premise written against
@@ -220,7 +220,7 @@ right way matters as much as finding inconsistency.
 
 10. **Per-stage reasoning effort.** `LLM_EXTRACTION_EFFORT` and
     `LLM_TRANSLATION_EFFORT` set the reasoning depth of the extraction and
-    translation stages independently — run extraction lean (reliable, cheap, under
+    translation stages independently: run extraction lean (reliable, cheap, under
     the token budget) while translation runs deep (where conditional reasoning
     pays off). Resolves the dense-document failures where one global effort either
     starved translation (under-thinking → null FOL) or blew the budget on
@@ -239,7 +239,7 @@ right way matters as much as finding inconsistency.
     `ResidentOfFrance`/`ResidentOfGermany` stay untouched). NLI (`--nli`) is now
     scoped to genuine two-candidate adjudication only.
 13. **Per-statement translation retry.** The batch translator drops hard
-    sentences non-deterministically — a conditional premise returns `null` in one
+    sentences non-deterministically, so a conditional premise returns `null` in one
     run and valid FOL in another. After the batch pass, every statement that
     produced no *parseable* FOL is re-asked individually (an isolated
     single-statement prompt with the full accumulated vocabulary and a fresh

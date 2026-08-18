@@ -73,7 +73,7 @@
       }
     },
     "cerebras_paid": {
-      "label": "Cerebras (PAID — 500 RPM / 500k TPM)",
+      "label": "Cerebras (PAID, 500 RPM / 500k TPM)",
       "base_url": "https://api.cerebras.ai/v1",
       "api_key_env": [
         "CEREBRAS_PAID_API_KEY"

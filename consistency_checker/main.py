@@ -150,7 +150,7 @@ def _run_all(args) -> int:
         # (where extraction started but the example never finished).
         if getattr(args, "resume", None) and (sub / "report.json").exists():
             emit(header)
-            emit(f"  [resume] skipping {ex['name']} — already completed (report.json exists)")
+            emit(f"  [resume] skipping {ex['name']}, already completed (report.json exists)")
             summary.append((ex["name"], "done", "done", 0.0, "-", str(sub)))
             continue
 

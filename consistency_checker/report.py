@@ -48,10 +48,10 @@ def render_markdown(report: RunReport) -> str:
         for m in report.predicate_merges:
             swap = " (arguments swapped: inverse phrasing)" if m.get("args_swapped") else ""
             lines.append(f"- treated `{m['from']}` and `{m['to']}` as the same relation; "
-                         f"kept `{m['to']}`{swap} — {m.get('reason', '')}")
+                         f"kept `{m['to']}`{swap}: {m.get('reason', '')}")
         for g in report.guard_strips:
             lines.append(f"- {g['id']}: stripped dangling type-guard `{g['guard']}` "
-                         f"(`{g['from']}` → `{g['to']}`) — {g.get('reason', '')}")
+                         f"(`{g['from']}` → `{g['to']}`): {g.get('reason', '')}")
         lines.append("")
 
     lines.append("## Statements")

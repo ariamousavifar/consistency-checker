@@ -12,12 +12,12 @@ logic, and hands the result to the Z3 theorem prover. What comes back is not a
 similarity score or a model's opinion: it is a **proof**. When statements cannot
 all be true, you get the *minimal* set that conflicts and a step-by-step
 derivation of the contradiction. When they are consistent, you get the author's
-argument reconstructed as a theory tree — axioms, theorems, and which premises
+argument reconstructed as a theory tree: axioms, theorems, and which premises
 each conclusion actually rests on.
 
 The point is multi-hop contradictions that no amount of sentence-pair comparison
 will catch. "All members are subscribers," "all subscribers are users," "all users
-have access," "Devon is a member," "Devon does not have access" — five sentences,
+have access," "Devon is a member," "Devon does not have access": five sentences,
 no two of which contradict each other, that cannot all be true together.
 
 ---
@@ -80,7 +80,7 @@ derived, red = the contradiction where the two chains collide:
 
 ![Theory tree for the prerequisite cycle](docs/assets/theory-tree-prereq-cycle.png)
 
-*(Click for full size — wide graphs are a known rendering limitation.)*
+*(Click for full size; wide graphs are a known rendering limitation.)*
 
 ---
 
@@ -96,10 +96,10 @@ python3 -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\ac
 pip install -r requirements.txt
 ```
 
-Run commands **from the project root** — the pipeline resolves `examples/` and
+Run commands **from the project root**, because the pipeline resolves `examples/` and
 `providers.json` relative to the working directory.
 
-**Offline mode needs no API key at all** — the shipped fixtures drive the entire
+**Offline mode needs no API key at all.** The shipped fixtures drive the entire
 downstream pipeline, so you can see the whole thing work before configuring
 anything:
 
@@ -127,15 +127,15 @@ Everything lands in `results/<run>/`: `report.md`, `report.json`, `store.json`,
 
 ```mermaid
 flowchart TD
-    A[raw text] --> B[cleaning<br/><i>deterministic — paragraphs, offsets</i>]
-    B --> C[extraction<br/><b>LLM</b> — which sentences claim what, self-contained]
-    C --> D[translation<br/><b>LLM</b> — claim → first-order logic]
+    A[raw text] --> B[cleaning<br/><i>deterministic: paragraphs, offsets</i>]
+    B --> C[extraction<br/><b>LLM</b>: which sentences claim what, self-contained]
+    C --> D[translation<br/><b>LLM</b>: claim → first-order logic]
     C --> R[rule translator<br/><i>deterministic fragment</i>]
     D --> E{translation gate}
     R --> E
     E -->|Z3-proved equivalent<br/>or fidelity-checked| F[vocabulary<br/><i>symbol alignment</i>]
     E -->|ambiguous / out of fragment| Q[quarantined<br/><i>with a written reason</i>]
-    F --> G[solver — <b>Z3</b><br/><i>consistency, entailment, minimal cores, reductio</i>]
+    F --> G[solver: <b>Z3</b><br/><i>consistency, entailment, minimal cores, reductio</i>]
     G --> H[reports<br/><i>Markdown · JSON · theory tree · graphs</i>]
     Q -.-> H
 
@@ -151,7 +151,7 @@ Note where the boundary falls: **the LLM proposes, Z3 disposes.**
 
 Four commitments run through the code:
 
-**The LLM never decides logic.** It does natural-language work — spotting claims,
+**The LLM never decides logic.** It does natural-language work: spotting claims,
 rendering them as formulas. Every logical verdict comes from Z3. Vocabulary
 normalization, equivalence checking, minimization, and reporting are auditable
 code, not model output.
@@ -161,8 +161,8 @@ quarantined *with a written reason* that appears in the report. If the tool
 ignored a sentence, it tells you which one and why.
 
 **Precision over recall.** A manufactured contradiction destroys trust in a way a
-missed one does not. When a construction is out of scope — modality, tense,
-causation, hedged generalizations — it is refused rather than forced into a
+missed one does not. When a construction is out of scope (modality, tense,
+causation, hedged generalizations), it is refused rather than forced into a
 formula that would produce a false alarm.
 
 **Provenance end to end.** Every statement carries character offsets into the
@@ -181,14 +181,14 @@ in silently.
 Deliberately refused, with a recorded reason:
 
 - **Tense and modality.** "I will not raise taxes" followed by raising them is a
-  broken promise — hypocrisy across time, not `P ∧ ¬P`. Tenseless first-order
+  broken promise: hypocrisy across time, not `P ∧ ¬P`. Tenseless first-order
   logic is *right* to decline it. Catching it would mean discarding the very tense
   information that makes the two statements compatible.
-- **Causation and comparatives** — no faithful FOL rendering.
+- **Causation and comparatives.** No faithful FOL rendering.
 - **Hedged generalizations.** "Birds typically fly" is not `∀x`. Treating it as one
   manufactures a contradiction the moment a penguin appears.
 - **Attributed belief.** Reporting someone else's view is not asserting it.
-- **∀∃ role restrictions over relations** — outside the decidable fragment; needs
+- **∀∃ role restrictions over relations.** Outside the decidable fragment, this needs
   description logic.
 
 Known weak spots, honestly: the fidelity check is a lexical-coverage heuristic
@@ -203,7 +203,7 @@ plain text only.
 
 **The problem.** Detecting whether a document contradicts *itself* is not the same
 problem as recognising textual entailment. A contradiction can be distributed
-across a chain of statements such that no pair of sentences is inconsistent —
+across a chain of statements such that no pair of sentences is inconsistent.
 the five-sentence example at the top of this README is the minimal case.
 Pairwise entailment models cannot reach these by construction, because the
 conflict does not exist in any pair; it only appears after inference over the
@@ -211,8 +211,8 @@ whole set.
 
 **The approach and what is claimed.** Claims are extracted and translated into
 first-order logic, and every logical judgement is discharged to an SMT solver
-(Z3). The language model performs only linguistic work — identifying claims and
-proposing formulas — while consistency, entailment, and minimality are decided
+(Z3). The language model performs only linguistic work, identifying claims and
+proposing formulas, while consistency, entailment, and minimality are decided
 symbolically. Four properties follow from that separation:
 
 1. **Verdicts are proofs, not predictions.** An inconsistency is reported only
@@ -223,7 +223,7 @@ symbolically. Four properties follow from that separation:
    forward-chaining step re-derives the two colliding chains, so the output is a
    derivation rather than a flag.
 3. **Translation is not trusted on the model's word.** Two independent
-   translators — one deterministic, one neural — must either be proved
+   translators, one deterministic and one neural, must either be proved
    equivalent in Z3 or survive a fidelity check before a formula is admitted.
 4. **Refusal is explicit.** Content outside the supported fragment is
    quarantined with a stated reason, which makes the system's coverage
@@ -231,8 +231,8 @@ symbolically. Four properties follow from that separation:
 
 **Decidability.** The base fragment is monadic first-order logic. Relational
 reasoning is admitted within the Bernays–Schönfinkel (EPR) class, and formulas
-that escape it — a universal with an existential in its scope linked by a
-relation — are detected and set aside rather than passed to the solver with no
+that escape it (a universal with an existential in its scope linked by a
+relation) are detected and set aside rather than passed to the solver with no
 guarantee of termination.
 
 **Relation to existing work.** Deterministic semantic parsing into logical form
@@ -245,7 +245,7 @@ outside it. Purely neural approaches invert the trade-off, covering arbitrary
 text without guarantees. This project sits deliberately between the two: neural
 breadth for translation, symbolic rigour for every decision that follows, and an
 arbitration layer between them. The measured cost of that choice is reported
-honestly — the deterministic translator currently covers only a small fraction
+honestly: the deterministic translator currently covers only a small fraction
 of real sentences, and closing that gap is the primary line of ongoing work.
 
 **Evaluation status.** Validated to date on synthetic multi-hop chains, real
@@ -280,7 +280,7 @@ cross-cluster sweep) · `--solver-timeout-ms` · `--bridges` · `--no-chunk` ·
 `--no-tree` · `--prune-derivation` · `--nli` (discouraged).
 
 **Environment:** `LLM_EXTRACTION_EFFORT` / `LLM_TRANSLATION_EFFORT` (per-stage
-reasoning depth — run extraction lean, translation deep) ·
+reasoning depth: run extraction lean, translation deep) ·
 `LLM_TRANSLATION_RETRY_MAX` (caps the per-statement retry storm) ·
 `LLM_TRANSLATION_CACHE` (statement-level resume; see below) · `LLM_MIN_INTERVAL`
 (raise on rate limits) · `LLM_TEMPERATURE`, `LLM_SEED`, `LLM_MAX_TOKENS`.
@@ -288,10 +288,10 @@ reasoning depth — run extraction lean, translation deep) ·
 **Long documents.** Extraction is chunked and cached; translation is checkpointed
 per statement to `translation.partial.jsonl`. Re-running into the same `--out`
 directory resumes where it stopped, so a rate-limit lockout hours into a large run
-costs nothing — and you can switch providers mid-run.
+costs nothing, and you can switch providers mid-run.
 
 **Providers** are configured in `providers.json` with keys in `.env`: Cerebras,
-Groq, NVIDIA NIM, Google. Pin one provider per benchmark — the same model on
+Groq, NVIDIA NIM, Google. Pin one provider per benchmark, because the same model on
 different infrastructure can produce different formulas for modal or relational
 text.
 
@@ -300,7 +300,7 @@ text.
 ## Project layout
 
 ```
-consistency_checker/pipeline.py         stage orchestration — read this first
+consistency_checker/pipeline.py         stage orchestration, read this first
 consistency_checker/schema.py           pydantic models (statements, propositions, verdicts, reports)
 consistency_checker/extraction.py       extraction judge + translator (live and fixture providers)
 consistency_checker/prompts.py          live-mode prompts
@@ -310,7 +310,7 @@ consistency_checker/fidelity.py         fidelity check (heuristic; NLI swap-in p
 consistency_checker/vocabulary.py       canonical predicate/constant registry + FOL normalization
 consistency_checker/fol_parser.py       FOL string → Z3, equivalence checking
 consistency_checker/solver.py           clustering, consistency, entailment, minimal conflict sets
-consistency_checker/forward_chain.py    constructive refutation — how a contradiction is derived
+consistency_checker/forward_chain.py    constructive refutation, how a contradiction is derived
 consistency_checker/normalize.py        extraction repair, instance retyping, guard normalization
 consistency_checker/report.py           Markdown + JSON reports
 consistency_checker/tree_builder.py     theory tree (ASCII), graph.dot / .svg / .png
@@ -333,15 +333,15 @@ chunk-spanning contradictions, and adversarial real-world argument (political
 speech, Austrian economics, TED transcripts). Next:
 
 1. **Scoring harness** for labeled benchmarks (ContraDoc, WikiContradict, Mündler)
-   — precision/recall/F1 against gold contradiction labels.
-2. **A larger deterministic fragment** — dependency-parse composition rules to
+   with precision/recall/F1 against gold contradiction labels.
+2. **A larger deterministic fragment**, using dependency-parse composition rules to
    replace the current regex translator, shrinking reliance on the LLM.
 3. **NLI-based fidelity** replacing the lexical heuristic.
-4. **Ambiguity as evidence** — enumerate readings of a genuinely ambiguous
+4. **Ambiguity as evidence**, enumerating readings of a genuinely ambiguous
    sentence and report "inconsistent under *every* reading" versus "under reading
    2 of 3." A strictly stronger claim than committing to one interpretation.
 
-**[Quantitative evaluation](docs/evaluation.md)** — results on three held-out
+**[Quantitative evaluation](docs/evaluation.md)**, results on four held-out
 datasets with confidence intervals, model comparison, and an ablation.
 
 Architecture in detail, with each component marked built / partial / planned:
@@ -350,12 +350,12 @@ Architecture in detail, with each component marked built / partial / planned:
 
 ## Citing
 
-If you use this work academically, see [CITATION.cff](CITATION.cff) — GitHub
+If you use this work academically, see [CITATION.cff](CITATION.cff); GitHub
 renders it as a "Cite this repository" option with APA and BibTeX output.
 
 ## License
 
-Licensed under the **Apache License 2.0** — see [LICENSE](LICENSE) and
+Licensed under the **Apache License 2.0**; see [LICENSE](LICENSE) and
 [NOTICE](NOTICE). You may use, modify, and redistribute this work, including
 commercially, provided you retain the copyright and license notices and state
 any significant changes. The license also grants patent rights from

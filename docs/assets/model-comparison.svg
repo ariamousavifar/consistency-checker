@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="400" viewBox="0 0 760 400" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">
+<rect width="760" height="400" fill="#ffffff"/>
+<text x="24" y="30" font-size="16" font-weight="600" fill="#1f2328">Translation model comparison</text>
+<text x="24" y="50" font-size="12" fill="#57606a">ProofWriter, 192 documents, same seed and settings</text>
+<line x1="60" y1="308.0" x2="720" y2="308.0" stroke="#d8dee4" stroke-width="1"/>
+<text x="50" y="312.0" font-size="11" fill="#57606a" text-anchor="end">0%</text>
+<line x1="60" y1="249.5" x2="720" y2="249.5" stroke="#d8dee4" stroke-width="1"/>
+<text x="50" y="253.5" font-size="11" fill="#57606a" text-anchor="end">25%</text>
+<line x1="60" y1="191.0" x2="720" y2="191.0" stroke="#d8dee4" stroke-width="1"/>
+<text x="50" y="195.0" font-size="11" fill="#57606a" text-anchor="end">50%</text>
+<line x1="60" y1="132.5" x2="720" y2="132.5" stroke="#d8dee4" stroke-width="1"/>
+<text x="50" y="136.5" font-size="11" fill="#57606a" text-anchor="end">75%</text>
+<line x1="60" y1="74.0" x2="720" y2="74.0" stroke="#d8dee4" stroke-width="1"/>
+<text x="50" y="78.0" font-size="11" fill="#57606a" text-anchor="end">100%</text>
+<rect x="96" y="120" width="44" height="188" fill="#0969da" rx="2"/>
+<text x="118" y="113" font-size="11" font-weight="600" fill="#0969da" text-anchor="middle">80.2</text>
+<rect x="148" y="80" width="44" height="228" fill="#1a7f37" rx="2"/>
+<text x="170" y="73" font-size="11" font-weight="600" fill="#1a7f37" text-anchor="middle">97.5</text>
+<rect x="200" y="303" width="44" height="5" fill="#9a6700" rx="2"/>
+<text x="222" y="296" font-size="11" font-weight="600" fill="#9a6700" text-anchor="middle">2.1</text>
+<text x="170" y="330" font-size="12.5" font-weight="600" fill="#1f2328" text-anchor="middle">gpt-oss-120b</text>
+<text x="170" y="348" font-size="10.5" fill="#57606a" text-anchor="middle">5,168 tokens/doc · 6.9s</text>
+<rect x="316" y="142" width="44" height="166" fill="#0969da" rx="2"/>
+<text x="338" y="135" font-size="11" font-weight="600" fill="#0969da" text-anchor="middle">70.8</text>
+<rect x="368" y="77" width="44" height="231" fill="#1a7f37" rx="2"/>
+<text x="390" y="70" font-size="11" font-weight="600" fill="#1a7f37" text-anchor="middle">98.6</text>
+<rect x="420" y="306" width="44" height="2" fill="#9a6700" rx="2"/>
+<text x="442" y="299" font-size="11" font-weight="600" fill="#9a6700" text-anchor="middle">1.0</text>
+<text x="390" y="330" font-size="12.5" font-weight="600" fill="#1f2328" text-anchor="middle">DeepSeek-V4-Flash</text>
+<text x="390" y="348" font-size="10.5" fill="#57606a" text-anchor="middle">4,924 tokens/doc · 59.1s</text>
+<rect x="536" y="159" width="44" height="149" fill="#0969da" rx="2"/>
+<text x="558" y="152" font-size="11" font-weight="600" fill="#0969da" text-anchor="middle">63.5</text>
+<rect x="588" y="81" width="44" height="227" fill="#1a7f37" rx="2"/>
+<text x="610" y="74" font-size="11" font-weight="600" fill="#1a7f37" text-anchor="middle">96.8</text>
+<rect x="640" y="303" width="44" height="5" fill="#9a6700" rx="2"/>
+<text x="662" y="296" font-size="11" font-weight="600" fill="#9a6700" text-anchor="middle">2.1</text>
+<text x="610" y="330" font-size="12.5" font-weight="600" fill="#1f2328" text-anchor="middle">GLM-4.7</text>
+<text x="610" y="348" font-size="10.5" fill="#57606a" text-anchor="middle">18,381 tokens/doc · 31.6s</text>
+<rect x="60" y="374" width="11" height="11" fill="#0969da" rx="2"/>
+<text x="77" y="384" font-size="11.5" fill="#57606a">recall</text>
+<rect x="220" y="374" width="11" height="11" fill="#1a7f37" rx="2"/>
+<text x="237" y="384" font-size="11.5" fill="#57606a">precision</text>
+<rect x="380" y="374" width="11" height="11" fill="#9a6700" rx="2"/>
+<text x="397" y="384" font-size="11.5" fill="#57606a">false pos.</text>
+<text x="60" y="370" font-size="11" fill="#57606a">confidence intervals overlap; read the ordering as suggestive, not established</text>
+</svg>
