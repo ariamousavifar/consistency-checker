@@ -1,12 +1,12 @@
 # Evaluation
 
-**Internal-Inconsistency Checker** · v0.8.8 · 2026‑08‑17 · fixed seed 7
+**Inconsistency Checker** · v0.8.8 · 2026‑08‑17 · fixed seed 7
 
 The system extracts claims from a document, translates each into first‑order logic,
 and gives every logical judgement to the Z3 solver. It reports the *minimal* set of
 statements that cannot all be true, together with a derivation of the conflict.
 
-**Evaluated on three held‑out datasets — none was used during development.** Two are
+**Evaluated on three held‑out datasets which none was used during development.** Two are
 externally authored with external labels; the third is generated so its labels follow
 from construction rather than from inspection.
 
@@ -70,7 +70,7 @@ cannot disable internal reasoning on its provider, DeepSeek can.
 
 ## Method
 
-Every verdict is a Z3 proof, not a model judgement — the language model only proposes
+Every verdict is a Z3 proof, not a model judgement. The language model only proposes
 formulas. Content outside the supported fragment (modality, tense, arithmetic,
 comparatives, hedged generalisations) is **quarantined with a written reason** rather
 than guessed at; quarantine rates were 3.2% (ProofWriter), 7.5% (FOLIO), 2.7%
