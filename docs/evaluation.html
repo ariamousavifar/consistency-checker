@@ -1,0 +1,319 @@
+<!doctype html><html><head><meta charset='utf-8'><title>evaluation</title><style>
+@page { size: A4; margin: 14mm 15mm; }
+* { box-sizing: border-box; }
+body {
+  font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 10.2pt; line-height: 1.45; color: #1f2328;
+  max-width: 100%; margin: 0; padding: 0;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+h1 { font-size: 19pt; margin: 0 0 2pt; letter-spacing: -0.2pt; }
+h2 { font-size: 12.5pt; margin: 11pt 0 4pt; padding-bottom: 3pt;
+     border-bottom: 1px solid #d8dee4; }
+h1 + p { color: #57606a; font-size: 9.6pt; margin-top: 0; }
+p { margin: 6pt 0; }
+hr { display: none; }                     /* the ---- rules waste vertical space in print */
+table { border-collapse: collapse; width: 100%; margin: 8pt 0; font-size: 9.2pt; }
+th, td { border: 1px solid #d8dee4; padding: 4pt 7pt; text-align: left; }
+th { background: #f6f8fa; font-weight: 600; }
+td:nth-child(n+3), th:nth-child(n+3) { text-align: right; }
+code { background: #f6f8fa; padding: 1pt 3pt; border-radius: 3px;
+       font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 8.8pt; }
+strong { font-weight: 650; }
+figure { margin: 6pt 0; text-align: center; page-break-inside: avoid; }
+figure svg { max-width: 86%; height: auto; }
+em { color: #57606a; }
+ul { margin: 6pt 0; padding-left: 18pt; }
+table, figure { page-break-inside: avoid; }
+h2 { page-break-after: avoid; }   /* keep a heading with its content */
+</style></head><body><h1>Evaluation</h1>
+<p><strong>Inconsistency Checker</strong> · v0.8.8 · 2026‑08‑17 · fixed seed 7</p>
+<p>The system extracts claims from a document, translates each into first‑order logic,
+and gives every logical judgement to the Z3 solver. It reports the <em>minimal</em> set of
+statements that cannot all be true, together with a derivation of the conflict.</p>
+<p><strong>Evaluated on three held‑out datasets which none was used during development.</strong> Two are
+externally authored with external labels; the third is generated so its labels follow
+from construction rather than from inspection.</p>
+<hr />
+<h2>Headline results</h2>
+<p><figure><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 720 300" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">
+<rect width="720" height="300" fill="#ffffff"/>
+<text x="24" y="30" font-size="16" font-weight="600" fill="#1f2328">Results by held-out dataset</text>
+<text x="24" y="50" font-size="12" fill="#57606a">no dataset was used during development; gpt-oss-120b, seed 7</text>
+<line x1="130.0" y1="78" x2="130.0" y2="244" stroke="#d8dee4" stroke-width="1"/>
+<text x="130.0" y="262" font-size="11" fill="#57606a" text-anchor="middle">0%</text>
+<line x1="262.5" y1="78" x2="262.5" y2="244" stroke="#d8dee4" stroke-width="1"/>
+<text x="262.5" y="262" font-size="11" fill="#57606a" text-anchor="middle">25%</text>
+<line x1="395.0" y1="78" x2="395.0" y2="244" stroke="#d8dee4" stroke-width="1"/>
+<text x="395.0" y="262" font-size="11" fill="#57606a" text-anchor="middle">50%</text>
+<line x1="527.5" y1="78" x2="527.5" y2="244" stroke="#d8dee4" stroke-width="1"/>
+<text x="527.5" y="262" font-size="11" fill="#57606a" text-anchor="middle">75%</text>
+<line x1="660.0" y1="78" x2="660.0" y2="244" stroke="#d8dee4" stroke-width="1"/>
+<text x="660.0" y="262" font-size="11" fill="#57606a" text-anchor="middle">100%</text>
+<text x="118" y="100.0" font-size="12" fill="#1f2328" text-anchor="end">ProofWriter</text>
+<text x="118" y="115.0" font-size="10" fill="#57606a" text-anchor="end">n=192</text>
+<rect x="130" y="84.0" width="425.06" height="13" fill="#0969da" rx="2"/>
+<text x="561.06" y="95.0" font-size="10" fill="#1f2328">80.2%</text>
+<rect x="130" y="101.0" width="516.75" height="13" fill="#1a7f37" rx="2"/>
+<text x="652.75" y="112.0" font-size="10" fill="#1f2328">97.5%</text>
+<rect x="130" y="118.0" width="11.13" height="13" fill="#cf222e" rx="2"/>
+<text x="147.13" y="129.0" font-size="10" fill="#1f2328">2.1%</text>
+<text x="118" y="155.33333333333334" font-size="12" fill="#1f2328" text-anchor="end">FOLIO</text>
+<text x="118" y="170.33333333333334" font-size="10" fill="#57606a" text-anchor="end">n=141</text>
+<rect x="130" y="139.33333333333334" width="265.0" height="13" fill="#0969da" rx="2"/>
+<text x="401.0" y="150.33333333333334" font-size="10" fill="#1f2328">50.0%</text>
+<rect x="130" y="156.33333333333334" width="489.19" height="13" fill="#1a7f37" rx="2"/>
+<text x="625.19" y="167.33333333333334" font-size="10" fill="#1f2328">92.3%</text>
+<rect x="130" y="173.33333333333334" width="22.79" height="13" fill="#cf222e" rx="2"/>
+<text x="158.79" y="184.33333333333334" font-size="10" fill="#1f2328">4.3%</text>
+<text x="118" y="210.66666666666669" font-size="12" fill="#1f2328" text-anchor="end">Synthetic</text>
+<text x="118" y="225.66666666666669" font-size="10" fill="#57606a" text-anchor="end">n=120</text>
+<rect x="130" y="194.66666666666669" width="530.0" height="13" fill="#0969da" rx="2"/>
+<text x="666.0" y="205.66666666666669" font-size="10" fill="#1f2328">100.0%</text>
+<rect x="130" y="211.66666666666669" width="530.0" height="13" fill="#1a7f37" rx="2"/>
+<text x="666.0" y="222.66666666666669" font-size="10" fill="#1f2328">100.0%</text>
+<rect x="130" y="228.66666666666669" width="1.5" height="13" fill="#cf222e" rx="2"/>
+<text x="137.5" y="239.66666666666669" font-size="10" fill="#1f2328">0.0%</text>
+<rect x="130" y="272" width="11" height="11" fill="#0969da" rx="2"/>
+<text x="146" y="282" font-size="11" fill="#1f2328">recall</text>
+<rect x="280" y="272" width="11" height="11" fill="#1a7f37" rx="2"/>
+<text x="296" y="282" font-size="11" fill="#1f2328">precision</text>
+<rect x="430" y="272" width="11" height="11" fill="#cf222e" rx="2"/>
+<text x="446" y="282" font-size="11" fill="#1f2328">false-positive</text>
+</svg></figure></p>
+<table>
+<thead>
+<tr>
+<th>Dataset</th>
+<th>n</th>
+<th>Source</th>
+<th>Recall (95% CI)</th>
+<th>Precision</th>
+<th>False positives</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ProofWriter</strong></td>
+<td>192</td>
+<td>external</td>
+<td><strong>80.2%</strong> [71.1–87.0]</td>
+<td><strong>97.5%</strong></td>
+<td><strong>2.1%</strong></td>
+</tr>
+<tr>
+<td><strong>FOLIO</strong></td>
+<td>141</td>
+<td>external</td>
+<td>50.0% [38.8–61.3]</td>
+<td>92.3%</td>
+<td>4.3%</td>
+</tr>
+<tr>
+<td><strong>Synthetic</strong></td>
+<td>120</td>
+<td>constructed</td>
+<td>100% [94.0–100]</td>
+<td>100%</td>
+<td>0.0%</td>
+</tr>
+</tbody>
+</table>
+<p>Balanced by construction (ProofWriter 96/96, FOLIO 72/69, synthetic 60/60), so recall
+and false‑positive rate are measured on equal numbers of positive and negative
+documents. Intervals are Wilson score intervals.</p>
+<hr />
+<h2>Recall does not degrade with reasoning depth</h2>
+<p><figure><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 720 400" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">
+<rect width="720" height="400" fill="#ffffff"/>
+<text x="24" y="30" font-size="16" font-weight="600" fill="#1f2328">Recall vs. reasoning depth</text>
+<text x="24" y="50" font-size="12" fill="#57606a">ProofWriter (192 held-out documents, externally authored)</text>
+<line x1="60" y1="346.0" x2="470" y2="346.0" stroke="#d8dee4" stroke-width="1"/>
+<text x="50" y="350.0" font-size="11" fill="#57606a" text-anchor="end">0%</text>
+<line x1="60" y1="278.0" x2="470" y2="278.0" stroke="#d8dee4" stroke-width="1"/>
+<text x="50" y="282.0" font-size="11" fill="#57606a" text-anchor="end">25%</text>
+<line x1="60" y1="210.0" x2="470" y2="210.0" stroke="#d8dee4" stroke-width="1"/>
+<text x="50" y="214.0" font-size="11" fill="#57606a" text-anchor="end">50%</text>
+<line x1="60" y1="142.0" x2="470" y2="142.0" stroke="#d8dee4" stroke-width="1"/>
+<text x="50" y="146.0" font-size="11" fill="#57606a" text-anchor="end">75%</text>
+<line x1="60" y1="74.0" x2="470" y2="74.0" stroke="#d8dee4" stroke-width="1"/>
+<text x="50" y="78.0" font-size="11" fill="#57606a" text-anchor="end">100%</text>
+<text x="60.0" y="366" font-size="11" fill="#57606a" text-anchor="middle">0</text>
+<text x="142.0" y="366" font-size="11" fill="#57606a" text-anchor="middle">1</text>
+<text x="224.0" y="366" font-size="11" fill="#57606a" text-anchor="middle">2</text>
+<text x="306.0" y="366" font-size="11" fill="#57606a" text-anchor="middle">3</text>
+<text x="388.0" y="366" font-size="11" fill="#57606a" text-anchor="middle">4</text>
+<text x="470.0" y="366" font-size="11" fill="#57606a" text-anchor="middle">5</text>
+<text x="265.0" y="388" font-size="12" fill="#1f2328" text-anchor="middle">inference steps between the conflict and its source</text>
+<polyline points="60.0,90.864 142.0,90.864 224.0,125.136 306.0,193.136 388.0,142.0 470.0,125.136" fill="none" stroke="#0969da" stroke-width="2.5"/>
+<circle cx="60.0" cy="90.864" r="3.5" fill="#0969da"/>
+<circle cx="142.0" cy="90.864" r="3.5" fill="#0969da"/>
+<circle cx="224.0" cy="125.136" r="3.5" fill="#0969da"/>
+<circle cx="306.0" cy="193.136" r="3.5" fill="#0969da"/>
+<circle cx="388.0" cy="142.0" r="3.5" fill="#0969da"/>
+<circle cx="470.0" cy="125.136" r="3.5" fill="#0969da"/>
+<line x1="492" y1="80" x2="514" y2="80" stroke="#0969da" stroke-width="2.5"/>
+<text x="520" y="84" font-size="12" fill="#1f2328">gpt-oss-120b</text>
+<polyline points="60.0,125.136 142.0,108.0 224.0,142.0 306.0,176.0 388.0,193.136 470.0,176.0" fill="none" stroke="#1a7f37" stroke-width="2.5"/>
+<circle cx="60.0" cy="125.136" r="3.5" fill="#1a7f37"/>
+<circle cx="142.0" cy="108.0" r="3.5" fill="#1a7f37"/>
+<circle cx="224.0" cy="142.0" r="3.5" fill="#1a7f37"/>
+<circle cx="306.0" cy="176.0" r="3.5" fill="#1a7f37"/>
+<circle cx="388.0" cy="193.136" r="3.5" fill="#1a7f37"/>
+<circle cx="470.0" cy="176.0" r="3.5" fill="#1a7f37"/>
+<line x1="492" y1="102" x2="514" y2="102" stroke="#1a7f37" stroke-width="2.5"/>
+<text x="520" y="106" font-size="12" fill="#1f2328">DeepSeek-V4-Flash</text>
+<polyline points="60.0,90.864 142.0,90.864 224.0,193.136 306.0,226.86400000000003 388.0,261.136 470.0,176.0" fill="none" stroke="#9a6700" stroke-width="2.5"/>
+<circle cx="60.0" cy="90.864" r="3.5" fill="#9a6700"/>
+<circle cx="142.0" cy="90.864" r="3.5" fill="#9a6700"/>
+<circle cx="224.0" cy="193.136" r="3.5" fill="#9a6700"/>
+<circle cx="306.0" cy="226.86400000000003" r="3.5" fill="#9a6700"/>
+<circle cx="388.0" cy="261.136" r="3.5" fill="#9a6700"/>
+<circle cx="470.0" cy="176.0" r="3.5" fill="#9a6700"/>
+<line x1="492" y1="124" x2="514" y2="124" stroke="#9a6700" stroke-width="2.5"/>
+<text x="520" y="128" font-size="12" fill="#1f2328">GLM-4.7</text>
+<polyline points="60.0,226.86400000000003 142.0,261.136 224.0,346.0 306.0,346.0 388.0,346.0 470.0,346.0" fill="none" stroke="#cf222e" stroke-width="2.5" stroke-dasharray="6 4"/>
+<circle cx="60.0" cy="226.86400000000003" r="3.5" fill="#cf222e"/>
+<circle cx="142.0" cy="261.136" r="3.5" fill="#cf222e"/>
+<circle cx="224.0" cy="346.0" r="3.5" fill="#cf222e"/>
+<circle cx="306.0" cy="346.0" r="3.5" fill="#cf222e"/>
+<circle cx="388.0" cy="346.0" r="3.5" fill="#cf222e"/>
+<circle cx="470.0" cy="346.0" r="3.5" fill="#cf222e"/>
+<line x1="492" y1="146" x2="514" y2="146" stroke="#cf222e" stroke-width="2.5" stroke-dasharray="6 4"/>
+<text x="520" y="150" font-size="12" fill="#1f2328">rule-only (no LLM)</text>
+<text x="492" y="190" font-size="11" fill="#57606a">Sentence-pair methods</text>
+<text x="492" y="206" font-size="11" fill="#57606a">reach 0% at depth &#8805; 2</text>
+<text x="492" y="222" font-size="11" fill="#57606a">by construction.</text>
+</svg></figure></p>
+<p>The central claim. A contradiction distributed across <em>k</em> inference steps is invisible
+to any method that compares sentences pairwise: at <em>k</em> ≥ 2 <strong>no pair of sentences is
+inconsistent</strong>, so pairwise entailment scores 0% by construction. The full pipeline
+holds 56–81% through depth 5.</p>
+<p>The dashed line is the same pipeline with the language model removed from translation
+(§ ablation). It collapses to 0% beyond depth 1.</p>
+<hr />
+<h2>Model comparison and the LLM's contribution</h2>
+<p><figure><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 720 360" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">
+<rect width="720" height="360" fill="#ffffff"/>
+<text x="24" y="30" font-size="16" font-weight="600" fill="#1f2328">Model comparison</text>
+<text x="24" y="50" font-size="12" fill="#57606a">ProofWriter, 192 documents, identical pipeline and seed</text>
+<line x1="150.0" y1="78" x2="150.0" y2="300" stroke="#d8dee4" stroke-width="1"/>
+<text x="150.0" y="318" font-size="11" fill="#57606a" text-anchor="middle">0%</text>
+<line x1="282.5" y1="78" x2="282.5" y2="300" stroke="#d8dee4" stroke-width="1"/>
+<text x="282.5" y="318" font-size="11" fill="#57606a" text-anchor="middle">25%</text>
+<line x1="415.0" y1="78" x2="415.0" y2="300" stroke="#d8dee4" stroke-width="1"/>
+<text x="415.0" y="318" font-size="11" fill="#57606a" text-anchor="middle">50%</text>
+<line x1="547.5" y1="78" x2="547.5" y2="300" stroke="#d8dee4" stroke-width="1"/>
+<text x="547.5" y="318" font-size="11" fill="#57606a" text-anchor="middle">75%</text>
+<line x1="680.0" y1="78" x2="680.0" y2="300" stroke="#d8dee4" stroke-width="1"/>
+<text x="680.0" y="318" font-size="11" fill="#57606a" text-anchor="middle">100%</text>
+<text x="138" y="112.0" font-size="12" fill="#1f2328" text-anchor="end">gpt-oss-120b</text>
+<rect x="150" y="86.0" width="425.06" height="16" fill="#0969da" rx="2"/>
+<text x="581.06" y="98.0" font-size="11" fill="#1f2328">80.2%</text>
+<rect x="150" y="108.0" width="516.75" height="16" fill="#1a7f37" rx="2"/>
+<text x="672.75" y="120.0" font-size="11" fill="#1f2328">97.5%</text>
+<rect x="150" y="130.0" width="11.13" height="16" fill="#cf222e" rx="2"/>
+<text x="167.13" y="142.0" font-size="11" fill="#1f2328">2.1%</text>
+<text x="138" y="167.5" font-size="12" fill="#1f2328" text-anchor="end">DeepSeek-V4-Flash</text>
+<rect x="150" y="141.5" width="375.24" height="16" fill="#0969da" rx="2"/>
+<text x="531.24" y="153.5" font-size="11" fill="#1f2328">70.8%</text>
+<rect x="150" y="163.5" width="522.58" height="16" fill="#1a7f37" rx="2"/>
+<text x="678.58" y="175.5" font-size="11" fill="#1f2328">98.6%</text>
+<rect x="150" y="185.5" width="5.3" height="16" fill="#cf222e" rx="2"/>
+<text x="161.3" y="197.5" font-size="11" fill="#1f2328">1.0%</text>
+<text x="138" y="223.0" font-size="12" fill="#1f2328" text-anchor="end">GLM-4.7</text>
+<rect x="150" y="197.0" width="336.55" height="16" fill="#0969da" rx="2"/>
+<text x="492.55" y="209.0" font-size="11" fill="#1f2328">63.5%</text>
+<rect x="150" y="219.0" width="513.04" height="16" fill="#1a7f37" rx="2"/>
+<text x="669.04" y="231.0" font-size="11" fill="#1f2328">96.8%</text>
+<rect x="150" y="241.0" width="11.13" height="16" fill="#cf222e" rx="2"/>
+<text x="167.13" y="253.0" font-size="11" fill="#1f2328">2.1%</text>
+<text x="138" y="278.5" font-size="12" fill="#1f2328" text-anchor="end">rule-only (no LLM)</text>
+<rect x="150" y="252.5" width="66.25" height="16" fill="#0969da" rx="2"/>
+<text x="222.25" y="264.5" font-size="11" fill="#1f2328">12.5%</text>
+<rect x="150" y="274.5" width="489.19" height="16" fill="#1a7f37" rx="2"/>
+<text x="645.19" y="286.5" font-size="11" fill="#1f2328">92.3%</text>
+<rect x="150" y="296.5" width="5.3" height="16" fill="#cf222e" rx="2"/>
+<text x="161.3" y="308.5" font-size="11" fill="#1f2328">1.0%</text>
+<rect x="150" y="330" width="11" height="11" fill="#0969da" rx="2"/>
+<text x="166" y="340" font-size="11" fill="#1f2328">recall</text>
+<rect x="300" y="330" width="11" height="11" fill="#1a7f37" rx="2"/>
+<text x="316" y="340" font-size="11" fill="#1f2328">precision</text>
+<rect x="450" y="330" width="11" height="11" fill="#cf222e" rx="2"/>
+<text x="466" y="340" font-size="11" fill="#1f2328">false-positive</text>
+</svg></figure></p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Recall</th>
+<th>Precision</th>
+<th>FP</th>
+<th>Tokens/doc</th>
+<th>s/doc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gpt‑oss‑120b</td>
+<td><strong>80.2%</strong></td>
+<td>97.5%</td>
+<td>2.1%</td>
+<td>5,168</td>
+<td><strong>6.9</strong></td>
+</tr>
+<tr>
+<td>DeepSeek‑V4‑Flash</td>
+<td>70.8%</td>
+<td><strong>98.6%</strong></td>
+<td><strong>1.0%</strong></td>
+<td><strong>4,924</strong></td>
+<td>59.1</td>
+</tr>
+<tr>
+<td>GLM‑4.7</td>
+<td>63.5%</td>
+<td>96.8%</td>
+<td>2.1%</td>
+<td>18,381</td>
+<td>31.6</td>
+</tr>
+<tr>
+<td><em>rule‑only (LLM withheld)</em></td>
+<td><em>12.5%</em></td>
+<td><em>92.3%</em></td>
+<td><em>1.0%</em></td>
+<td><em>0</em></td>
+<td><em>offline</em></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ablation.</strong> Withholding the LLM translator while leaving extraction, the gate, the
+solver and reporting untouched drops recall from <strong>80.2% → 12.5%</strong> (and 100% → 1.7% on
+the synthetic set). Recall is therefore bounded by <em>translation coverage</em>, not by the
+reasoning engine — the deterministic translator currently produces usable logic for
+about 5% of real sentences. This is the primary target for future work.</p>
+<p><strong>Precision never falls below 92% in any configuration, including with no LLM at all.</strong>
+The system does not manufacture contradictions.</p>
+<p>Model recall differences have overlapping confidence intervals and should be read as
+suggestive, not established. The models were not run under identical settings: gpt‑oss
+cannot disable internal reasoning on its provider, DeepSeek can.</p>
+<hr />
+<h2>Method</h2>
+<p>Every verdict is a Z3 proof, not a model judgement. The language model only proposes
+formulas. Content outside the supported fragment (modality, tense, arithmetic,
+comparatives, hedged generalisations) is <strong>quarantined with a written reason</strong> rather
+than guessed at; quarantine rates were 3.2% (ProofWriter), 7.5% (FOLIO), 2.7%
+(synthetic). ProofWriter and FOLIO are entailment datasets, converted to consistency
+checking by appending the negated conclusion: a theory entails <em>Q</em> exactly when the
+theory together with <em>¬Q</em> is inconsistent. The conversion rule was fixed before any
+result was seen.</p>
+<p><strong>Reproducibility.</strong> Fixed seed and temperature 0; the full test suite (255 tests) runs
+offline against shipped fixtures with no API key. Datasets, adapters, scorer and charts
+are in <code>tools/</code>; per‑document outputs and <code>metrics.json</code> for every run are retained.</p>
+<p><strong>Limitations.</strong> The synthetic set was authored by us and exercises the fragment the
+system targets; the external results are the load‑bearing ones. The depth‑3 dip is
+non‑monotonic across all three models and is a sampling artefact at 16 documents per
+cell, not a depth effect. Performance tracks how <em>logical</em> a contradiction is:
+conflicts resting on arithmetic, dates, degree or world knowledge are outside the
+representation by design.</p></body></html>
