@@ -1,4 +1,0 @@
-Imidazoline receptor
-
-I1 receptors include Agonists such as AGN 192403, and Moxonidine
-Nonselective ligands include Agonists such as Agmatine (putative endogenous ligand at I1; also interacts with NMDA, nicotinic, and α2 adrenoceptors), Apraclonidine (α2 adrenoceptor agonist), 2-BFI (I2 agonist, NMDA antagonist), Cimetidine (I1 agonist, H2 receptor antagonist), Clonidine (I1 agonist, α2 adrenoceptor agonist), LNP-509, LNP-911, 7-Me-marsanidine, Dimethyltryptamine, mCPP, and Moxonidine

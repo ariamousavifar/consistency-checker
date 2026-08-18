@@ -15,3 +15,11 @@ build/
 dist/
 *.egg-info/
 PROJECT_MEMORY.md
+
+# third-party benchmark kept locally, not redistributed
+validation/wikicontradict/
+validation/wikicontradict_sample/
+tools/prepare_wikicontradict.py
+tools/classify_wc_scope.py
+results/eval_wikicontradict*/
+results/eval_validation_wc*/

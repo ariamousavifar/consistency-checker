@@ -1,4 +1,0 @@
-Microsoft Office 2013
-
-A version of Microsoft Office 2013 comes included on Windows RT devices. It has been confirmed to work on Windows 11 on March 4, 2023, but not Windows Server 2022. Later on, Microsoft claimed that Microsoft Office 2013 would no longer be supported on Windows 11 and Windows Server 2022. 
-Microsoft Office 2013 is available for Windows Server 2022. Microsoft Office 2013 still runs on Windows 11 and Windows Server 2022.
