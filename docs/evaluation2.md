@@ -130,7 +130,4 @@ engine, and that is where further work belongs.
 
 ---
 
-*Scope: this page compares the pipeline against sentence‑pair entailment.
-Prompting a language model to judge a whole document at once is a different
-approach that does not face the pairwise structural limit, and is not evaluated
-here or in [evaluation.md](evaluation.md).*
+*Scope: this page compares the pipeline against sentence‑pair entailment.*

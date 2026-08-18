@@ -139,6 +139,4 @@ system targets; the external results are the load‑bearing ones. The depth‑3 
 non‑monotonic across all three models and is a sampling artefact at 16 documents per
 cell, not a depth effect. Performance tracks how *logical* a contradiction is: conflicts
 resting on arithmetic, dates, degree or world knowledge are outside the representation by
-design. The comparison here is against sentence‑pair entailment specifically; prompting a
-language model to judge a whole document at once is a different approach that does not
-face the pairwise structural limit, and is not evaluated in this report.
+design. The comparison here is against sentence‑pair entailment specifically.
