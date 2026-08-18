@@ -139,28 +139,31 @@ def dataset_chart(path: Path):
     s = _hdr(W, H, "Results by held-out dataset",
              "this system against sentence-pair entailment, identical documents and scoring")
     _yaxis(s, L, T, pw, ph)
-    bars = [(2, OURS, "recall"), (4, NLI, "recall, pairwise NLI"),
-            (3, WARN, "false positives")]
+    # colour encodes the system, opacity the metric, so both read at a glance
+    bars = [(2, OURS, 1.0, "recall, this system"), (4, NLI, 1.0, "recall, pairwise NLI"),
+            (3, OURS, 0.40, "false positives, this system"),
+            (5, NLI, 0.40, "false positives, pairwise NLI")]
     slot = pw / len(DATASETS)
     for i, d in enumerate(DATASETS):
         cx = L + slot * (i + 0.5)
-        for j, (idx, col, _) in enumerate(bars):
+        for j, (idx, col, op, _) in enumerate(bars):
             val = d[idx]
-            bw = 36
-            x = cx - (len(bars) * bw + (len(bars) - 1) * 7) / 2 + j * (bw + 7)
+            bw = 30
+            x = cx - (len(bars) * bw + (len(bars) - 1) * 6) / 2 + j * (bw + 6)
             bh = ph * val / 100
             s.append(f'<rect x="{x:.0f}" y="{T+ph-bh:.0f}" width="{bw}" height="{bh:.0f}" '
-                     f'fill="{col}" rx="2"/>')
-            s.append(f'<text x="{x+bw/2:.0f}" y="{T+ph-bh-7:.0f}" font-size="10.5" '
+                     f'fill="{col}" rx="2" opacity="{op}"/>')
+            s.append(f'<text x="{x+bw/2:.0f}" y="{T+ph-bh-7:.0f}" font-size="10" '
                      f'font-weight="600" fill="{col}" text-anchor="middle">{val:.1f}</text>')
         s.append(f'<text x="{cx:.0f}" y="{T+ph+22}" font-size="12" fill="{FG}" '
                  f'text-anchor="middle">{d[0]}</text>')
         s.append(f'<text x="{cx:.0f}" y="{T+ph+38}" font-size="10.5" fill="{MUTED}" '
                  f'text-anchor="middle">n={d[1]}</text>')
-    for j, (_, col, lab) in enumerate(bars):
-        x = L + j * 210
-        s.append(f'<rect x="{x}" y="{H-30}" width="11" height="11" fill="{col}" rx="2"/>')
-        s.append(f'<text x="{x+17}" y="{H-20}" font-size="11.5" fill="{MUTED}">{lab}</text>')
+    for j, (_, col, op, lab) in enumerate(bars):
+        x = L + (j % 2) * 330
+        y = H - 34 + (j // 2) * 16
+        s.append(f'<rect x="{x}" y="{y}" width="11" height="11" fill="{col}" rx="2" opacity="{op}"/>')
+        s.append(f'<text x="{x+17}" y="{y+10}" font-size="11" fill="{MUTED}">{lab}</text>')
     s.append("</svg>")
     path.write_text("\n".join(s), encoding="utf-8")
 

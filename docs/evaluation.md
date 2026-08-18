@@ -18,12 +18,17 @@ identical scoring.
 
 ![Results by held-out dataset](assets/dataset-results.svg)
 
-| Dataset | n | Source | Recall (95% CI) | Precision | False positives |
-|---|---|---|---|---|---|
-| **ProofWriter** | 192 | external | **80.2%** [71.1–87.0] | **97.5%** | **2.1%** |
-| **FOLIO** | 141 | external | 50.0% [38.8–61.3] | 92.3% | 4.3% |
-| **Synthetic** | 120 | constructed | 100% [94.0–100] | 100% | 0.0% |
-| **Stress (depth 5–20)** | 96 | constructed | 47.9% [34.5–61.7] | 82.1% | 10.4% |
+| Dataset | n | Recall | Precision | False pos. | NLI recall | NLI precision | NLI false pos. |
+|---|---|---|---|---|---|---|---|
+| **ProofWriter** | 192 | **80.2%** [71.1–86.9] | **97.5%** | **2.1%** | 30.2% | 69.0% | 13.5% |
+| **FOLIO** | 141 | 50.0% [38.7–61.3] | 92.3% | 4.3% | 45.8% | 71.7% | 18.8% |
+| **Synthetic** | 120 | 100% [94.0–100] | 100% | 0.0% | 40.0% | 100% | 0.0% |
+| **Stress (depth 5–20)** | 96 | 47.9% [34.5–61.7] | 82.1% | 10.4% | 6.2% | 100% | 0.0% |
+
+The pipeline leads on recall on all four corpora and on false positives on the two
+externally authored ones, where the baseline flags **13.5%** and **18.8%** of clean
+documents against our 2.1% and 4.3%. A per-system breakdown with confusion counts and
+every model is in [evaluation2.md](evaluation2.md).
 
 Balanced by construction (ProofWriter 96/96, FOLIO 72/69, synthetic 60/60, stress
 48/48), so recall and false‑positive rate are measured on equal numbers of positive and
