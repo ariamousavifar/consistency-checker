@@ -30,3 +30,6 @@ INTERNAL_FINDINGS.md
 # superseded stress set (entity names could collide) and a derived subset
 validation/stress/
 validation/stress2_nodist/
+
+# internal analysis: charts and notes that stay off GitHub
+internal/
