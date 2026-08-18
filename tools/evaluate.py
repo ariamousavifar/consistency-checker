@@ -67,6 +67,8 @@ def run_one(doc: dict, docs_dir: Path, out_root: Path, args) -> dict:
         cmd.append("--allow-relations")
     if args.allow_conditionals:
         cmd.append("--allow-conditionals")
+    if args.no_chunk:
+        cmd.append("--no-chunk")
     env = dict(os.environ)
     env.update({"LLM_EXTRACTION_EFFORT": args.effort,
                 "LLM_TRANSLATION_EFFORT": args.effort,
@@ -115,6 +117,8 @@ def main(argv=None) -> int:
     ap.add_argument("--max-tokens", type=int, default=8192)
     ap.add_argument("--allow-relations", action="store_true")
     ap.add_argument("--allow-conditionals", action="store_true")
+    ap.add_argument("--no-chunk", action="store_true",
+                    help="single-pass extraction; chunking existed for a 5 RPM free tier")
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--timeout", type=int, default=600)
     ap.add_argument("--limit", type=int, default=0)

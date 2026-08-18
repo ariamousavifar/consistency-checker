@@ -23,3 +23,10 @@ tools/prepare_wikicontradict.py
 tools/classify_wc_scope.py
 results/eval_wikicontradict*/
 results/eval_validation_wc*/
+
+# personal working notes, not for publication
+INTERNAL_FINDINGS.md
+
+# superseded stress set (entity names could collide) and a derived subset
+validation/stress/
+validation/stress2_nodist/

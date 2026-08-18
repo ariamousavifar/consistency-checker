@@ -1,0 +1,3 @@
+Depot register
+
+Any registered item is also a catalogued item. Every catalogued item is a audited item. Every certified item is a bonded item. Any bonded item is also a insured item. Any insured item is also a licensed item. If an item is verified then it is inspected. Any audited item is also a certified item. Every cleared item is transferable. Every licensed item is a approved item. Unit sierra-01 is registered. Any inspected item is also a cleared item. Unit sierra-01 is not transferable. Every approved item is a verified item.

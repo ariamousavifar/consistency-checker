@@ -1,0 +1,3 @@
+Depot register
+
+Any catalogued item is also a audited item. Every audited item is a certified item. If an item is registered then it is catalogued. All certified items are bonded items. Pallet oscar-05 is not transferable. All bonded items are insured items. Every insured item is transferable. Pallet oscar-05 is registered.

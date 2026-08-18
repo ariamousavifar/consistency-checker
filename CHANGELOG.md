@@ -7,6 +7,63 @@ For what the project *is* and how to run it, see [README.md](README.md).
 
 ## Unreleased
 
+### Evaluation: a baseline, a stress set, and a corrected report
+
+No behaviour change and no source edits — this is measurement infrastructure and
+the report built from it.
+
+1. **`tools/baselines.py` — a reference point for the recall numbers.** A recall
+   figure floats without something to compare it against. The baseline
+   implemented here is sentence-pair entailment (NLI): every pair of statements
+   judged independently, flagging the document if any pair conflicts. Each
+   judgement sees only its two sentences — that isolation is the whole point, so
+   pairs are never batched into one prompt, which would let the model reason
+   across them and stop it being a pairwise method. Scored by the same rule and
+   the same labels as the pipeline, so the numbers are directly comparable.
+
+2. **`tools/make_stress_set.py` — pushing depth past what public corpora reach.**
+   ProofWriter tops out at 5 inference steps. This generates documents at 5, 10,
+   15 and 20 steps, crossed with 0, 40 and 100 irrelevant statements, so depth
+   and document length vary independently. Distractors reuse the same predicate
+   vocabulary on *other* entities rather than being off-topic filler, so they
+   cannot be dismissed by surface similarity. The set is designed to be able to
+   falsify the hypothesis it tests, and the prediction is recorded in `gold.json`
+   before the run.
+
+   The first version of this generator was wrong, and the fix is worth recording:
+   names were drawn from 12 entity types × 20 tags, so two distinct objects could
+   share a surface form ("consignment oscar" and "shipment oscar"), which the
+   translator then collapsed into one — manufacturing contradictions that were
+   artefacts of the test rather than the system. Names are now globally unique.
+   Correcting it moved the measured false-positive rate from 18.8% to 10.4%.
+   Only the corrected set is committed; the superseded one is ignored.
+
+3. **`docs/evaluation.md` rewritten, and its central claim narrowed.** The
+   previous version led with "recall does not degrade with reasoning depth". That
+   is not what the stress set shows: recall is *flat* at roughly 50%, at every
+   depth including the shallowest, which points at translation coverage rather
+   than at depth. The report now says so, states plainly that translation and not
+   solving is the bottleneck, and reports the ablation (80.2% → 12.5% with the
+   language model withheld) as the evidence.
+
+   The comparison it draws is explicitly against sentence-pair entailment, and
+   the limitations section states that prompting a language model to judge a
+   whole document is a serious alternative not evaluated here, so no reader
+   mistakes the scope of the claim.
+
+4. **`tools/evaluate.py`** gains `--no-chunk`, `--allow-relations` and
+   `--allow-conditionals`. Chunking existed to fit a 5 requests-per-minute free
+   tier and costs cross-chunk contradictions; it is no longer needed at current
+   rate limits.
+
+5. **Charts regenerated** (`tools/make_charts.py`), now plotting the pipeline
+   against the pairwise baseline on the same axes. The stale figures from the
+   previous report are removed rather than left to rot.
+
+---
+
+## Earlier unreleased work
+
 Documentation and environment only — no behavior change, no source edits.
 
 1. **README rewritten as a project description.** It had become a changelog under

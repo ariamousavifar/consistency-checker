@@ -1,0 +1,3 @@
+Depot register
+
+If an item is audited then it is certified. If an item is bonded then it is insured. Every cleared item is transferable. Pallet mike-06 is not transferable. Every licensed item is a approved item. Every certified item is a bonded item. Any approved item is also a verified item. Parcel romeo-04 is registered. If an item is catalogued then it is audited. All insured items are licensed items. Any inspected item is also a cleared item. If an item is verified then it is inspected. Every registered item is a catalogued item.

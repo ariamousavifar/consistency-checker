@@ -5,17 +5,32 @@ output is small and diffable, and GitHub renders it inline. Colours are chosen t
 stay legible on both light and dark backgrounds, and every chart paints its own
 background so it never inherits the host page's.
 
+Figures are drawn from the measured numbers recorded below, each annotated with
+the results directory it came from so any figure can be traced back to the run
+that produced it.
+
 Usage:  python -m tools.make_charts --out docs/assets
 """
 from __future__ import annotations
 
 import argparse
-import json
 from pathlib import Path
 
 BG, FG, MUTED, GRID = "#ffffff", "#1f2328", "#57606a", "#d8dee4"
-SERIES = {"gpt-oss-120b": "#0969da", "DeepSeek-V4-Flash": "#1a7f37",
-          "GLM-4.7": "#9a6700", "rule-only (no LLM)": "#cf222e"}
+OURS, NLI, WARN = "#0969da", "#cf222e", "#9a6700"
+
+# results/eval_proofwriter_gpt-oss-120b_off/metrics.json
+PW_OURS = {0: 93.8, 1: 93.8, 2: 81.2, 3: 56.2, 4: 75.0, 5: 81.2}
+# results/baseline_proofwriter_pairwise_gpt-oss-120b/metrics.json
+PW_NLI = {0: 92.3, 1: 12.5, 2: 16.7, 3: 0.0, 4: 0.0, 5: 0.0}
+
+# results/eval_stress2_* and results/baseline_stress2_nodist_pairwise_*
+ST_OURS = {5: 41.7, 10: 50.0, 15: 50.0, 20: 50.0}
+ST_NLI = {5: 25.0, 10: 0.0, 15: 0.0, 20: 0.0}
+
+# recall, false-positive rate, n
+DATASETS = [("ProofWriter", 80.2, 2.1, 192), ("FOLIO", 50.0, 4.3, 141),
+            ("Synthetic", 100.0, 0.0, 120), ("Stress (depth 5-20)", 47.9, 10.4, 96)]
 
 
 def _hdr(w, h, title, sub=""):
@@ -28,99 +43,100 @@ def _hdr(w, h, title, sub=""):
     return s
 
 
-def depth_chart(data: dict, path: Path):
-    """Recall as a function of reasoning depth -- the central result."""
-    W, H = 720, 400
-    L, R, T, B = 60, 250, 74, 54
-    pw, ph = W - L - R, H - T - B
-    s = _hdr(W, H, "Recall vs. reasoning depth",
-             "ProofWriter (192 held-out documents, externally authored)")
-    for i in range(0, 101, 25):                      # y grid
+def _yaxis(s, L, T, pw, ph):
+    for i in range(0, 101, 25):
         y = T + ph - ph * i / 100
         s.append(f'<line x1="{L}" y1="{y}" x2="{L+pw}" y2="{y}" stroke="{GRID}" stroke-width="1"/>')
-        s.append(f'<text x="{L-10}" y="{y+4}" font-size="11" fill="{MUTED}" text-anchor="end">{i}%</text>')
-    for d in range(6):                               # x labels
-        x = L + pw * d / 5
-        s.append(f'<text x="{x}" y="{T+ph+20}" font-size="11" fill="{MUTED}" text-anchor="middle">{d}</text>')
-    s.append(f'<text x="{L+pw/2}" y="{T+ph+42}" font-size="12" fill="{FG}" '
-             f'text-anchor="middle">inference steps between the conflict and its source</text>')
+        s.append(f'<text x="{L-10}" y="{y+4}" font-size="11" fill="{MUTED}" '
+                 f'text-anchor="end">{i}%</text>')
 
-    for li, (name, vals) in enumerate(data.items()):
-        col = SERIES[name]
-        pts = " ".join(f"{L+pw*d/5},{T+ph-ph*vals[d]/100}" for d in range(6))
-        dash = ' stroke-dasharray="6 4"' if "rule-only" in name else ""
-        s.append(f'<polyline points="{pts}" fill="none" stroke="{col}" stroke-width="2.5"{dash}/>')
-        for d in range(6):
-            s.append(f'<circle cx="{L+pw*d/5}" cy="{T+ph-ph*vals[d]/100}" r="3.5" fill="{col}"/>')
-        y = T + 6 + li * 22
-        s.append(f'<line x1="{L+pw+22}" y1="{y}" x2="{L+pw+44}" y2="{y}" stroke="{col}" stroke-width="2.5"{dash}/>')
-        s.append(f'<text x="{L+pw+50}" y="{y+4}" font-size="12" fill="{FG}">{name}</text>')
 
-    s.append(f'<text x="{L+pw+22}" y="{T+6+len(data)*22+22}" font-size="11" fill="{MUTED}">'
-             f'Sentence-pair methods</text>')
-    s.append(f'<text x="{L+pw+22}" y="{T+6+len(data)*22+38}" font-size="11" fill="{MUTED}">'
-             f'reach 0% at depth &#8805; 2</text>')
-    s.append(f'<text x="{L+pw+22}" y="{T+6+len(data)*22+54}" font-size="11" fill="{MUTED}">'
-             f'by construction.</text>')
+def _line(s, series, colour, label, keys, L, T, pw, ph):
+    xs = [L + pw * i / max(1, len(keys) - 1) for i in range(len(keys))]
+    pts = [(x, T + ph - ph * series[k] / 100) for x, k in zip(xs, keys)]
+    s.append(f'<polyline points="{" ".join(f"{x:.1f},{y:.1f}" for x, y in pts)}" '
+             f'fill="none" stroke="{colour}" stroke-width="2.5"/>')
+    for x, y in pts:
+        s.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="4" fill="{colour}"/>')
+    return pts[-1]
+
+
+def depth_chart(path: Path):
+    """Recall against the number of inference steps -- the central result."""
+    W, H, L, R, T, B = 720, 400, 60, 210, 74, 56
+    pw, ph = W - L - R, H - T - B
+    keys = sorted(PW_OURS)
+    s = _hdr(W, H, "Recall vs. number of inference steps",
+             "ProofWriter: 192 held-out documents, externally authored")
+    _yaxis(s, L, T, pw, ph)
+    for i, k in enumerate(keys):
+        x = L + pw * i / (len(keys) - 1)
+        s.append(f'<text x="{x:.0f}" y="{T+ph+20}" font-size="11" fill="{MUTED}" '
+                 f'text-anchor="middle">{k}</text>')
+    s.append(f'<text x="{L+pw/2:.0f}" y="{H-14}" font-size="11.5" fill="{MUTED}" '
+             f'text-anchor="middle">inference steps separating the conflicting statements</text>')
+
+    e1 = _line(s, PW_OURS, OURS, "ours", keys, L, T, pw, ph)
+    e2 = _line(s, PW_NLI, NLI, "nli", keys, L, T, pw, ph)
+    for (x, y), lab, col in ((e1, "This system", OURS), (e2, "Sentence-pair (NLI)", NLI)):
+        s.append(f'<text x="{x+12:.0f}" y="{y+4:.0f}" font-size="12.5" font-weight="600" '
+                 f'fill="{col}">{lab}</text>')
+    s.append(f'<text x="{L+pw*0.30:.0f}" y="{T+ph-16}" font-size="11.5" fill="{MUTED}">'
+             f'no single pair of sentences conflicts beyond step 1</text>')
     s.append("</svg>")
     path.write_text("\n".join(s), encoding="utf-8")
 
 
-def model_chart(rows: list, path: Path):
-    """Recall / precision / false-positive per model, grouped."""
-    W, H = 720, 360
-    L, T, B = 150, 78, 60
-    pw, ph = W - L - 40, H - T - B
-    bar, gap = 16, 6
-    s = _hdr(W, H, "Model comparison", "ProofWriter, 192 documents, identical pipeline and seed")
-    metrics = [("recall", "#0969da"), ("precision", "#1a7f37"), ("false-positive", "#cf222e")]
-    for i in range(0, 101, 25):
-        x = L + pw * i / 100
-        s.append(f'<line x1="{x}" y1="{T}" x2="{x}" y2="{T+ph}" stroke="{GRID}" stroke-width="1"/>')
-        s.append(f'<text x="{x}" y="{T+ph+18}" font-size="11" fill="{MUTED}" text-anchor="middle">{i}%</text>')
-    rh = ph / len(rows)
-    for ri, (name, rec, pre, fpr) in enumerate(rows):
-        y0 = T + ri * rh + 8
-        s.append(f'<text x="{L-12}" y="{y0+26}" font-size="12" fill="{FG}" text-anchor="end">{name}</text>')
-        for mi, (val, (label, col)) in enumerate(zip((rec, pre, fpr), metrics)):
-            y = y0 + mi * (bar + gap)
-            w = max(1.5, pw * val / 100)
-            s.append(f'<rect x="{L}" y="{y}" width="{w}" height="{bar}" fill="{col}" rx="2"/>')
-            s.append(f'<text x="{L+w+6}" y="{y+12}" font-size="11" fill="{FG}">{val:.1f}%</text>')
-    for mi, (label, col) in enumerate(metrics):
-        x = L + mi * 150
-        s.append(f'<rect x="{x}" y="{H-30}" width="11" height="11" fill="{col}" rx="2"/>')
-        s.append(f'<text x="{x+16}" y="{H-20}" font-size="11" fill="{FG}">{label}</text>')
+def stress_chart(path: Path):
+    """The same axis pushed far past what the public corpora reach."""
+    W, H, L, R, T, B = 720, 360, 60, 210, 74, 56
+    pw, ph = W - L - R, H - T - B
+    keys = sorted(ST_OURS)
+    s = _hdr(W, H, "Deeper chains: 5 to 20 inference steps",
+             "Purpose-built stress set, 96 documents, up to 100 irrelevant statements")
+    _yaxis(s, L, T, pw, ph)
+    for i, k in enumerate(keys):
+        x = L + pw * i / (len(keys) - 1)
+        s.append(f'<text x="{x:.0f}" y="{T+ph+20}" font-size="11" fill="{MUTED}" '
+                 f'text-anchor="middle">{k}</text>')
+    s.append(f'<text x="{L+pw/2:.0f}" y="{H-14}" font-size="11.5" fill="{MUTED}" '
+             f'text-anchor="middle">inference steps</text>')
+    e1 = _line(s, ST_OURS, OURS, "ours", keys, L, T, pw, ph)
+    e2 = _line(s, ST_NLI, NLI, "nli", keys, L, T, pw, ph)
+    for (x, y), lab, col in ((e1, "This system", OURS), (e2, "Sentence-pair (NLI)", NLI)):
+        s.append(f'<text x="{x+12:.0f}" y="{y+4:.0f}" font-size="12.5" font-weight="600" '
+                 f'fill="{col}">{lab}</text>')
     s.append("</svg>")
     path.write_text("\n".join(s), encoding="utf-8")
 
 
-def dataset_chart(rows: list, path: Path):
-    """Headline metrics per held-out dataset."""
-    W, H = 720, 300
-    L, T, B = 130, 78, 56
-    pw, ph = W - L - 60, H - T - B
-    s = _hdr(W, H, "Results by held-out dataset",
-             "no dataset was used during development; gpt-oss-120b, seed 7")
-    for i in range(0, 101, 25):
-        x = L + pw * i / 100
-        s.append(f'<line x1="{x}" y1="{T}" x2="{x}" y2="{T+ph}" stroke="{GRID}" stroke-width="1"/>')
-        s.append(f'<text x="{x}" y="{T+ph+18}" font-size="11" fill="{MUTED}" text-anchor="middle">{i}%</text>')
-    rh = ph / len(rows)
-    for ri, (name, n, rec, pre, fpr) in enumerate(rows):
-        y0 = T + ri * rh + 6
-        s.append(f'<text x="{L-12}" y="{y0+16}" font-size="12" fill="{FG}" text-anchor="end">{name}</text>')
-        s.append(f'<text x="{L-12}" y="{y0+31}" font-size="10" fill="{MUTED}" text-anchor="end">n={n}</text>')
-        for mi, (val, col) in enumerate(((rec, "#0969da"), (pre, "#1a7f37"), (fpr, "#cf222e"))):
-            y = y0 + mi * 17
-            w = max(1.5, pw * val / 100)
-            s.append(f'<rect x="{L}" y="{y}" width="{w}" height="13" fill="{col}" rx="2"/>')
-            s.append(f'<text x="{L+w+6}" y="{y+11}" font-size="10" fill="{FG}">{val:.1f}%</text>')
-    for mi, (label, col) in enumerate((("recall", "#0969da"), ("precision", "#1a7f37"),
-                                       ("false-positive", "#cf222e"))):
-        x = L + mi * 150
-        s.append(f'<rect x="{x}" y="{H-28}" width="11" height="11" fill="{col}" rx="2"/>')
-        s.append(f'<text x="{x+16}" y="{H-18}" font-size="11" fill="{FG}">{label}</text>')
+def dataset_chart(path: Path):
+    """Recall and false-positive rate side by side on every corpus."""
+    W, H, L, R, T, B = 720, 360, 60, 40, 74, 74
+    pw, ph = W - L - R, H - T - B
+    s = _hdr(W, H, "Results across four corpora",
+             "recall and false-positive rate; three externally sourced, one purpose-built")
+    _yaxis(s, L, T, pw, ph)
+    n = len(DATASETS)
+    slot = pw / n
+    for i, (name, rec, fpr, cnt) in enumerate(DATASETS):
+        cx = L + slot * (i + 0.5)
+        for j, (val, col, lab) in enumerate(((rec, OURS, "recall"), (fpr, WARN, "false pos."))):
+            bw = 42
+            x = cx - bw - 6 + j * (bw + 12)
+            bh = ph * val / 100
+            s.append(f'<rect x="{x:.0f}" y="{T+ph-bh:.0f}" width="{bw}" height="{bh:.0f}" '
+                     f'fill="{col}" rx="2"/>')
+            s.append(f'<text x="{x+bw/2:.0f}" y="{T+ph-bh-7:.0f}" font-size="11.5" '
+                     f'font-weight="600" fill="{col}" text-anchor="middle">{val:.1f}%</text>')
+        s.append(f'<text x="{cx:.0f}" y="{T+ph+20}" font-size="11.5" fill="{FG}" '
+                 f'text-anchor="middle">{name}</text>')
+        s.append(f'<text x="{cx:.0f}" y="{T+ph+36}" font-size="10.5" fill="{MUTED}" '
+                 f'text-anchor="middle">n={cnt}</text>')
+    for j, (col, lab) in enumerate(((OURS, "recall"), (WARN, "false-positive rate"))):
+        x = L + j * 150
+        s.append(f'<rect x="{x}" y="{H-26}" width="11" height="11" fill="{col}" rx="2"/>')
+        s.append(f'<text x="{x+17}" y="{H-16}" font-size="11.5" fill="{MUTED}">{lab}</text>')
     s.append("</svg>")
     path.write_text("\n".join(s), encoding="utf-8")
 
@@ -131,27 +147,9 @@ def main(argv=None) -> int:
     a = ap.parse_args(argv)
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
-
-    depth_chart({
-        "gpt-oss-120b":       [93.8, 93.8, 81.2, 56.2, 75.0, 81.2],
-        "DeepSeek-V4-Flash":  [81.2, 87.5, 75.0, 62.5, 56.2, 62.5],
-        "GLM-4.7":            [93.8, 93.8, 56.2, 43.8, 31.2, 62.5],
-        "rule-only (no LLM)": [43.8, 31.2,  0.0,  0.0,  0.0,  0.0],
-    }, out / "recall-by-depth.svg")
-
-    model_chart([
-        ("gpt-oss-120b",      80.2, 97.5, 2.1),
-        ("DeepSeek-V4-Flash", 70.8, 98.6, 1.0),
-        ("GLM-4.7",           63.5, 96.8, 2.1),
-        ("rule-only (no LLM)", 12.5, 92.3, 1.0),
-    ], out / "model-comparison.svg")
-
-    dataset_chart([
-        ("ProofWriter",  192, 80.2, 97.5, 2.1),
-        ("FOLIO",        141, 50.0, 92.3, 4.3),
-        ("Synthetic",    120, 100.0, 100.0, 0.0),
-    ], out / "dataset-results.svg")
-
+    depth_chart(out / "recall_by_depth.svg")
+    stress_chart(out / "recall_stress.svg")
+    dataset_chart(out / "datasets.svg")
     for f in sorted(out.glob("*.svg")):
         print(f"  {f}  ({f.stat().st_size:,} bytes)")
     return 0

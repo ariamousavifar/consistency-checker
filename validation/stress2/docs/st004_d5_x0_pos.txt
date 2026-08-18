@@ -1,0 +1,3 @@
+Depot register
+
+All registered items are catalogued items. Carton lima-03 is registered. If an item is audited then it is certified. Carton lima-03 is not transferable. If an item is certified then it is bonded. Every insured item is transferable. All bonded items are insured items. Any catalogued item is also a audited item.

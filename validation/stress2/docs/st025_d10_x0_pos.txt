@@ -1,0 +1,3 @@
+Depot register
+
+Shipment hotel-04 is not transferable. All bonded items are insured items. Every approved item is a verified item. Every licensed item is a approved item. If an item is certified then it is bonded. All verified items are inspected items. Every registered item is a catalogued item. Every insured item is a licensed item. Every cleared item is transferable. Shipment hotel-04 is registered. All inspected items are cleared items. If an item is catalogued then it is audited. Any audited item is also a certified item.

@@ -1,0 +1,3 @@
+Depot register
+
+Parcel charlie-02 is registered. Every insured item is transferable. If an item is registered then it is catalogued. If an item is catalogued then it is audited. Parcel charlie-02 is not transferable. Any certified item is also a bonded item. All audited items are certified items. If an item is bonded then it is insured.

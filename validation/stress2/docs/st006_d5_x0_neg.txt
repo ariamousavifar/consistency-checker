@@ -1,0 +1,3 @@
+Depot register
+
+Any registered item is also a catalogued item. Any audited item is also a certified item. All bonded items are insured items. All certified items are bonded items. Every insured item is transferable. Any catalogued item is also a audited item. Shipment sierra-04 is not transferable. Crate charlie-01 is registered.

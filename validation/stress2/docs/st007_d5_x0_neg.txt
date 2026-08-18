@@ -1,0 +1,3 @@
+Depot register
+
+If an item is bonded then it is insured. Lot quebec-05 is registered. Any registered item is also a catalogued item. All certified items are bonded items. Every insured item is transferable. All audited items are certified items. Container echo-01 is not transferable. Any catalogued item is also a audited item.

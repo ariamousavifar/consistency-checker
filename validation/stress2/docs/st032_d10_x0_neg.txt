@@ -1,0 +1,3 @@
+Depot register
+
+Any inspected item is also a cleared item. Every catalogued item is a audited item. If an item is certified then it is bonded. All audited items are certified items. Every approved item is a verified item. Carton lima-05 is not transferable. Every cleared item is transferable. Every insured item is a licensed item. Case tango-02 is registered. All licensed items are approved items. If an item is registered then it is catalogued. Any verified item is also a inspected item. Every bonded item is a insured item.
