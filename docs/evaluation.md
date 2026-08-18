@@ -39,9 +39,15 @@ The central claim. A contradiction distributed across *k* inference steps is inv
 to any method that compares sentences pairwise: at *k* ≥ 2 **no pair of sentences is
 inconsistent**, so pairwise entailment cannot see the conflict at all.
 
-This is measured, not asserted. The NLI baseline scores **92.3% at depth 0**, where the
-contradiction is directly visible in one pair, then **12.5% at depth 1 and 0% from
-depth 3 onward**. The full pipeline holds 56–81% through depth 5.
+This is measured, not asserted. On all 192 documents the NLI baseline scores **100% at
+depth 0**, where the contradiction is directly visible in a single pair, then collapses to
+**6.2% at depth 1** and stays between 12% and 31% thereafter. The full pipeline holds
+56–81% across the same range.
+
+Its residual recall at greater depths should be read next to its **13.5% false-positive
+rate**: a method that flags one clean document in seven will also flag contradictory ones
+for the wrong reason, so some of that residue is a lucky guess rather than a found chain.
+Precision bears this out, 69.0% against the pipeline's 97.5%.
 
 The dashed purple line is the same pipeline with the language model removed from
 translation (§ ablation). It collapses to 0% beyond depth 1 for a different reason:
@@ -115,8 +121,8 @@ result was seen.
 flags the document if any pair conflicts. Each judgement sees only its two sentences.
 That isolation is the method, so pairs are never batched into one prompt, which would
 let the model reason across them. It is scored by the same rule and the same labels as
-the pipeline. On the two external corpora it reaches 43.8% and 45.8% recall, at 7.1% and
-18.8% false positives.
+the pipeline. On the two external corpora it reaches 30.2% and 45.8% recall, at 13.5% and
+18.8% false positives, against the pipeline's 80.2% and 50.0% at 2.1% and 4.3%.
 
 **Reproducibility.** Fixed seed and temperature 0; the full test suite (255 tests) runs
 offline against shipped fixtures with no API key. Datasets, adapters, scorer, baseline

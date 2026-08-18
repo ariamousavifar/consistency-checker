@@ -47,17 +47,17 @@
 <circle cx="350.4" cy="338.0" r="3.5" fill="#8250df"/>
 <circle cx="447.2" cy="338.0" r="3.5" fill="#8250df"/>
 <circle cx="544.0" cy="338.0" r="3.5" fill="#8250df"/>
-<polyline points="60.0,94.3 156.8,305.0 253.6,293.9 350.4,338.0 447.2,338.0 544.0,338.0" fill="none" stroke="#cf222e" stroke-width="2.5" stroke-dasharray="5,4"/>
-<circle cx="60.0" cy="94.3" r="3.5" fill="#cf222e"/>
-<circle cx="156.8" cy="305.0" r="3.5" fill="#cf222e"/>
-<circle cx="253.6" cy="293.9" r="3.5" fill="#cf222e"/>
-<circle cx="350.4" cy="338.0" r="3.5" fill="#cf222e"/>
-<circle cx="447.2" cy="338.0" r="3.5" fill="#cf222e"/>
-<circle cx="544.0" cy="338.0" r="3.5" fill="#cf222e"/>
+<polyline points="60.0,74.0 156.8,321.6 253.6,288.4 350.4,305.0 447.2,305.0 544.0,255.6" fill="none" stroke="#cf222e" stroke-width="2.5" stroke-dasharray="5,4"/>
+<circle cx="60.0" cy="74.0" r="3.5" fill="#cf222e"/>
+<circle cx="156.8" cy="321.6" r="3.5" fill="#cf222e"/>
+<circle cx="253.6" cy="288.4" r="3.5" fill="#cf222e"/>
+<circle cx="350.4" cy="305.0" r="3.5" fill="#cf222e"/>
+<circle cx="447.2" cy="305.0" r="3.5" fill="#cf222e"/>
+<circle cx="544.0" cy="255.6" r="3.5" fill="#cf222e"/>
 <text x="556" y="128" font-size="11.5" font-weight="600" fill="#0969da">gpt-oss-120b</text>
 <text x="556" y="177" font-size="11.5" font-weight="600" fill="#1a7f37">DeepSeek-V4-Flash</text>
 <text x="556" y="192" font-size="11.5" font-weight="600" fill="#9a6700">GLM-4.7</text>
-<text x="556" y="342" font-size="11.5" font-weight="600" fill="#cf222e">pairwise NLI</text>
-<text x="556" y="357" font-size="11.5" font-weight="600" fill="#8250df">rule-only (no LLM)</text>
-<text x="60" y="404" font-size="11" fill="#57606a">beyond one step no PAIR of sentences conflicts, so pairwise entailment cannot see the contradiction at all</text>
+<text x="556" y="260" font-size="11.5" font-weight="600" fill="#cf222e">pairwise NLI</text>
+<text x="556" y="342" font-size="11.5" font-weight="600" fill="#8250df">rule-only (no LLM)</text>
+<text x="60" y="404" font-size="11" fill="#57606a">beyond one step no PAIR of sentences conflicts; the baseline’s residual score tracks its 13.5% false-positive rate, not found chains</text>
 </svg>

@@ -28,7 +28,7 @@ DEPTH = {
     "DeepSeek-V4-Flash":  {0: 81.2, 1: 87.5, 2: 75.0, 3: 62.5, 4: 56.2, 5: 62.5},
     "GLM-4.7":            {0: 93.8, 1: 93.8, 2: 56.2, 3: 43.8, 4: 31.2, 5: 62.5},
     "rule-only (no LLM)": {0: 43.8, 1: 31.2, 2: 0.0, 3: 0.0, 4: 0.0, 5: 0.0},
-    "pairwise NLI":       {0: 92.3, 1: 12.5, 2: 16.7, 3: 0.0, 4: 0.0, 5: 0.0},
+    "pairwise NLI":       {0: 100.0, 1: 6.2, 2: 18.8, 3: 12.5, 4: 12.5, 5: 31.2},
 }
 DASHED = {"rule-only (no LLM)", "pairwise NLI"}
 
@@ -37,7 +37,7 @@ STRESS = {"this system": {5: 41.7, 10: 50.0, 15: 50.0, 20: 50.0},
           "pairwise NLI": {5: 25.0, 10: 0.0, 15: 0.0, 20: 0.0}}
 
 # dataset, n, our recall, our FP, NLI recall, NLI FP
-DATASETS = [("ProofWriter", 192, 80.2, 2.1, 43.8, 7.1),
+DATASETS = [("ProofWriter", 192, 80.2, 2.1, 30.2, 13.5),
             ("FOLIO", 141, 50.0, 4.3, 45.8, 18.8),
             ("Synthetic", 120, 100.0, 0.0, 40.0, 0.0),
             ("Stress (depth 5-20)", 96, 47.9, 10.4, 6.2, 0.0)]
@@ -98,8 +98,8 @@ def depth_chart(path: Path):
         s.append(f'<text x="{L+pw+12:.0f}" y="{e[0]+4:.0f}" font-size="11.5" '
                  f'font-weight="600" fill="{e[2]}">{e[1]}</text>')
     s.append(f'<text x="{L}" y="{H-16}" font-size="11" fill="{MUTED}">'
-             f'beyond one step no PAIR of sentences conflicts, so pairwise entailment '
-             f'cannot see the contradiction at all</text>')
+             f'beyond one step no PAIR of sentences conflicts; the baseline’s residual score '
+             f'tracks its 13.5% false-positive rate, not found chains</text>')
     s.append("</svg>")
     path.write_text("\n".join(s), encoding="utf-8")
 
